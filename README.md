@@ -1,4 +1,37 @@
-(Working to transition from [gist](https://gist.github.com/priyapower/443cded92f84e38b1cc4ec990137ba56) to a repo with more structure)
+# Learning Python with Priya and Ricky
+![image](https://i.pinimg.com/originals/24/97/b4/2497b48e8f9778fb8463c525e14794f9.gif)
 
-# priya_and_ricky_learn_python
-My learning journey to feeling confident in python and relevant systems
+## Table of Contents
+1. [Our Background](#our-background)
+1. [What is this Repo?](#what-we-are-doing)
+1. [Resource List](#resource-list)
+1. [Setup - Both Windows(basic) and Mac](lessons/1setup.md)
+1. [Part 1 Practice](lessons/2part_1.md)
+1. [Part 2 Practice](lessons/3part_2.md)
+
+### Our Background:
+**Ricky** - French Teacher; specializes in Being Awesome. Learning coding and development for the first time.
+
+**Priya** - Software Developer; specializes in Ruby/Rails. Growing python skills to a confident level of understanding - aka familiar with usage, python specific details, testing, etc.
+
+**Priya and Ricky** - Both coming from diverse backgrounds and life experiences, Priya and Ricky have been holding hands, making plans, and charming friends for 5 years. They use their education background and empathetic communication to overcome world struggles and their own challenges as a couple. Now watch them learn Python and have a blast doing it!
+
+[Table of Contents](#table-of-contents)
+
+## What We Are Doing
+This repo represents a learning document. As Priya learn's Python (using a variety of resources found on the web), she also teaches Ricky while documenting the process in the hopes it may help others learn Python as well. The exposure to both Mac environments and intermediate/advanced topics in Python while also understanding Windows environments and basic/theory topics in Python will provide a good overview.
+
+End Goal #1: Can we build intermediate and advanced level project
+
+End Goal #2: Can we answer Python Technical questions
+
+[Table of Contents](#table-of-contents)
+
+## Resource List:
+1. [Windows Installation of Python](https://docs.microsoft.com/en-us/windows/python/beginners)
+1. [Mac Installation of Python](https://docs.python-guide.org/starting/install3/osx/)
+1. [Case Styles](https://medium.com/better-programming/string-case-styles-camel-pascal-snake-and-kebab-case-981407998841)
+1. [Python Data Types](https://www.w3schools.com/python/python_datatypes.asp)
+1. [Building a GUI Deskptop Calculator](https://realpython.com/python-pyqt-gui-calculator/)
+
+[Table of Contents](#table-of-contents)
