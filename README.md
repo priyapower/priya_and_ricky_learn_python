@@ -3,28 +3,28 @@
 
 ## Table of Contents
 1. [Our Background](#our-background)
-1. [What is this Repo?](#what-we-are-doing)
-1. [Resource List](#resource-list)
-1. [Setup - Both Windows(basic) and Mac](lessons/1setup.md)
-1. [Part 1 Practice](lessons/2part_1.md)
+2. [What is this Repo?](#what-we-are-doing)
+3. [Resource List](#resource-list)
+4. [Setup - Both Windows(basic) and Mac](lessons/1setup.md)
+5. [Part 1 Practice](lessons/2part_1.md)
   - Ricky: Theory and Hello World
   - Priya: PyQt and GUI Calculator
-1. [Part 2 Practice](lessons/3part_2.md)
+6. [Part 2 Practice](lessons/3part_2.md)
   - Ricky: Theory & Number Guessing Game
   - Priya: RESTful apis with MongoDB and Flask
-1. [Part 3 Practice](lessons/4part_3.md)
+7. [Part 3 Practice](lessons/4part_3.md)
   - Ricky: More Theory and Rock, Paper, Scissors
   - Priya: SQL vs noSQL, PEP3 (Python Convention), More RESTful apis tutorials - this time with testing!
-1. [Part 4 Practice]()
+8. [Part 4 Practice]()
   - Ricky: Theory and Plotting Sine/Cosine
   - Priya: OOP, 2D Platform Game
-1. [Part 5 Practice]()
+9. [Part 5 Practice]()
   - Ricky: Django and building a portfolio app
   - Priya: More theory & Make a gradebook with Panda
-1. [Part 6 Practice]()
+10. [Part 6 Practice]()
   - Ricky: Bitcoin Notifications & Basic API app
   - Priya: Instagam Bot
-1. [Part 7 Practice]()
+11. [Part 7 Practice]()
   - Ricky: Flask apps - Lyricize and ToDo
   - Priya: GPU Programming with CUDA library
 
@@ -52,5 +52,8 @@ End Goal #2: Can we answer Python Technical questions
 1. [Case Styles](https://medium.com/better-programming/string-case-styles-camel-pascal-snake-and-kebab-case-981407998841)
 1. [Python Data Types](https://www.w3schools.com/python/python_datatypes.asp)
 1. [Building a GUI Deskptop Calculator](https://realpython.com/python-pyqt-gui-calculator/)
+1. [Flask MongoDB REST Api](https://dev.to/paurakhsharma/flask-rest-api-part-0-setup-basic-crud-api-4650)
+1. [Mongo Quick Reference](https://docs.mongodb.com/manual/reference/mongo-shell/)
+1. [Comparing Python, Ruby, NodeJS side-by-side](https://hyperpolyglot.org/scripting)
 
 [Table of Contents](#table-of-contents)
