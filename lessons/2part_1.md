@@ -1,16 +1,23 @@
-# NEEDS FORMATTING UPDATES
 # Part 1 Practice
 
 ## What is on this page
+
 Ricky/Windows/Beginner:
-- [Ricky's Practice](#rickys-practice)
+- [Ricky's Practice](#ricky's-practice)
+- Goal is to understand introductory coding language/practices while also learning python
 - Product: [Coming Soon (get him registered on GH and teach him to push up his repo)]
+
 Priya/Mac/Intermediate:
-- [Priya's Practice](#priyas-practice)
+- [Priya's Practice](#priya's-practice)
+- Goal is to build a GUI calculator while practicing python and learning PyQt
 - Product: [Finished Product](https://github.com/priyapower/python_gui_calculator)
 
 
 ## Ricky's Practice
+
+(more coming soon, below are notes to transfer)
+
+Goal is to understand introductory coding language/practices while also learning python
 - What are cases (camelCase, PascalCase, snake_case, and kebab-case)
 - What are datatypes and specific to [Python ones](https://www.w3schools.com/python/python_datatypes.asp)
 - Practicing on PowerShell
@@ -21,13 +28,15 @@ Priya/Mac/Intermediate:
 
 ## Priya's Practice
 
-[Setup](#SetupStuffForThisProject)
+Goal is to build a GUI calculator while practicing python and learning PyQt
 
-[Understanding PyQt](#PriyaDay1ProjectUnderstandingPyQt)
+[Setup](#the-setup-for-this-project)
 
-[Beginning to Code Section](#priyaday1projectbeginningcode)
+[Understanding PyQt](#Understanding-PyQt)
 
-[Final Code Section](#priyaday1projectfinalcode)
+[Beginning to Code Section](#Beginning-to-Code-the-Project)
+
+[Final Code Section](#The-Final-Leg-of-Code)
 
 1. We are going to build a GUI calculator (it looks a lot like the calculator preloaded in the system!) [resource](https://realpython.com/python-pyqt-gui-calculator/)
 2. Old Concept: GUI
@@ -39,7 +48,8 @@ Priya/Mac/Intermediate:
   - Qt is a framework written in `C++`
   - From RealPython: "a set of C++ libraries and development tools that include platform-independent abstractions for Graphical User Interfaces (GUI), as well as networking, threads, regular expressions, SQL databases, SVG, OpenGL, XML, and many other powerful features. "
   - We are working with **PyQt5** in this tutorial
-4. #### SetupStuffForThisProject - Let's install PyQt, the [docs](https://www.riverbankcomputing.com/static/Docs/PyQt5/installation.html#building-and-installing-from-source) if you are "building from source"
+4. #### The Setup for this Project
+  - Let's install PyQt, the [docs](https://www.riverbankcomputing.com/static/Docs/PyQt5/installation.html#building-and-installing-from-source) if you are "building from source"
   - You can also use `binary wheels`. [Resource for Understanding](https://realpython.com/python-wheels/)
     - To summarize: wheels are components that help make package installation faster and more stable
   - Since we are okay with system-wide installation (not worrying about virtual environments right now)
@@ -55,7 +65,6 @@ Priya/Mac/Intermediate:
     """Simple Hello World example with PyQt5.""" # understanding the triple quotes (https://www.geeksforgeeks.org/triple-quotes-in-python/)
     # Handles the exit status of the application
     import sys #The sys module provides information about constants, functions and methods of the Python interpreter. (https://www.python-course.eu/sys_module.php)
-
     # Step 1. Import `QApplication` and all the required widgets
     from PyQt5.QtWidgets import QApplication # manages the GUI applications control flow and main settings. Contains the main event loop (where all events from the window system and other sources are processed and dispatched)
     from PyQt5.QtWidgets import QLabel # Used for displaying text or an image. No user interaction functionality is provided.
@@ -84,7 +93,6 @@ Priya/Mac/Intermediate:
             # Defines placement in the window
     helloMsg = QLabel('<h1>Hello World!</h1>', parent=window) # sets a variable that executes QLabel and makes a header on the parent window
     helloMsg.move(60, 15) # Set the position of helloMsg
-
     # NOTES
         # To avoid memory leaks, you should always make sure that any QWidget object has a parent, with the sole exception of top-level windows.
         # parent-child: A widget that doesn’t have a parent is a main window or a top-level window; A widget that has a parent (which is always another widget) is contained (or shown) within its parent.
@@ -106,14 +114,15 @@ Priya/Mac/Intermediate:
     - CLI: `python3 hello.py`
     - Running this script opens a cute [window!](https://files.realpython.com/media/hello.066635a13824.png), mine even came through on dark mode! => black bg white txt
   - Step 7: Celebrate your success! You did it - you've created your first PyQt GUI desktop application
-![image](https://thumbs.gfycat.com/AggressiveWebbedCormorant-small.gif)
+  - ![image](https://thumbs.gfycat.com/AggressiveWebbedCormorant-small.gif)
 6. Code style
   - [PEP 8](https://www.python.org/dev/peps/pep-0008) Convention
     - Written by Guido van Rossum (the original author of Python), alone with Barry Warsaw (known for work with Python and GNU Mailman, and Nick Coghlan (known for work with Python and founding the PyCon Australia Education Seminar)
     - Good [resource](https://realpython.com/python-pep8/#naming-styles) for understanding and seeing naming convention with examples
   - PyQt Convention
     - Since this was built on top of Qt (and that was written in C++), it uses camelCase in naming convention **which we will follow and use in this project**
-7. #### PriyaDay1ProjectUnderstandingPyQt - Basics of PyQt (let's get the building blocks figured out so we can build our house), [direct link](https://realpython.com/python-pyqt-gui-calculator/#learning-the-basics-of-pyqt)
+7. #### Understanding PyQt
+  - Basics of PyQt (let's get the building blocks figured out so we can build our house), [direct link](https://realpython.com/python-pyqt-gui-calculator/#learning-the-basics-of-pyqt)
   - [Widgets](https://realpython.com/python-pyqt-gui-calculator/#widgets):
     - Rectangular-shaped graphical components
     - Examples: Buttons, Labels, Line Edits (Forms), Combo boxes (drop downs), Radio buttons, ETC
@@ -127,12 +136,10 @@ Priya/Mac/Intermediate:
     ```py
     """Horizontal layout example."""
     import sys
-
     from PyQt5.QtWidgets import QApplication
     from PyQt5.QtWidgets import QHBoxLayout # Lines up widgets horizontally (layout manager)
     from PyQt5.QtWidgets import QPushButton # Provides a command button (widget)
     from PyQt5.QtWidgets import QWidget
-
     app = QApplication(sys.argv) # Initializer
     window = QWidget() # Executable widget
     window.setWindowTitle("QHBoxLayout") # sets window title
@@ -150,12 +157,10 @@ Priya/Mac/Intermediate:
     ```py
     """Vertical layout example."""
     import sys
-
     from PyQt5.QtWidgets import QApplication
     from PyQt5.QtWidgets import QPushButton
     from PyQt5.QtWidgets import QVBoxLayout # # Lines up widgets vertically (layout manager)
     from PyQt5.QtWidgets import QWidget
-
     app = QApplication(sys.argv)
     window = QWidget()
     window.setWindowTitle("QVBoxLayout")
@@ -173,12 +178,10 @@ Priya/Mac/Intermediate:
     ```py
     """Grid layout example."""
     import sys
-
     from PyQt5.QtWidgets import QApplication
     from PyQt5.QtWidgets import QGridLayout # Imports the Grid Layout Manager class
     from PyQt5.QtWidgets import QPushButton
     from PyQt5.QtWidgets import QWidget
-
     app = QApplication(sys.argv)
     window = QWidget()
     window.setWindowTitle("QGridLayout")
@@ -201,12 +204,10 @@ Priya/Mac/Intermediate:
     ```py
     """Form layout example."""
     import sys
-
     from PyQt5.QtWidgets import QApplication
     from PyQt5.QtWidgets import QFormLayout # Imports the form layout manager class
     from PyQt5.QtWidgets import QLineEdit # Widget that allows for text editable sections (aka, the form)
     from PyQt5.QtWidgets import QWidget
-
     app = QApplication(sys.argv)
     window = QWidget()
     window.setWindowTitle("QFormLayout")
@@ -228,18 +229,14 @@ Priya/Mac/Intermediate:
     ```py
     """Dialog-Style application."""
     import sys
-
     from PyQt5.QtWidgets import QApplication
     from PyQt5.QtWidgets import QDialog # Dialog class
     from PyQt5.QtWidgets import QDialogButtonBox #Submit buttons?
     from PyQt5.QtWidgets import QFormLayout # Form layout manager
     from PyQt5.QtWidgets import QLineEdit # Widgets for forms
     from PyQt5.QtWidgets import QVBoxLayout # Vertical layout manager
-
-
     class Dialog(QDialog): # Line 12 creates a full class Dialog for the GUI, which inherits from QDialog.
         """Dialog."""
-
         def __init__(self, parent=None):
             """Initializer."""
             super().__init__(parent)
@@ -255,8 +252,6 @@ Priya/Mac/Intermediate:
             btns.setStandardButtons(QDialogButtonBox.Cancel | QDialogButtonBox.Ok) # 2 buttons = cancel and ok # Lines 27 and 28 add two standard buttons: Ok and Cancel.
             dlgLayout.addWidget(btns) # adds the buttons to the vertical layout
             self.setLayout(dlgLayout) # sets layout of self
-
-
     if __name__ == "__main__": # Lines 32 to 36 wrap the boilerplate code in an if __name__ == '__main__': idiom. This is considered a best practice for Pythonistas.
         app = QApplication(sys.argv)
         dlg = Dialog()
@@ -271,13 +266,11 @@ Priya/Mac/Intermediate:
     ```py
     """Main Window-Style application."""
     import sys
-
     from PyQt5.QtWidgets import QApplication
     from PyQt5.QtWidgets import QLabel
     from PyQt5.QtWidgets import QMainWindow
     from PyQt5.QtWidgets import QStatusBar
     from PyQt5.QtWidgets import QToolBar
-
     class Window(QMainWindow): # Line 10 creates a class Window that inherits from QMainWindow.
         """Main Window."""
         def __init__(self, parent=None):
@@ -288,22 +281,17 @@ Priya/Mac/Intermediate:
             self._createMenu() # Lines 17 to 19 call private methods in the lines that follow in order to create different GUI elements
             self._createToolBar() # Lines 17 to 19 call private methods in the lines that follow in order to create different GUI elements
             self._createStatusBar() # Lines 17 to 19 call private methods in the lines that follow in order to create different GUI elements
-
         def _createMenu(self): # Lines 21 to 23 create the main menu.
             self.menu = self.menuBar().addMenu("&Menu")
             self.menu.addAction("&Exit", self.close)
-
         def _createToolBar(self): # Lines 25 to 28 create the toolbar.
             tools = QToolBar()
             self.addToolBar(tools)
             tools.addAction("Exit", self.close)
-
         def _createStatusBar(self): # Lines 30 to 33 create the status bar.
             status = QStatusBar()
             status.showMessage("I'm the Status Bar")
             self.setStatusBar(status)
-
-
     if __name__ == "__main__":
         app = QApplication(sys.argv)
         win = Window()
@@ -323,7 +311,7 @@ Priya/Mac/Intermediate:
       - Parsing common command-line arguments
       - Defining the application’s look and feel
       - Providing localization capabilities
-    - **Most Important:** It hanles the event loop and the entire event handling mechanism
+    - **Most Important:** It handles the event loop and the entire event handling mechanism
   - [Event loops](https://realpython.com/python-pyqt-gui-calculator/#event-loops)
     - Gui application are event-drive - which meaas that the functions and methods are exectued in response to user actions, aka events(click button, select item, entering text, pressing keys, etc)
     - Events are handles by the event loop (or main loop)
@@ -340,28 +328,23 @@ Priya/Mac/Intermediate:
     ```py
     """Signals and slots example."""
     import sys
-
     from PyQt5.QtWidgets import QApplication
     from PyQt5.QtWidgets import QLabel
     from PyQt5.QtWidgets import QPushButton
     from PyQt5.QtWidgets import QVBoxLayout
     from PyQt5.QtWidgets import QWidget
-
     def greeting(): # create greeting(), which you’ll use as a slot.
         """Slot function."""
         if msg.text():
             msg.setText("")
         else:
             msg.setText("Hello World!")
-
     app = QApplication(sys.argv)
     window = QWidget()
     window.setWindowTitle("Signals, and Slots")
     layout = QVBoxLayout()
-
     btn = QPushButton("Greet")
     btn.clicked.connect(greeting)  # Connect clicked to greeting() # connect the button’s clicked signal to greeting()
-
     layout.addWidget(btn)
     msg = QLabel("")
     layout.addWidget(msg)
@@ -376,31 +359,24 @@ Priya/Mac/Intermediate:
     """Signals and slots example."""
     import functools # For this code to work, you need to import functools first (the partial language)
     import sys
-
     from PyQt5.QtWidgets import QApplication
     from PyQt5.QtWidgets import QLabel
     from PyQt5.QtWidgets import QPushButton
     from PyQt5.QtWidgets import QVBoxLayout
     from PyQt5.QtWidgets import QWidget
-
-
     def greeting(who):
         """Slot function."""
         if msg.text():
             msg.setText("")
         else:
             msg.setText(f"Hello {who}") # Now, greeting() needs to receive an argument called who.
-
-
     app = QApplication(sys.argv)
     window = QWidget()
     window.setWindowTitle("Signals, and Slots")
     layout = QVBoxLayout()
-
     btn = QPushButton("Greet")
     btn.clicked.connect(functools.partial(greeting, "World!")) # connect this new version of greeting() to the btn.clicked signal # If your slot function needs to receive extra arguments, then you can pass them in by using functools.partial.
     # TRY CHANGING "World!" AND SEE WHAT HAPPENS!!!! => This is the "dynamic" variable declaration
-
     layout.addWidget(btn)
     msg = QLabel("")
     layout.addWidget(msg)
@@ -410,7 +386,8 @@ Priya/Mac/Intermediate:
     ```
     - Call it with `python3 signals_slots_partial.py`
     - [Look]() here for result :)
-8. #### PriyaDay1ProjectBeginningCode - Creating a Calculator with Python and PyQt, [direct link](https://realpython.com/python-pyqt-gui-calculator/#creating-a-calculator-with-python-and-pyqt)
+8. #### Beginning to Code the Project
+  - Creating a Calculator with Python and PyQt, [direct link](https://realpython.com/python-pyqt-gui-calculator/#creating-a-calculator-with-python-and-pyqt)
   - Initial Notes:
     - We are using MVC here
     - A step-by-step of our future MVC pattern interacting with out GUI Application:
@@ -429,15 +406,12 @@ Priya/Mac/Intermediate:
     # Above is a 'shebang line' => which defines where the interpreter is located
     """PyCalc is a simple calculator built using Python3 and PyQt5."""
     import sys
-
     # Import QApplication and the required widgets from PyQt5.QtWidgets
     from PyQt5.QtWidgets import QApplication # import the required modules and classes from PyQt5.QtWidgets
     from PyQt5.QtWidgets import QMainWindow # import the required modules and classes from PyQt5.QtWidgets
     from PyQt5.QtWidgets import QWidget # import the required modules and classes from PyQt5.QtWidgets
-
     __version__ = '0.1' # Is this versioning the calculator?
     __author__ = 'Leodanis Pozo Ramos'  # Who is the author here? - He is one of the authors at RealPython
-
     # Create a subclass of QMainWindow to setup the calculator's GUI
     class PyCalcUi(QMainWindow): # creates the GUI with the class PyCalcUi. Note that this class inherits from QMainWindow
         """PyCalc's View (GUI)."""
@@ -450,7 +424,6 @@ Priya/Mac/Intermediate:
             # Set the central widget # The widget will expand to take up all the space in the window by default
             self._centralWidget = QWidget(self) # creates a QWidget object to play the role of a central widget. Remember that since your GUI class inherits from QMainWindow, you need a central widget. This object will be the parent for the rest of the GUI component.
             self.setCentralWidget(self._centralWidget)
-
     # Client code
     def main(): # defines your calculator’s main function, which is considered a best practice # This function will be the entry point to the application
         """Main function."""
@@ -461,7 +434,6 @@ Priya/Mac/Intermediate:
         view.show() # shows the GUI with view.show()
         # Execute the calculator's main loop
         sys.exit(pycalc.exec_()) # runs the application’s event loop with pycalc.exec_()
-
     if __name__ == '__main__':
         main()
     ```
@@ -475,7 +447,6 @@ Priya/Mac/Intermediate:
     # Above is a 'shebang line' => which defines where the interpreter is located
     """PyCalc is a simple calculator built using Python3 and PyQt5."""
     import sys
-
     # Import QApplication and the required widgets from PyQt5.QtWidgets
     from PyQt5.QtWidgets import QApplication # import the required modules and classes from PyQt5.QtWidgets
     from PyQt5.QtWidgets import QMainWindow # import the required modules and classes from PyQt5.QtWidgets
@@ -485,10 +456,8 @@ Priya/Mac/Intermediate:
     from PyQt5.QtWidgets import QLineEdit # Imports text edit widgets
     from PyQt5.QtWidgets import QPushButton # Import button widgets
     from PyQt5.QtWidgets import QVBoxLayout # Imports vertical layout manager
-
     __version__ = '0.1' # Is this versioning the calculator?
     __author__ = 'Leodanis Pozo Ramos'  # Who is the author here? - He is one of the authors at RealPython
-
     # Create a subclass of QMainWindow to setup the calculator's GUI
     class PyCalcUi(QMainWindow): # creates the GUI with the class PyCalcUi. Note that this class inherits from QMainWindow
         """PyCalc's View (GUI)."""
@@ -507,7 +476,6 @@ Priya/Mac/Intermediate:
             # Create the display and the buttons
             self._createDisplay() # These buttons don't work without defining the behavior (see def on ln 38)
             self._createButtons() # These buttons don't work without defining the behavior first (see def on ln 49)
-
         def _createDisplay(self):
             """Create the display."""
             # Create the display widget
@@ -518,7 +486,6 @@ Priya/Mac/Intermediate:
             self.display.setReadOnly(True) # The display is set to read-only to avoid direct editing
             # Add the display to the general layout
             self.generalLayout.addWidget(self.display) # adds the display to the calculator’s general layout
-
         def _createButtons(self):
             """Create the buttons."""
             self.buttons = {} # First create an empty dictionary || datatype:dictionary - think hash from Ruby
@@ -553,25 +520,20 @@ Priya/Mac/Intermediate:
                 buttonsLayout.addWidget(self.buttons[btnText], pos[0], pos[1])
             # Add buttonsLayout to the general layout
             self.generalLayout.addLayout(buttonsLayout)
-
         # BUT WHAT IF YOU WANT TO UPDATE THE DICTIONARY? I MEAN - DO WE REALLY HAVE TO SET STATIC INFORMATION FOR THE BUTTONS?
             # .setDisplayText() to set and update the display’s text
             # .displayText() to get the current display’s text
             # .clearDisplay() to clear the display’s text
-
         def setDisplayText(self, text): # uses .setText() to set and update the display’s text, and .setFocus() to set the cursor’s focus on the display
             """Set display's text."""
             self.display.setText(text)
             self.display.setFocus()
-
         def displayText(self): # is a getter method that returns the display’s current text. When the user clicks on the equals sign (=), the program will use the return value of .displayText() as the math expression to be evaluated
             """Get display's text."""
             return self.display.text()
-
         def clearDisplay(self): # sets the display’s text to an empty string ('') so the user can introduce a new math expression
             """Clear the display."""
             self.setDisplayText('')
-
     # Client code
     def main(): # defines your calculator’s main function, which is considered a best practice # This function will be the entry point to the application
         """Main function."""
@@ -582,7 +544,6 @@ Priya/Mac/Intermediate:
         view.show() # shows the GUI with view.show()
         # Execute the calculator's main loop
         sys.exit(pycalc.exec_()) # runs the application’s event loop with pycalc.exec_()
-
     if __name__ == '__main__':
         main()
     ```
@@ -596,14 +557,11 @@ Priya/Mac/Intermediate:
         # Controller - is class PyCalcCtrl
             # main is like a runner/index file
         # View - is class PyCalcUi
-
     #!/usr/bin/env python3
     # Above is a 'shebang line' => which defines where the interpreter is located
     """PyCalc is a simple calculator built using Python3 and PyQt5."""
     import sys
-
     from functools import partial # import this in to connect signals with methods that need to take an extra argument
-
     # Import QApplication and the required widgets from PyQt5.QtWidgets
     from PyQt5.QtWidgets import QApplication # import the required modules and classes from PyQt5.QtWidgets
     from PyQt5.QtWidgets import QMainWindow # import the required modules and classes from PyQt5.QtWidgets
@@ -613,10 +571,8 @@ Priya/Mac/Intermediate:
     from PyQt5.QtWidgets import QLineEdit # Imports text edit widgets
     from PyQt5.QtWidgets import QPushButton # Import button widgets
     from PyQt5.QtWidgets import QVBoxLayout # Imports vertical layout manager
-
     __version__ = '0.1' # Is this versioning the calculator?
     __author__ = 'Leodanis Pozo Ramos'  # Who is the author here? - He is one of the authors at RealPython
-
     # Create a subclass of QMainWindow to setup the calculator's GUI
     class PyCalcUi(QMainWindow): # creates the GUI with the class PyCalcUi. Note that this class inherits from QMainWindow
         """PyCalc's View (GUI)."""
@@ -635,7 +591,6 @@ Priya/Mac/Intermediate:
             # Create the display and the buttons
             self._createDisplay() # These buttons don't work without defining the behavior (see def on ln 38)
             self._createButtons() # These buttons don't work without defining the behavior first (see def on ln 49)
-
         def _createDisplay(self):
             """Create the display."""
             # Create the display widget
@@ -646,7 +601,6 @@ Priya/Mac/Intermediate:
             self.display.setReadOnly(True) # The display is set to read-only to avoid direct editing
             # Add the display to the general layout
             self.generalLayout.addWidget(self.display) # adds the display to the calculator’s general layout
-
         def _createButtons(self):
             """Create the buttons."""
             self.buttons = {} # First create an empty dictionary || datatype:dictionary - think hash from Ruby
@@ -681,32 +635,25 @@ Priya/Mac/Intermediate:
                 buttonsLayout.addWidget(self.buttons[btnText], pos[0], pos[1])
             # Add buttonsLayout to the general layout
             self.generalLayout.addLayout(buttonsLayout)
-
         # BUT WHAT IF YOU WANT TO UPDATE THE DICTIONARY? I MEAN - DO WE REALLY HAVE TO SET STATIC INFORMATION FOR THE BUTTONS?
             # .setDisplayText() to set and update the display’s text
             # .displayText() to get the current display’s text
             # .clearDisplay() to clear the display’s text
-
         def setDisplayText(self, text): # uses .setText() to set and update the display’s text, and .setFocus() to set the cursor’s focus on the display
             """Set display's text."""
             self.display.setText(text)
             self.display.setFocus()
-
         def displayText(self): # is a getter method that returns the display’s current text. When the user clicks on the equals sign (=), the program will use the return value of .displayText() as the math expression to be evaluated
             """Get display's text."""
             return self.display.text()
-
         def clearDisplay(self): # sets the display’s text to an empty string ('') so the user can introduce a new math expression
             """Clear the display."""
             self.setDisplayText('')
-
-
     # BUT WHAT IF WE NEED A CONTROLLER CLASS
         # What does the controller class need to do:
             # Access the GUI’s public interface
             # Handle the creation of math expressions
             # Connect button clicked signals with the appropriate slots
-
     # Create a Controller class to connect the GUI and the model
     class PyCalcCtrl:
         """PyCalc Controller class."""
@@ -715,21 +662,17 @@ Priya/Mac/Intermediate:
             self._view = view
             # Connect signals and slots
             self._connectSignals()
-
         def _buildExpression(self, sub_exp): # This is going to handle the math expression
             """Build expression."""
             expression = self._view.displayText() + sub_exp # also updates the calculator’s display in response to user input
             self._view.setDisplayText(expression)
-
         def _connectSignals(self): # connect the printable buttons with ._buildExpression() # allows your users to create math expressions by clicking on the calculator’s buttons
             """Connect signals and slots."""
             for btnText, btn in self._view.buttons.items():
                 if btnText not in {'=', 'C'}:
                     btn.clicked.connect(partial(self._buildExpression, btnText))  # connect the clear button (C) to ._view.clearDisplay(). This method will clear up the text on the display.
             self._view.buttons['C'].clicked.connect(self._view.clearDisplay)
-
     # HOWEVER - For this new controller class to work, you need to update main():
-
     # Client code
     def main(): # defines your calculator’s main function, which is considered a best practice # This function will be the entry point to the application
         """Main function."""
@@ -742,7 +685,6 @@ Priya/Mac/Intermediate:
         PyCalcCtrl(view=view) # This is what tells the controller's initialize method that the 'view' comes from the PyCalcUi (the view variable that is set a few lines above)
         # Execute the calculator's main loop
         sys.exit(pycalc.exec_()) # runs the application’s event loop with pycalc.exec_()
-
     if __name__ == '__main__':
         main()
     ```
@@ -760,14 +702,11 @@ Priya/Mac/Intermediate:
         # Controller - is class PyCalcCtrl
             # main is like a runner/index file
         # View - is class PyCalcUi
-
     #!/usr/bin/env python3
     # Above is a 'shebang line' => which defines where the interpreter is located
     """PyCalc is a simple calculator built using Python3 and PyQt5."""
     import sys
-
     from functools import partial # import this in to connect signals with methods that need to take an extra argument
-
     # Import QApplication and the required widgets from PyQt5.QtWidgets
     from PyQt5.QtWidgets import QApplication # import the required modules and classes from PyQt5.QtWidgets
     from PyQt5.QtWidgets import QMainWindow # import the required modules and classes from PyQt5.QtWidgets
@@ -777,10 +716,8 @@ Priya/Mac/Intermediate:
     from PyQt5.QtWidgets import QLineEdit # Imports text edit widgets
     from PyQt5.QtWidgets import QPushButton # Import button widgets
     from PyQt5.QtWidgets import QVBoxLayout # Imports vertical layout manager
-
     __version__ = '0.1' # Is this versioning the calculator?
     __author__ = 'Leodanis Pozo Ramos'  # Who is the author here? - He is one of the authors at RealPython
-
     # Create a subclass of QMainWindow to setup the calculator's GUI
     class PyCalcUi(QMainWindow): # creates the GUI with the class PyCalcUi. Note that this class inherits from QMainWindow
         """PyCalc's View (GUI)."""
@@ -799,7 +736,6 @@ Priya/Mac/Intermediate:
             # Create the display and the buttons
             self._createDisplay() # These buttons don't work without defining the behavior (see def on ln 38)
             self._createButtons() # These buttons don't work without defining the behavior first (see def on ln 49)
-
         def _createDisplay(self):
             """Create the display."""
             # Create the display widget
@@ -810,7 +746,6 @@ Priya/Mac/Intermediate:
             self.display.setReadOnly(True) # The display is set to read-only to avoid direct editing
             # Add the display to the general layout
             self.generalLayout.addWidget(self.display) # adds the display to the calculator’s general layout
-
         def _createButtons(self):
             """Create the buttons."""
             self.buttons = {} # First create an empty dictionary || datatype:dictionary - think hash from Ruby
@@ -845,32 +780,25 @@ Priya/Mac/Intermediate:
                 buttonsLayout.addWidget(self.buttons[btnText], pos[0], pos[1])
             # Add buttonsLayout to the general layout
             self.generalLayout.addLayout(buttonsLayout)
-
         # BUT WHAT IF YOU WANT TO UPDATE THE DICTIONARY? I MEAN - DO WE REALLY HAVE TO SET STATIC INFORMATION FOR THE BUTTONS?
             # .setDisplayText() to set and update the display’s text
             # .displayText() to get the current display’s text
             # .clearDisplay() to clear the display’s text
-
         def setDisplayText(self, text): # uses .setText() to set and update the display’s text, and .setFocus() to set the cursor’s focus on the display
             """Set display's text."""
             self.display.setText(text)
             self.display.setFocus()
-
         def displayText(self): # is a getter method that returns the display’s current text. When the user clicks on the equals sign (=), the program will use the return value of .displayText() as the math expression to be evaluated
             """Get display's text."""
             return self.display.text()
-
         def clearDisplay(self): # sets the display’s text to an empty string ('') so the user can introduce a new math expression
             """Clear the display."""
             self.setDisplayText('')
-
-
     # BUT WHAT IF WE NEED A CONTROLLER CLASS
         # What does the controller class need to do:
             # Access the GUI’s public interface
             # Handle the creation of math expressions
             # Connect button clicked signals with the appropriate slots
-
     # Create a Controller class to connect the GUI and the model
     class PyCalcCtrl:
         """PyCalc Controller class."""
@@ -879,28 +807,22 @@ Priya/Mac/Intermediate:
             self._view = view
             # Connect signals and slots
             self._connectSignals()
-
         def _buildExpression(self, sub_exp): # This is going to handle the math expression
             """Build expression."""
             expression = self._view.displayText() + sub_exp # also updates the calculator’s display in response to user input
             self._view.setDisplayText(expression)
-
         def _connectSignals(self): # connect the printable buttons with ._buildExpression() # allows your users to create math expressions by clicking on the calculator’s buttons
             """Connect signals and slots."""
             for btnText, btn in self._view.buttons.items():
                 if btnText not in {'=', 'C'}:
                     btn.clicked.connect(partial(self._buildExpression, btnText))  # connect the clear button (C) to ._view.clearDisplay(). This method will clear up the text on the display.
             self._view.buttons['C'].clicked.connect(self._view.clearDisplay)
-
     # HOWEVER - For this new controller class to work, you need to update main():
-
     # BUT WHAT ABOUT THE MATH? It currently doesn't do anything on 'equal'
         # So we hit the Model! It holds the data/business/math logic of an application
         # This is where the methods live to evaluate the operators used by the user
         # This is also where error handling (of the math) would occur
-
     ERROR_MSG = 'ERROR' # sets a global variable/constraint to print string 'ERROR' # Should happen when a user introduces an invalid math expression
-
     # Create a Model to handle the calculator's operation
     def evaluateExpression(expression):
         """Evaluate an expression."""
@@ -911,9 +833,7 @@ Priya/Mac/Intermediate:
             result = str(eval(expression, {}, {})) # use eval() to evaluate a string as an expression
         except Exception: # If not successful
             result = ERROR_MSG # save the global variable ERROR_MSG to the result
-
         return result # Return the result # Automatically hits this if the 'try' is successful
-
     # Client code
     def main(): # defines your calculator’s main function, which is considered a best practice # This function will be the entry point to the application
         """Main function."""
@@ -926,15 +846,14 @@ Priya/Mac/Intermediate:
         PyCalcCtrl(view=view) # This is what tells the controller's initialize method that the 'view' comes from the PyCalcUi (the view variable that is set a few lines above)
         # Execute the calculator's main loop
         sys.exit(pycalc.exec_()) # runs the application’s event loop with pycalc.exec_()
-
     if __name__ == '__main__':
         main()
     ```
     - You can run the script, but it still doesn't work on equal (See below)
   - [Fix your controller:](https://realpython.com/python-pyqt-gui-calculator/#completing-the-controller)
     - **UH OH! Why doesn't the calculator work when I've added the model?**
-    - Well, we never updated the controller with the model or methods that evalute the final expression
-    - #### PriyaDay1ProjectFinalCode
+    - Well, we never updated the controller with the model or methods that evaluate the final expression
+    - #### The Final Leg of Code
     - Update your code (to make it easier to read, it is the entire file, instead of showing ONLY the code updates)
     ```py
     # MVC
@@ -942,14 +861,11 @@ Priya/Mac/Intermediate:
         # Controller - is class PyCalcCtrl
             # main is like a runner/index file
         # View - is class PyCalcUi
-
     #!/usr/bin/env python3
     # Above is a 'shebang line' => which defines where the interpreter is located
     """PyCalc is a simple calculator built using Python3 and PyQt5."""
     import sys
-
     from functools import partial # import this in to connect signals with methods that need to take an extra argument
-
     # Import QApplication and the required widgets from PyQt5.QtWidgets
     from PyQt5.QtWidgets import QApplication # import the required modules and classes from PyQt5.QtWidgets
     from PyQt5.QtWidgets import QMainWindow # import the required modules and classes from PyQt5.QtWidgets
@@ -959,12 +875,9 @@ Priya/Mac/Intermediate:
     from PyQt5.QtWidgets import QLineEdit # Imports text edit widgets
     from PyQt5.QtWidgets import QPushButton # Import button widgets
     from PyQt5.QtWidgets import QVBoxLayout # Imports vertical layout manager
-
     __version__ = '0.1' # Is this versioning the calculator?
     __author__ = 'Leodanis Pozo Ramos'  # Who is the author here? - He is one of the authors at RealPython
-
     # ******************************VIEW******************************
-
     # Create a subclass of QMainWindow to setup the calculator's GUI
     class PyCalcUi(QMainWindow): # creates the GUI with the class PyCalcUi. Note that this class inherits from QMainWindow
         """PyCalc's View (GUI)."""
@@ -983,7 +896,6 @@ Priya/Mac/Intermediate:
             # Create the display and the buttons
             self._createDisplay() # These buttons don't work without defining the behavior (see def on ln 38)
             self._createButtons() # These buttons don't work without defining the behavior first (see def on ln 49)
-
         def _createDisplay(self):
             """Create the display."""
             # Create the display widget
@@ -994,7 +906,6 @@ Priya/Mac/Intermediate:
             self.display.setReadOnly(True) # The display is set to read-only to avoid direct editing
             # Add the display to the general layout
             self.generalLayout.addWidget(self.display) # adds the display to the calculator’s general layout
-
         def _createButtons(self):
             """Create the buttons."""
             self.buttons = {} # First create an empty dictionary || datatype:dictionary - think hash from Ruby
@@ -1029,34 +940,26 @@ Priya/Mac/Intermediate:
                 buttonsLayout.addWidget(self.buttons[btnText], pos[0], pos[1])
             # Add buttonsLayout to the general layout
             self.generalLayout.addLayout(buttonsLayout)
-
         # BUT WHAT IF YOU WANT TO UPDATE THE DICTIONARY? I MEAN - DO WE REALLY HAVE TO SET STATIC INFORMATION FOR THE BUTTONS?
             # .setDisplayText() to set and update the display’s text
             # .displayText() to get the current display’s text
             # .clearDisplay() to clear the display’s text
-
         def setDisplayText(self, text): # uses .setText() to set and update the display’s text, and .setFocus() to set the cursor’s focus on the display
             """Set display's text."""
             self.display.setText(text)
             self.display.setFocus()
-
         def displayText(self): # is a getter method that returns the display’s current text. When the user clicks on the equals sign (=), the program will use the return value of .displayText() as the math expression to be evaluated
             """Get display's text."""
             return self.display.text()
-
         def clearDisplay(self): # sets the display’s text to an empty string ('') so the user can introduce a new math expression
             """Clear the display."""
             self.setDisplayText('')
-
-
     # BUT WHAT IF WE NEED A CONTROLLER CLASS
         # What does the controller class need to do:
             # Access the GUI’s public interface
             # Handle the creation of math expressions
             # Connect button clicked signals with the appropriate slots
-
     # ******************************CONTROLLER******************************
-
     # Create a Controller class to connect the GUI and the model
     class PyCalcCtrl:
         """PyCalc Controller class."""
@@ -1067,19 +970,16 @@ Priya/Mac/Intermediate:
             self._view = view
             # Connect signals and slots
             self._connectSignals()
-
         def _calculateResult(self): # takes the display’s content, evaluate it as a math expression, and finally show the result in the display
             """Evaluate expressions."""
             result = self._evaluate(expression=self._view.displayText())
             self._view.setDisplayText(result)
-
         def _buildExpression(self, sub_exp): # This is going to handle the math expression
             """Build expression."""
             if self._view.displayText() == ERROR_MSG: # check if an error has occured
                 self._view.clearDisplay() # If it is, clear the display
             expression = self._view.displayText() + sub_exp # also updates the calculator’s display in response to user input
             self._view.setDisplayText(expression)
-
         def _connectSignals(self): # connect the printable buttons with ._buildExpression() # allows your users to create math expressions by clicking on the calculator’s buttons
             """Connect signals and slots."""
             for btnText, btn in self._view.buttons.items():
@@ -1088,18 +988,13 @@ Priya/Mac/Intermediate:
             self._view.buttons['='].clicked.connect(self._calculateResult) # This enables the equals button
             self._view.display.returnPressed.connect(self._calculateResult) # If a user hits enter, the calculator can also process the expression (same as equals?)
             self._view.buttons['C'].clicked.connect(self._view.clearDisplay)
-
     # HOWEVER - For this new controller class to work, you need to update main():
-
     # ******************************MODEL******************************
-
     # BUT WHAT ABOUT THE MATH? It currently doesn't do anything on 'equal'
         # So we hit the Model! It holds the data/business/math logic of an application
         # This is where the methods live to evaluate the operators used by the user
         # This is also where error handling (of the math) would occur
-
     ERROR_MSG = 'ERROR' # sets a global variable/constraint to print string 'ERROR' # Should happen when a user introduces an invalid math expression
-
     # Create a Model to handle the calculator's operation
     def evaluateExpression(expression):
         """Evaluate an expression."""
@@ -1112,12 +1007,9 @@ Priya/Mac/Intermediate:
             result = ERROR_MSG # save the global variable ERROR_MSG to the result
 
         return result # Return the result # Automatically hits this if the 'try' is successful
-
     # UH OH! Why doesn't the calculator work when I've added the model?
         # Well - we haven't actually finished the logic in the controller
-
     # ******************************MAIN/RUNNER/INDEX******************************
-
     # Client code
     def main(): # defines your calculator’s main function, which is considered a best practice # This function will be the entry point to the application
         """Main function."""
@@ -1131,7 +1023,6 @@ Priya/Mac/Intermediate:
         PyCalcCtrl(view=view, model=model) # This is what tells the controller's initialize method that the 'view' comes from the PyCalcUi (the view variable that is set a few lines above)
         # Execute the calculator's main loop
         sys.exit(pycalc.exec_()) # runs the application’s event loop with pycalc.exec_()
-
     if __name__ == '__main__':
         main()
     ```

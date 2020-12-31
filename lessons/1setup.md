@@ -1,7 +1,13 @@
 # Setup:
 
-1. [Windows - Basic (dev env coming soon)](#windows-setup)
-1. [Mac](#mac-setup)
+
+## What is on this page
+
+Ricky/Windows/Beginner:
+- [Windows - Basic (dev env coming soon)](#windows-setup)
+
+Priya/Mac/Intermediate:
+- [Mac](#mac-setup)
 
 ## Windows Setup
 _Following the Microsoft [tutorials](https://docs.microsoft.com/en-us/windows/python/beginners)_
