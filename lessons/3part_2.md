@@ -1,4 +1,4 @@
-# Part 2 Practice - ROUND 1: Building a RESTful Api
+# Part 2 Practice
 Keyword - REST
 ![rest](https://static.onecms.io/wp-content/uploads/sites/35/2017/04/03204310/fb-lazy-cat-rest-day-gif.gif)
 ## With Python, MongoDB, and Flask (No testing)
@@ -27,15 +27,27 @@ Goal is to create a number guessing game
 Goal is to build a a RESTful api with Flask and MongoDB
 
 [Setup](#setup)
-Following [this tutorial](https://dev.to/paurakhsharma/flask-rest-api-part-0-setup-basic-crud-api-4650)
 
-- `mkdir practice_api_movies`
+[Get your Root endpoint Exposed](#get-your-root-endpoint-exposed)
+
+[Let's get an index of movies returned](#lets-get-an-index-of-movies-returned)
+
+[CRUD - It's what you do](#crud-its-what-you-do)
+
+[Test CRUD out with Postman](#test-crud-with-postman)
+
+[](#)
+
+#### Setup
+- Following [this tutorial](https://dev.to/paurakhsharma/flask-rest-api-part-0-setup-basic-crud-api-4650)
+- Create your project folder/directory: `mkdir practice_api_movies`
 - `cd practice_api_movies`
-- attempted to install pipenv
-- tried `pip install --user pipenv`, error = 'no command pip'
-- tried `pip3 install --user pipenv` and got a correct sequence, however, could not use `pipenv` still
-- Finally tried `sudo -H pip install -U pipenv` ([source](https://stackoverflow.com/questions/46391721/pipenv-command-not-found))
-- Now using `pipenv install flask` works (this creates a new virtual environment and installs flask)
+- Create a new virtual environment
+- Successful installation of pipenv, includes errors
+  - tried `pip install --user pipenv`, error = 'no command pip'
+  - tried `pip3 install --user pipenv` and got a correct sequence, however, could not use `pipenv` still
+  - Finally tried `sudo -H pip install -U pipenv` ([source](https://stackoverflow.com/questions/46391721/pipenv-command-not-found))
+- Use `pipenv install flask` to install flask
 - The following prints out
     ```console
     Creating a virtualenv for this project...
@@ -80,7 +92,8 @@ Following [this tutorial](https://dev.to/paurakhsharma/flask-rest-api-part-0-set
     [requires]
     python_version = "3.9"
     ```
-- `touch app.py`
+- #### Get your Root endpoint Exposed
+- Make a file for our rest api: `touch app.py`
 - Code for the app file:
     ```python
     # imports the flask class from the flask package
@@ -121,7 +134,8 @@ Following [this tutorial](https://dev.to/paurakhsharma/flask-rest-api-part-0-set
 - Checked at http://localhost:5000 OR http://127.0.0.1:5000/
 - Confirmed site response was `{'hello': 'world'}`
 - Yay! Everything is up an running
-![round_of_applause](https://media0.giphy.com/media/PkXrOxe77MbmavlfWa/giphy.gif)
+- ![round_of_applause](https://media0.giphy.com/media/PkXrOxe77MbmavlfWa/giphy.gif)
+- #### Let's get an index of movies returned
 - Time to update our `app.py` "runner" file:
     ```python
     # Imports jsonify from flask package. This converts our data into proper JSON responses
@@ -152,10 +166,11 @@ Following [this tutorial](https://dev.to/paurakhsharma/flask-rest-api-part-0-set
     app.run()
     ```
 - Tested at http://127.0.0.1:5000/movies and http://localhost:5000/movies
-- From this point, all testing will be done directly through localhost since 127.0.0.1 represents localhost
+  - From this point, all testing will be done directly through localhost since 127.0.0.1 represents localhost
 - Now that we know our endpoint is exposing data correctly and through JSON, time to check it with **Postman**
-![image](bring in from finder Screen Shot 2020-12-30 at 12.09.18 PM)
+![Get on Postman](https://user-images.githubusercontent.com/49959312/103389126-2e907380-4aca-11eb-8949-9ea100449747.png)
 - Woo! It works
+- #### CRUD - It's what you do
 - Time to work on that CRUD (create, read, update, and destroy, see this [article](https://trendintech.com/2018/01/19/why-is-crud-so-important-in-computer-programming/) for more information on CRUD)
 - Updates to code:
     ```python
@@ -218,14 +233,14 @@ Following [this tutorial](https://dev.to/paurakhsharma/flask-rest-api-part-0-set
 
     app.run()
     ```
-- Test it in POSTMAN
+- #### Test CRUD out with Postman
 - Create/Post:
   - Post verb
   - Body tab = raw & JSON
   - Put user/client info for a NEW movie record in the body input section
   - Hit Send
   - VOILA! - You can confirm with /movies as a GET to see all 3 movie records
-  - ![image](Screen Shot 2020-12-30 at 4.18.17 PM)
+  - ![image](https://user-images.githubusercontent.com/49959312/103389125-2e907380-4aca-11eb-9f11-c0c748ada3b8.png)
 - Update/Put:
   - Put verb
   - Body tab = raw & JSON
@@ -233,11 +248,11 @@ Following [this tutorial](https://dev.to/paurakhsharma/flask-rest-api-part-0-set
   - Hit send
   - **ERROR** - I attempted to do /movies/3, since there are 3 records, however, it is technically id=2 because it begins at 0. Is there a discrepancy in the code? Why does POST show id=3?
   - VOILA!
-  - ![image](Screen Shot 2020-12-30 at 4.21.55 PM)
+  - ![image](https://user-images.githubusercontent.com/49959312/103389124-2df7dd00-4aca-11eb-8eb4-41ebb4b3fa2f.png)
 - Destroy/Delete:
   - Ensure correct id in endpoint uri
   - Delete verb
   - Hit send
   - VOILA!
-  - ![image](Screen Shot 2020-12-30 at 4.25.52 PM)
+  - ![image](https://user-images.githubusercontent.com/49959312/103389122-2d5f4680-4aca-11eb-99d0-0f3abee0cf08.png)
 - blarg
