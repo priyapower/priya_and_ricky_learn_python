@@ -28,25 +28,31 @@ Goal is to build a a RESTful api with Flask and MongoDB
 
 [Setup](#setup)
 
-[Get your Root endpoint Exposed](#get-your-root-endpoint-exposed)
+[Get your Root Endpoint Exposed](#get-your-root-endpoint-exposed)
 
-[Let's get an index of movies returned](#lets-get-an-index-of-movies-returned)
+[Let's Get an Index of Movies Returned](#lets-get-an-index-of-movies-returned)
 
-[CRUD - It's what you do](#crud-its-what-you-do)
+[CRUD - It's What You Do](#crud-its-what-you-do)
 
 [Test CRUD out with Postman](#test-crud-with-postman)
 
-[Installing Mongodb and Understanding the library we will use](#installing-mongodb-and-understanding-the-library-we-will-use)
+[Installing Mongodb and Understanding the Library We Will Use](#installing-mongodb-and-understanding-the-library-we-will-use)
 
-[Getting started with the database](#getting-started-with-the-database)
+[Getting Started with the Database](#getting-started-with-the-database)
 
-[Connect your database with your app](#connect-your-database-with-your-app)
+[Connect Your Database with Your App](#connect-your-database-with-your-app)
 
-[Make our API endpoints more robust](#make-our-api-endpoints-more-robust)
+[Make Our API Endpoints More Robust](#make-our-api-endpoints-more-robust)
 
-[Connect seeds file for testing](#Connect-seeds-file-for-testing)
+[Run the Server and Test in Postman](#run-the-server-and-test-in-postman)
 
-[Run the server and test in Postman](#run-the-server-and-test-in-postman)
+[Add Data to Database](#add-data-to-database)
+
+[Best Practices for Organizing Code](#best-practices-for-organizing-code)
+
+[Blueprints](#blueprints)
+
+[Flask RESTful](#flask-restful)
 
 #### Setup
   - Following [this tutorial](https://dev.to/paurakhsharma/flask-rest-api-part-0-setup-basic-crud-api-4650)
@@ -358,11 +364,12 @@ Goal is to build a a RESTful api with Flask and MongoDB
   from database.db import initialize_db
   # Brings in the class (document) we just wrote in models.py
   from database.models import Movie
+  import json
   app = Flask(__name__)
   # Sets up configuration for mongodb
   app.config['MONGODB_SETTINGS'] = {
       # declare the host in the format <host-url>/<database-name> (see http://docs.mongoengine.org/projects/flask-mongoengine/en/latest/#configuration)
-      'host': 'mongodb://localhost/movie-bag'
+      'host': 'mongodb://localhost/practice-api-movies'
   }
   # initialize the database
   initialize_db(app)
@@ -407,10 +414,103 @@ Goal is to build a a RESTful api with Flask and MongoDB
       movies = Movie.objects.get(id=id).to_json()
       return Response(movies, mimetype="application/json", status=200)
   ```
+- The Final code:
+  ```py
+  from flask import Flask, request, Response
+  from database.db import initialize_db
+  from database.models import Movie
+  import json
 
-- #### Connect seeds file for testing
-  - [source](https://github.com/pkosiec/mongo-seeding)
+  app = Flask(__name__)
+
+  app.config['MONGODB_SETTINGS'] = {
+      'host': 'mongodb://localhost/practice-api-movies'
+  }
+
+  initialize_db(app)
+
+  @app.route('/')
+  def hello():
+      return {'hello': 'world'} # Left this for an browser confirmation that localhost is connected correctly
+
+  @app.route('/movies')
+  def get_movies():
+      movies = Movie.objects().to_json()
+      return Response(movies, mimetype="application/json", status=200)
+
+  @app.route('/movies', methods=['POST'])
+  def add_movie():
+      body = request.get_json()
+      movie =  Movie(**body).save()
+      id = movie.id
+      return {'id': str(id)}, 200
+
+  @app.route('/movies/<id>', methods=['PUT'])
+  def update_movie(id):
+      body = request.get_json()
+      Movie.objects.get(id=id).update(**body)
+      return '', 200
+
+  @app.route('/movies/<id>', methods=['DELETE'])
+  def delete_movie(id):
+      movie = Movie.objects.get(id=id).delete()
+      return '', 200
+
+  @app.route('/movies/<id>')
+  def get_movie(id):
+      movies = Movie.objects.get(id=id).to_json()
+      return Response(movies, mimetype="application/json", status=200)
+
+  app.run()
+  ```
+
 - #### Run the server and test in Postman
   - If you are outside of the virtual environment, first run `pipenv shell`
   - Otherwise, just run `python app.py`
   - If there are no typos, you should see your server start
+  - To continue testing, we may need to ensure database is connected and loaded with data (see next section)
+
+- #### Add data to database
+<!-- - [source](https://github.com/pkosiec/mongo-seeding) -->
+  - Exit the server (CTRL + C on Mac)
+  - First, we need to see if we have truly started mongodb.
+    - Run `brew services list`.
+    - Is `mongodb-community` labeled as _started_ or _stopped_?
+      - If started, great, move to next bullet.
+      - If not, run `brew services start mongodb-community@4.4` (change version if need to, or use without version)
+  - Now that mongodb is started:
+    - I ran my server first (In terminal `python app.py`)
+    - And confirmed my Postman could "hit" the endpoints
+    - I ran POST with faker data and then ran GET to confirm at least 2 endpoints were exposed and working correctly
+  - We can always interact with the database using Postman, **but what if I want to interact with the db using my terminal?**
+    - In terminal, run `mongo` to enter the database shell
+    - Run `show dbs` to see your databases (_my project db didn't show up until I had run the server and connected via Postman - maybe this was a fluke or a misconception on my part_)
+    - Run `use <project-db-name>`; for me this was `use practice-api-movies`
+    - The response from terminal was `switched to db practice-api-movies`
+    - FUN FACT ABOUT MONGO: _If this db didn't exist before, it will create it right here!_
+    - Commands:
+      - db is a command
+      - foo = <collection-name> (in our example it would be movie)
+      - DROP: `db.dropDatabase()`
+      - INSERT single: `db.foo.insert({
+          "attribute": "information",
+          "attribute": "information"
+        })`
+      - INSERT multi: `db.foo.insert([
+        {
+          "attribute": "information"
+        },
+        {
+          "attribute2": "information2"
+        }
+        ])`
+      - GET all: `db.foo.find()`
+      - GET all, pretty: `db.foo.find().pretty()`
+      - See all collections: `show collections`
+      - GET single record `db.foo.findOne()`
+      - REMOVE single record: `db.foo.remove({"id": "id object"})`
+      - UPDATE single record: `db.foo.update({"id": "id object"}, {"name": "NEW NAME"} )`
+      - [Looking for more commands?](https://docs.mongodb.com/manual/crud/#create-operations)
+
+- At this point you have successfully added data to your database using mongo shell (terminal) or using Postman and can test each of your CRUD endpoints via Postman! Celebrate!
+- ![celebrate with birds](https://media2.giphy.com/media/ZUomWFktUWpFu/giphy.gif)
