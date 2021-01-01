@@ -25,39 +25,30 @@ Goal is to create a number guessing game
 
 ## Priya's Practice
 Goal is to build a a RESTful api with Flask and MongoDB
+- [Part 1: Basics and Setup](#part1)
+  1. [Setup](#setup)
+  1. [Get your Root Endpoint Exposed](#get-your-root-endpoint-exposed)
+  1. [Let's Get an Index of Movies Returned](#lets-get-an-index-of-movies-returned)
+  1. [CRUD - It's What You Do](#crud-its-what-you-do)
+  1. [Test CRUD out with Postman](#test-crud-out-with-postman)
+- [Part 2: Mongo](#part2)
+  1. [Installing Mongodb and Understanding the Library We Will Use](#installing-mongodb-and-understanding-the-library-we-will-use)
+  1. [Getting Started with the Database](#getting-started-with-the-database)
+  1. [Connect Your Database with Your App](#connect-your-database-with-your-app)
+  1. [Make Our API Endpoints More Robust](#make-our-api-endpoints-more-robust)
+  1. [Run the Server and Test in Postman](#run-the-server-and-test-in-postman)
+  1. [Add Data to Database](#add-data-to-database)
+- [Part 3: Refactor](#part3)
+  1. [Best Practices for Organizing Code](#best-practices-for-organizing-code)
+  1. [Blueprints](#blueprints)
+  1. [Flask RESTful](#flask-restful)
+- [Part 4: Authentication and Authorization](#part4)
+  1. [Authentication and Authorization](#Authentication-and-Authorization)
+  1. [Implement Authentication into Our Backend Server](#Implement-Authentication-into-Our-Backend-Server)
+  1. [Implement Authorization into Our Backend Server](#Implement-Authorization-into-Our-Backend-Server)
 
-[Setup](#setup)
-
-[Get your Root Endpoint Exposed](#get-your-root-endpoint-exposed)
-
-[Let's Get an Index of Movies Returned](#lets-get-an-index-of-movies-returned)
-
-[CRUD - It's What You Do](#crud-its-what-you-do)
-
-[Test CRUD out with Postman](#test-crud-with-postman)
-
-[Installing Mongodb and Understanding the Library We Will Use](#installing-mongodb-and-understanding-the-library-we-will-use)
-
-[Getting Started with the Database](#getting-started-with-the-database)
-
-[Connect Your Database with Your App](#connect-your-database-with-your-app)
-
-[Make Our API Endpoints More Robust](#make-our-api-endpoints-more-robust)
-
-[Run the Server and Test in Postman](#run-the-server-and-test-in-postman)
-
-[Add Data to Database](#add-data-to-database)
-
-[Best Practices for Organizing Code](#best-practices-for-organizing-code)
-
-[Blueprints](#blueprints)
-
-[Flask RESTful](#flask-restful)
-
-[Authentication and Authorization](#Authentication-and-Authorization)
-
-[Blarg](#blarg)
-
+### Part 1
+------
 #### Setup
   - Following [this tutorial](https://dev.to/paurakhsharma/flask-rest-api-part-0-setup-basic-crud-api-4650)
   - Create your project folder/directory: `mkdir practice_api_movies`
@@ -193,7 +184,8 @@ Goal is to build a a RESTful api with Flask and MongoDB
   ![Get on Postman](https://user-images.githubusercontent.com/49959312/103389126-2e907380-4aca-11eb-8949-9ea100449747.png)
   - Woo! It works
 
-- #### CRUD - It's what you do
+- #### CRUD, It's what you do
+  - For pop reference, see [example commercial](https://www.youtube.com/watch?v=sxcsKE1SS4Y) and [wiki](https://en.wikipedia.org/wiki/VERB_(program)
   - Time to work on that CRUD (create, read, update, and destroy, see this [article](https://trendintech.com/2018/01/19/why-is-crud-so-important-in-computer-programming/) for more information on CRUD)
   - Updates to code:
       ```python
@@ -282,7 +274,7 @@ Goal is to build a a RESTful api with Flask and MongoDB
 
 - Final Code for this section:
   ```py
-  Part 0 Final product
+  # Part 0 Final product
   from flask import Flask, jsonify, request
 
   app = Flask(__name__)
@@ -327,7 +319,8 @@ Goal is to build a a RESTful api with Flask and MongoDB
 
   app.run()
   ```
-
+### Part 2
+------
 - #### Installing Mongodb and Understanding the library we will use
   - The docs for installing on [mac](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/)
   - Prereqs: xcode command-line & homebrew
@@ -473,8 +466,9 @@ Goal is to build a a RESTful api with Flask and MongoDB
       movies = Movie.objects.get(id=id).to_json()
       return Response(movies, mimetype="application/json", status=200)
   ```
-- The Final code:
+- The Final code for this section:
   ```py
+  # Part 1 Final Code
   from flask import Flask, request, Response
   from database.db import initialize_db
   from database.models import Movie
@@ -584,6 +578,8 @@ Goal is to build a a RESTful api with Flask and MongoDB
 - At this point you have successfully added data to your database using mongo shell (terminal) or using Postman and can test each of your CRUD endpoints via Postman! Celebrate!
 - ![celebrate with birds](https://media.giphy.com/media/B81XkL3dtnWTe/giphy.gif)
 
+### Part 3
+------
 - #### Best Practices for Organizing Code
   - See [here](https://exploreflask.com/en/latest/organizing.html) for official Flask documentation on organizing code
   - [Flask Community](https://github.com/pallets/flask/issues/2626) conversation on MVC, factory patterns, and folder/tree structure
@@ -832,8 +828,9 @@ Goal is to build a a RESTful api with Flask and MongoDB
     ```
   - Don't forget to test in Postman (I like to test GET, GET by id, POST, PUT, and DELETE) (it is a great thing I did, because there were a couple typos!! See final code for updates)
     - _Troubleshooting tip: When updating your code, stop and restart server to see affects in Postman_
-  - Final code:
+  - Final code for this section:
     ```py
+    # Part 3 Final Code
     # app.py
     from flask import Flask
     from database.db import initialize_db
@@ -897,11 +894,433 @@ Goal is to build a a RESTful api with Flask and MongoDB
   - Take a moment to appreciate your clean and pretty code!
   - ![moment](https://i.pinimg.com/originals/4a/3e/d6/4a3ed62b7a158d34a37d8c53595b445f.gif)
 
+### Part 4
+------
 - #### Authentication and Authorization
   - Authentication vs Authorization:
     - Authentication: You are who you say you are; _Logging into an application_
     - Authorization: You are allowed to do the things you are trying to do; _An admin is authorized to see all users and delete/update/create users, whereas a user is only authorized to update their own records_
-  - Let's implement authentication into our backend server
-  - Let's implement authorization into our backend server
+- #### Implement Authentication into Our Backend Server
+  - Why do we need it?
+  - Right now, any user with this code can access perform all CRUD functionality. Maybe you want this. Maybe you don't.
+  - If you need to restrict who has access to CRUD functionality, we need to add authentication so only a logged in user can access CRUD.
+  - _An example of usage: an unregistered user may be able to access GET all and GET by id, but you may not want them creating, destroying, or updating records unless they have logged in._
+  - We have a Movie Model, now we need to add a User Model:
+  - Update `database/models.py`
+    ```py
+    from .db import db
 
+    # Adds a new model class called User that is a document
+    class User(db.Document):
+        # Adds an email field that is required and must be unique
+        email = db.EmailField(required=True, unique=True)
+        # Adds a password field that is required and must be a minimum length of 6 characters
+        password = db.StringField(required=True, min_length=6)
+
+    class Movie(db.Document):
+        name = db.StringField(required=True, unique=True)
+        casts = db.ListField(db.StringField(), required=True)
+        genres = db.ListField(db.StringField(), required=True)
+    ```
+  - **WHOA!!** => is it smart to save our password as a string. In essence, that is saving a raw password to the database. SECURITY ALERT! This is bad practice for password/security/safety
+  - We need to hash our password (converting a password into an encrypted, unreadable, irreversible string of characters/symbols) using bcyrpt, specifically the [flask version](https://flask-bcrypt.readthedocs.io/en/latest/)
+  - In terminal, run `pipenv install flask-bcrypt`
+  - Terminal returns
+    ```console
+    Installing flask-bcrypt...
+    Adding flask-bcrypt to Pipfile's [packages]...
+    ✔ Installation Succeeded
+    Pipfile.lock (b8315d) out of date, updating to (bff510)...
+    Locking [dev-packages] dependencies...
+    Locking [packages] dependencies...
+    Building requirements...
+    Resolving dependencies...
+    ✔ Success!
+    Updated Pipfile.lock (bff510)!
+    Installing dependencies from Pipfile.lock (bff510)...
+      🐍   ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0/0 — 00:00:00
+    ```
+  - We need to add bcrypt information to `app.py` (update the top)
+    ```py
+    from flask import Flask
+    # Bring in Bcrypt
+    from flask_bcrypt import Bcrypt
+    from database.db import initialize_db
+    from flask_restful import Api
+    from resources.routes import initialize_routes
+
+    app = Flask(__name__)
+    api = Api(app)
+    # Apply bcrypt to the app
+    bcrypt = Bcrypt(app)
+    ```
+  - Update `models.py` for functions that will generate a password hash and confirm correct password hash
+    ```py
+    from .db import db
+    # Imports bcrypt functions for generating and checking hashes
+    from flask_bcrypt import generate_password_hash, check_password_hash
+
+    class User(db.Document):
+        email = db.EmailField(required=True, unique=True)
+        password = db.StringField(required=True, min_length=6)
+
+        # Makes a function that calls self as the argument
+        def hash_password(self):
+            # For the self object's password, run the hash generator
+            self.password = generate_password_hash(self.password).decode('utf8')
+
+        # Makes a function that takes self and password as an argument
+        def check_password(self, password):
+            # Returns if the password from input patches self.password
+            return check_password_hash(self.password, password)
+
+    class Movie(db.Document):
+        name = db.StringField(required=True, unique=True)
+        casts = db.ListField(db.StringField(), required=True)
+        genres = db.ListField(db.StringField(), required=True)
+    ```
+  - Now that we have a User, we also need endpoints for our user, such us _signing up_ or _registering_
+    - From directory `resources`
+    - Run `touch auth.py`
+  - Add code to `auth.py`
+    ```py
+    # We need request from flask
+    from flask import request
+    # We need User model
+    from database.models import User
+    # We need Resource for our restful api code
+    from flask_restful import Resource
+
+    # Build a new endpoint class
+    class SignupApi(Resource):
+        # Writes a post endpoint for SignupApi (we still need a route for this)
+        def post(self):
+            body = request.get_json()
+            user = User(**body)
+            # ensures password is hashed
+            user.hash_password()
+            # save the user
+            user.save()
+            id = user.id
+            # returns id as response
+            return {'id': str(id)}, 200
+
+    ```
+  - Now to add that route, update `routes.py`:
+    ```py
+    from .movie import MovieApi, MoviesApi
+    # imports the new class for SignupApi
+    from .auth import SignupApi
+
+    def initialize_routes(api):
+        api.add_resource(MoviesApi, '/api/v1/movies')
+        api.add_resource(MovieApi, '/api/v1/movies/<id>')
+        # Adds a route that allows for registration/signing up
+        api.add_resource(SignupApi, '/api/v1/auth/signup')
+    ```
+  - TEST time! Go to Postman and test POSTing to http://localhost:5000/api/v1/auth/signup, then go to Mongo Shell and check Users collection for a hashed password
+    - Postman Post Request Check
+      - ![Postman POST Request](https://user-images.githubusercontent.com/49959312/103426165-b8951680-4b74-11eb-92a0-f8667c3b3d74.png)
+    - Mongo Password Hashing Check
+      - For this, I ran:
+      - `mongo`
+      - `show dbs`
+      - `use practice-api-movies`
+      - `show collections`
+      - `db.user.find().pretty()`
+      - ![Mongo Check](https://user-images.githubusercontent.com/49959312/103426217-06aa1a00-4b75-11eb-8a10-05bd74075bc5.png)
+  - SIDE QUEST: Need a GUI for your Mongo db interaction? Try [Compass](https://www.mongodb.com/products/compass)
+  - Okay, so a user can sign up for your application, but can they login as a returning user? AND if they are logged in, how does the application know they are still who they say they are without making them give their email and password every time? **This is where _token-based authentication_ play a large part!**
+  - For our purposes, we are going to use [JSON Web Tokens](https://jwt.io/introduction/), a popular choice for token-based authentication, especially if your code already uses JSON for its data exposure and consumption
+  - Install by running `pipenv install flask-jwt-extended`
+  - Terminal response:
+    ```console
+    Installing flask-jwt-extended...
+    Adding flask-jwt-extended to Pipfile's [packages]...
+    ✔ Installation Succeeded
+    Pipfile.lock (bff510) out of date, updating to (340587)...
+    Locking [dev-packages] dependencies...
+    Locking [packages] dependencies...
+    Building requirements...
+    Resolving dependencies...
+    ✔ Success!
+    Updated Pipfile.lock (340587)!
+    Installing dependencies from Pipfile.lock (340587)...
+      🐍   ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0/0 — 00:00:00
+    ```
+  - For this project, we want to save our user's id as our token, but first it needs to be made secret (with salt - the secret key). We will need the secret key saved somewhere away from codebase, so we will make a `.env` file and give the application access to it (but not a public repo!)
+  - From root folder, `touch .env`
+  - In `.env` file, add a key that should be long and hard to guess:
+  ```
+  JWT_SECRET_KEY = '<your-encryption-key>'
+  ```
+    - Having trouble coming up with an encrypted key? You can always try random typing on your keyboard, OR:
+    - I like to use this [website](https://www.allkeysgenerator.com/Random/Security-Encryption-Key-Generator.aspx)
+    - For this one, I used the `GUID` tab and grabbed a random set, for example `JWT_SECRET_KEY = '786b115a5e2e405fbb72e88d7a8bb335'`
+  - Since we want to ensure this file is kept off public files, let's go ahead and add a `.gitignore` to the project folder
+    - Don't forget to add `.env` to the .gitignore file
+    - At this point, we haven't actually initialized git in this project or worked on uploading it to Github, but better safe than sorry!
+  - Update `app.py` to configure `.env`
+    ```py
+    from flask import Flask
+    from flask_bcrypt import Bcrypt
+    #Imports jwt information
+    from flask_jwt_extended import JWTManager
+
+    from database.db import initialize_db
+    from flask_restful import Api
+    from resources.routes import initialize_routes
+
+    app = Flask(__name__)
+    # This environment variable stores the location of the .env file (even app.py doesn't have direct access to .env!)
+    app.config.from_envvar('ENV_FILE_LOCATION')
+
+    api = Api(app)
+    bcrypt = Bcrypt(app)
+    # Runs the App throught the JWT manager
+    jwt = JWTManager(app)
+
+    app.config['MONGODB_SETTINGS'] = {
+        'host': 'mongodb://localhost/practice-api-movies'
+    }
+
+    initialize_db(app)
+
+    @app.route('/')
+    def hello():
+        return {'hello': 'world'}
+
+    initialize_routes(api)
+
+    app.run()
+    ```
+  - For the above code to work:
+    - Mac Terminal: run `export ENV_FILE_LOCATION=./.env`
+    - Windows Powershell: run `set ENV_FILE_LOCATION=./.env`
+  - To finish the login endpoint we need to update `auth.py` and `routes.py`
+  - `auth.py`
+    ```py
+    from flask import Response, request
+    # bring in token properties
+    from flask_jwt_extended import create_access_token
+    from database.models import User
+    from flask_restful import Resource
+    # bring in python datetime
+    import datetime
+
+    class SignupApi(Resource):
+        def post(self):
+            body = request.get_json()
+            user = User(**body)
+            user.hash_password()
+            user.save()
+            id = user.id
+            return {'id': str(id)}, 200
+
+    # Makes a new class endpoint for Login
+    class LoginApi(Resource):
+        # Post verb
+        def post(self):
+            body = request.get_json()
+            # Checks the User objects in the data for a user that matches email
+            user = User.objects.get(email=body.get('email'))
+            # Runs authorization check
+            authorized = user.check_password(body.get('password'))
+            # If NOT authorized, end function and return error message and status code 401
+            if not authorized:
+                return {'error': 'Email or password invalid'}, 401
+
+            # Else, if authorized, run the following
+            # Create a 7 day time limit (users can't use this token after 7 days)
+            expires = datetime.timedelta(days=7)
+            # make an access token using JWT, specifically on user.id
+            access_token = create_access_token(identity=str(user.id), expires_delta=expires)
+            # return the access_token and status of 200
+            return {'token': access_token}, 200
+    ```
+  - `routes.py`
+    ```py
+    from .movie import MovieApi, MoviesApi
+    # Also brings in LoginApi class endpoint
+    from .auth import SignupApi, LoginApi
+
+    def initialize_routes(api):
+        api.add_resource(MoviesApi, '/api/v1/movies')
+        api.add_resource(MovieApi, '/api/v1/movies/<id>')
+        api.add_resource(SignupApi, '/api/v1/auth/signup')
+        # New route for logging in
+        api.add_resource(LoginApi, '/api/v1/auth/login')
+    ```
+- #### Implement Authorization into Our Backend Server
+  - We will need to update our `movie.py` for safeguards using JWT - only authenticated users can Create, Update, and Delete movie records
+  - `movie.py`
+    ```py
+    from flask import Response, request
+    # Brings in jwt_required package
+    from flask_jwt_extended import jwt_required
+    from database.models import Movie
+    from flask_restful import Resource
+
+    class MovieApi(Resource):
+        def get(self, id):
+            movie = Movie.objects.get(id=id).to_json()
+            return Response(movie, mimetype="application/json", status=200)
+
+        # Requires jwt on this function
+        @jwt_required
+        def put(self, id):
+            body = request.get_json()
+            Movie.objects.get(id=id).update(**body)
+            return '', 200
+
+        # Requires jwt on this function
+        @jwt_required
+        def delete(self, id):
+            movie = Movie.objects.get(id=id).delete()
+            return '', 200
+
+    class MoviesApi(Resource):
+        def get(self):
+            movies = Movie.objects().to_json()
+            return Response(movies, mimetype="application/json", status=200)
+
+        # Requires jwt on this function
+        @jwt_required
+        def post(self):
+            body = request.get_json()
+            movie =  Movie(**body).save()
+            id = movie.id
+            return {'id': str(id)}, 200
+    ```
+  - Test in Postman:
+    - We are going to login the user we "signed up". To recall my dummy data was:
+      ```json
+      {
+          "email": "test@user.com",
+          "password": "IAmAPassword"
+      }
+      ```
+    - Run the server in terminal, `python app.py`
+    - POST http://localhost:5000/api/v1/auth/login
+    - ![postman login](https://user-images.githubusercontent.com/49959312/103431480-9eb3fd80-4b8d-11eb-81bc-c177155b5262.png)
+    - If you attempt POST http://localhost:5000/api/v1/movies, **Error!**
+    - ![postman post error](https://user-images.githubusercontent.com/49959312/103431501-fd797700-4b8d-11eb-8617-a65cf0d7e978.png)
+    - But if you put Authorization in the headers and grab the token from your login response, you can _NOW_ gain access to POSTing a new movie record!
+    - ![success postman post](https://user-images.githubusercontent.com/49959312/103431540-bc359700-4b8e-11eb-8b1b-281fc4dffc0a.png)
+  - What if I want to restrict update and destroy to only the user who originally created that record?
+  - Update `models.py` for these restrictions and relationship between movie and user
+    ```py
+    from .db import db
+    from flask_bcrypt import generate_password_hash, check_password_hash
+
+    class Movie(db.Document):
+      name = db.StringField(required=True, unique=True)
+      casts = db.ListField(db.StringField(), required=True)
+      genres = db.ListField(db.StringField(), required=True)
+      # creates another field which ties the movie to a user
+      added_by = db.ReferenceField('User')
+
+    class User(db.Document):
+        email = db.EmailField(required=True, unique=True)
+        password = db.StringField(required=True, min_length=6)
+        # Adds a movies field with datatype List that holds datatypes references (aka - the movie relationship)
+        # This also has a reverse_delete_rule, which means that if the movie is deleted from the database, it should also be deleted from this list
+        movies = db.ListField(db.ReferenceField('Movie', reverse_delete_rule=db.PULL))
+
+        def hash_password(self):
+            self.password = generate_password_hash(self.password).decode('utf8')
+
+        def check_password(self, password):
+            return check_password_hash(self.password, password)
+
+    # This creates a delete rule that is a user is deleted, then the movie created by a user is also deleted
+    User.register_delete_rule(Movie, 'added_by', db.CASCADE)
+    ```
+  - For this model update to apply, we need to update it the endpoint in `movie.py`
+    ```py
+    from flask import Response, request
+    # Brings in get_jwt_identity()
+    from flask_jwt_extended import jwt_required, get_jwt_identity
+    # Imports the User model
+    from database.models import Movie, User
+    from flask_restful import Resource
+
+    class MovieApi(Resource):
+        def get(self, id):
+            movie = Movie.objects.get(id=id).to_json()
+            return Response(movie, mimetype="application/json", status=200)
+
+        @jwt_required
+        def put(self, id):
+            # gets the token from user
+            user_id = get_jwt_identity()
+            # Confirms the movie matches the id passed in the URL && that the added_by field matches the user who is "logged in"
+            movie = Movie.objects.get(id=id, added_by=user_id)
+            body = request.get_json()
+            Movie.objects.get(id=id).update(**body)
+            return '', 200
+
+        @jwt_required
+        def delete(self, id):
+            # gets the token from user
+            user_id = get_jwt_identity()
+            # Confirms the movie matches the id passed in the URL && that the added_by field matches the user who is "logged in"
+            movie = Movie.objects.get(id=id, added_by=user_id)
+            movie.delete()
+            return '', 200
+
+    class MoviesApi(Resource):
+        def get(self):
+            movies = Movie.objects().to_json()
+            return Response(movies, mimetype="application/json", status=200)
+
+        @jwt_required
+        def post(self):
+            # gets the token from user
+            user_id = get_jwt_identity()
+            body = request.get_json()
+            # Grabs the user who matches the jwt identity
+            user = User.objects.get(id=user_id)
+            # Ensures the new movie record takes the json body data && adds the user to the added_by field
+            movie =  Movie(**body, added_by=user)
+            movie.save()
+            # Adds the new movie to the users movies field
+            user.update(push__movies=movie)
+            user.save()
+            id = movie.id
+            return {'id': str(id)}, 200
+    ```
+  - Time to test in Postman and declare success!
+    - We need to drop the data from our database and reset it so that our new created records have a user connection for jwt authorization
+      - In terminal, run `mongo`
+      - `use practice-api-movies` (or whatever your db name is)
+      - `db.dropDatabase()`
+      - Quit mongo (CTRL + C)
+    - I made 2 dummy users, logged in each user and made a dummy movie record with their authorization
+      - ![dummy1](https://user-images.githubusercontent.com/49959312/103432436-eccffd80-4b9b-11eb-8104-885ebafb1bb7.png)
+
+      - ![dummy2](https://user-images.githubusercontent.com/49959312/103432449-3e788800-4b9c-11eb-85aa-c2bdb533d72b.png)
+
+      - ![dummy1 movie](https://user-images.githubusercontent.com/49959312/103432479-b5ae1c00-4b9c-11eb-85cb-9a59e26a5ba3.png)
+      - Don't forget authorization
+      - ![dummy1 movie auth](https://user-images.githubusercontent.com/49959312/103432481-b8107600-4b9c-11eb-8ceb-f39f9707c14a.png)
+
+      - ![dummy2 movie](https://user-images.githubusercontent.com/49959312/103432509-2f460a00-4b9d-11eb-8a96-dfe3fad7aca5.png)
+    - I also checked the movies existed and have the users reference relationship
+      - ![confirm users](https://user-images.githubusercontent.com/49959312/103432536-95cb2800-4b9d-11eb-90e8-22e661e12192.png)
+    - For dummy user 1:
+      - I checked that I could update the record && confirmed with GET that the record updated
+      - ![dummy user 1 update movie](https://user-images.githubusercontent.com/49959312/103432573-71238000-4b9e-11eb-889f-993c3fcfb4fa.png)
+      - Then I checked that I couldn't update movie1 with dummy user 2's authorization
+      - Currently this is a 500 error, the next part will cover error handling
+      - ![dummy user 2 update movie expected error](https://user-images.githubusercontent.com/49959312/103432592-c65f9180-4b9e-11eb-862f-d0bdf55d9dc6.png)
+      - Then I checked that I could delete the record && confirmed with GET that the record deleted
+      - ![dummy user 1 delete movie](https://user-images.githubusercontent.com/49959312/103432606-f4dd6c80-4b9e-11eb-9bf4-d35d68f72e08.png)
+    - Repeated for dummy user 2
+  - ![Success](https://i0.wp.com/winkgo.com/wp-content/uploads/2019/11/congratulations-memes-08.gif?w=720&ssl=1)
+
+### Part 5
+------
+- #### Blarg
+- #### Blarg
 - #### Blarg
