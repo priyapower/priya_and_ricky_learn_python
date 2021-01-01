@@ -490,6 +490,128 @@ Or, if you don't want/need a background service you can just run:
       return Response(movies, mimetype="application/json", status=200)
   ```
 
+#### Run the server and test in Postman
+[Table of Contents](#priyas-practice)
+- If you are outside of the virtual environment, first run `pipenv shell`
+- Otherwise, just run `python app.py`
+- If there are no typos, you should see your server start
+- To continue testing, we may need to ensure database is connected and loaded with data (see next section)
+
+#### Add data to database
+[Table of Contents](#priyas-practice)
+- _For data see below with [options 1 & 2](#options)_
+- Exit the server (CTRL + C on Mac)
+- First, we need to see if we have truly started mongodb.
+  - Run `brew services list`.
+  - Is `mongodb-community` labeled as _started_ or _stopped_?
+    - If started, great, move to next bullet.
+    - If not, run `brew services start mongodb-community@4.4` (change version if need to, or use without version)
+- Now that mongodb is started:
+  - I ran my server first (In terminal `python app.py`)
+  - And confirmed my Postman could "hit" the endpoints
+  - I ran POST with faker data and then ran GET to confirm at least 2 endpoints were exposed and working correctly
+- We can always interact with the database using Postman, **but what if I want to interact with the db using my terminal?**
+  - In terminal, run `mongo` to enter the database shell
+  - Run `show dbs` to see your databases (_my project db didn't show up until I had run the server and connected via Postman - maybe this was a fluke or a misconception on my part_)
+  - Run `use <project-db-name>`; for me this was `use practice-api-movies`
+  - The response from terminal was `switched to db practice-api-movies`
+  - FUN FACT ABOUT MONGO: _If this db didn't exist before, it will create it right here!_
+  - Commands:
+    ```python
+    # db is a command
+    # foo = <collection-name> (in our project it would be movie)
+
+    # DROP:
+    db.dropDatabase()`
+
+    # INSERT single:
+    db.foo.insert({
+      "attribute": "information",
+      "attribute": "information"
+    })
+
+    # INSERT multi:
+    db.foo.insert([
+      {
+        "attribute": "information"
+      },
+      {
+        "attribute2": "information2"
+      }
+    ])
+
+    # GET all:
+    db.foo.find()
+    # GET all, pretty:
+    db.foo.find().pretty()
+    # See all collections:
+    show collections
+    # GET single record `db.foo.findOne()`
+    # REMOVE single record:
+    db.foo.remove({"id": "id object"})
+    # UPDATE single record:
+    db.foo.update({"id": "id object"}, {"name": "NEW NAME"} )
+    ```
+  - [Looking for more commands?](https://docs.mongodb.com/manual/crud/#create-operations)
+- #### Options
+- Option 1 for adding data via `Postman`
+  ```py
+  # Movie Record 1
+  POST http://localhost:5000/movies
+  # In the body tab, using raw & JSON
+  {
+      "name": "The Shawshank Redemption",
+      "casts": ["Tim Robbins", "Morgan Freeman", "Bob Gunton", "William Sadler"],
+      "genres": ["Drama"]
+  }
+  # Click Send
+
+  # Movie Record 2
+  POST http://localhost:5000/movies
+  # In the body tab, using raw & JSON
+  {
+     "name": "The Godfather ",
+     "casts": ["Marlon Brando", "Al Pacino", "James Caan", "Diane Keaton"],
+     "genres": ["Crime", "Drama"]
+  }
+  # Click Send
+
+  # Confirm movies in database
+  GET http://localhost:5000/movies
+  # Click Send
+  ```
+- Option 2 for adding data via `Mongo Shell`
+  ```py
+  # In Mongo Shell, so run `mongo` in terminal
+
+  # See your databases
+  show dbs
+
+  # Use a specific database (FUN FACT: if it doesn't exist already, it will also create it)
+  use practice-api-movies # use <your-project-or-database-name>
+
+  # If you need to drop a database
+
+  # Insert multiple records
+  db.movie.insert([
+    {
+        "name": "The Shawshank Redemption",
+        "casts": ["Tim Robbins", "Morgan Freeman", "Bob Gunton", "William Sadler"],
+        "genres": ["Drama"]
+    },
+    {
+       "name": "The Godfather ",
+       "casts": ["Marlon Brando", "Al Pacino", "James Caan", "Diane Keaton"],
+       "genres": ["Crime", "Drama"]
+    }
+  ])
+
+  # Confirm your records
+  db.movie.find().pretty()
+  ```
+- At this point you have successfully added data to your database using mongo shell (terminal) or using Postman and can test each of your CRUD endpoints via Postman! Celebrate!
+- ![celebrate with birds](https://media.giphy.com/media/B81XkL3dtnWTe/giphy.gif)
+
 #### Part 2 Final Code
 [Table of Contents](#priyas-practice)
   ```py
@@ -540,71 +662,6 @@ Or, if you don't want/need a background service you can just run:
 
   app.run()
   ```
-
-#### Run the server and test in Postman
-[Table of Contents](#priyas-practice)
-- If you are outside of the virtual environment, first run `pipenv shell`
-- Otherwise, just run `python app.py`
-- If there are no typos, you should see your server start
-- To continue testing, we may need to ensure database is connected and loaded with data (see next section)
-
-#### Add data to database
-[Table of Contents](#priyas-practice)
-- Exit the server (CTRL + C on Mac)
-- First, we need to see if we have truly started mongodb.
-  - Run `brew services list`.
-  - Is `mongodb-community` labeled as _started_ or _stopped_?
-    - If started, great, move to next bullet.
-    - If not, run `brew services start mongodb-community@4.4` (change version if need to, or use without version)
-- Now that mongodb is started:
-  - I ran my server first (In terminal `python app.py`)
-  - And confirmed my Postman could "hit" the endpoints
-  - I ran POST with faker data and then ran GET to confirm at least 2 endpoints were exposed and working correctly
-- We can always interact with the database using Postman, **but what if I want to interact with the db using my terminal?**
-  - In terminal, run `mongo` to enter the database shell
-  - Run `show dbs` to see your databases (_my project db didn't show up until I had run the server and connected via Postman - maybe this was a fluke or a misconception on my part_)
-  - Run `use <project-db-name>`; for me this was `use practice-api-movies`
-  - The response from terminal was `switched to db practice-api-movies`
-  - FUN FACT ABOUT MONGO: _If this db didn't exist before, it will create it right here!_
-  - Commands:
-    ```python
-    # db is a command
-    # foo = <collection-name> (in our example it would be movie)
-
-    # DROP:
-    db.dropDatabase()`
-
-    # INSERT single:
-    db.foo.insert({
-      "attribute": "information",
-      "attribute": "information"
-    })
-
-    # INSERT multi:
-    db.foo.insert([
-      {
-        "attribute": "information"
-      },
-      {
-        "attribute2": "information2"
-      }
-    ])
-
-    # GET all:
-    db.foo.find()
-    # GET all, pretty:
-    db.foo.find().pretty()
-    # See all collections:
-    show collections
-    # GET single record `db.foo.findOne()`
-    # REMOVE single record:
-    db.foo.remove({"id": "id object"})
-    # UPDATE single record:
-    db.foo.update({"id": "id object"}, {"name": "NEW NAME"} )
-    ```
-  - [Looking for more commands?](https://docs.mongodb.com/manual/crud/#create-operations)
-- At this point you have successfully added data to your database using mongo shell (terminal) or using Postman and can test each of your CRUD endpoints via Postman! Celebrate!
-- ![celebrate with birds](https://media.giphy.com/media/B81XkL3dtnWTe/giphy.gif)
 
 ### Part 3
 ------
@@ -2012,7 +2069,8 @@ class LoginApi(Resource):
 ------
 #### Flask Mail
 [Table of Contents](#priyas-practice)
--
+- What happens if a registered user forgets their password? The easiest and most common method of password resetting is an email flow:
+  - Where our server emails the user a reset_token option. If the user selects it (typically within a timeframe), it returns to the server
 
 #### A New Runner
 [Table of Contents](#priyas-practice)
