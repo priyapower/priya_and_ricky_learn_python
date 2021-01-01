@@ -54,10 +54,15 @@ Goal is to build a a RESTful api with Flask and MongoDB
   1. [Custom Error Messages](#custom-error-messages)
   1. [Auth and Error Handling](#auth-and-error-handling)
   1. [Part 5 Final Code](#part-5-final-code)
+- [Part 6: Password Reset and Email Clients](#part-6)
+  1. [Flask Mail and Implementing Email and Password Code](#flask-mail-and-implementing-email-and-password-code)
+  1. [A New Runner](#a-new-runner)
+  1. [Part 6 Final Code](#part-6-final-code)
 
 ### Part 1
 ------
 #### Setup
+[Table of Contents](#priyas-practice)
 - Following [this tutorial](https://dev.to/paurakhsharma/flask-rest-api-part-0-setup-basic-crud-api-4650)
 - Create your project folder/directory: `mkdir practice_api_movies`
 - `cd practice_api_movies`
@@ -113,6 +118,7 @@ Goal is to build a a RESTful api with Flask and MongoDB
     ```
 
 #### Get your Root endpoint Exposed
+[Table of Contents](#priyas-practice)
 - Make a file for our rest api: `touch app.py`
 - Code for the app file:
     ```python
@@ -157,6 +163,7 @@ Goal is to build a a RESTful api with Flask and MongoDB
 - ![round_of_applause](https://media0.giphy.com/media/PkXrOxe77MbmavlfWa/giphy.gif)
 
 #### Let's get an index of movies returned
+[Table of Contents](#priyas-practice)
 - Time to update our `app.py` "runner" file:
     ```python
     # Imports jsonify from flask package. This converts our data into proper JSON responses
@@ -193,6 +200,7 @@ Goal is to build a a RESTful api with Flask and MongoDB
 - Woo! It works
 
 #### CRUD, It's what you do
+[Table of Contents](#priyas-practice)
 - For pop reference, see [example commercial](https://www.youtube.com/watch?v=sxcsKE1SS4Y) and [wiki](https://en.wikipedia.org/wiki/VERB_(program)
 - Time to work on that CRUD (create, read, update, and destroy, see this [article](https://trendintech.com/2018/01/19/why-is-crud-so-important-in-computer-programming/) for more information on CRUD)
 - Updates to code:
@@ -258,6 +266,7 @@ Goal is to build a a RESTful api with Flask and MongoDB
     ```
 
 #### Test CRUD out with Postman
+[Table of Contents](#priyas-practice)
 - Create/Post:
   - Post verb
   - Body tab = raw & JSON
@@ -281,6 +290,7 @@ Goal is to build a a RESTful api with Flask and MongoDB
   - ![image](https://user-images.githubusercontent.com/49959312/103389122-2d5f4680-4aca-11eb-99d0-0f3abee0cf08.png)
 
 #### Part 1 Final Code
+[Table of Contents](#priyas-practice)
   ```py
   from flask import Flask, jsonify, request
 
@@ -330,6 +340,7 @@ Goal is to build a a RESTful api with Flask and MongoDB
 ### Part 2
 ------
 #### Installing Mongodb and Understanding the library we will use
+[Table of Contents](#priyas-practice)
 - The docs for installing on [mac](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/)
 - Prereqs: xcode command-line & homebrew
 - "Tap" the homebrew mongodb by running `brew tap mongodb/brew`
@@ -374,6 +385,7 @@ Or, if you don't want/need a background service you can just run:
   - To confirm the extension installed, I ran `pip freeze | grep flask-mongoengine` , which returned `flask-mongoengine==1.0.0`
 
 #### Getting started with the database
+[Table of Contents](#priyas-practice)
 - First we begin my updating our file tree
   - `mkdir database`
   - `cd database`
@@ -409,6 +421,7 @@ Or, if you don't want/need a background service you can just run:
   ```
 
 #### Connect your database with your app
+[Table of Contents](#priyas-practice)
 - Update  `app.py` to use the database and not hardcoded data && change the view functions
   ```py
   # remove jsonify from flask imports and add a Response import
@@ -467,6 +480,7 @@ Or, if you don't want/need a background service you can just run:
   ```
 
 #### Make our API endpoints more robust
+[Table of Contents](#priyas-practice)
   - We forgot a CRUD endpoint. We have Create (Post), Read/Retrieve (GET), Update (Put), and Destroy (Delete). HOWEVER, Read/Retrieve technically has 2! GET single movie (in rails this is Show) and GET all movies (in rails this is Index). We are missing our GET single (get by id)
   - Add the following _above_ `app.run()`
   ```py
@@ -477,6 +491,7 @@ Or, if you don't want/need a background service you can just run:
   ```
 
 #### Part 2 Final Code
+[Table of Contents](#priyas-practice)
   ```py
   from flask import Flask, request, Response
   from database.db import initialize_db
@@ -527,12 +542,14 @@ Or, if you don't want/need a background service you can just run:
   ```
 
 #### Run the server and test in Postman
+[Table of Contents](#priyas-practice)
 - If you are outside of the virtual environment, first run `pipenv shell`
 - Otherwise, just run `python app.py`
 - If there are no typos, you should see your server start
 - To continue testing, we may need to ensure database is connected and loaded with data (see next section)
 
 #### Add data to database
+[Table of Contents](#priyas-practice)
 - Exit the server (CTRL + C on Mac)
 - First, we need to see if we have truly started mongodb.
   - Run `brew services list`.
@@ -593,11 +610,13 @@ Or, if you don't want/need a background service you can just run:
 ------
 
 #### Best Practices for Organizing Code
+[Table of Contents](#priyas-practice)
 - See [here](https://exploreflask.com/en/latest/organizing.html) for official Flask documentation on organizing code
 - [Flask Community](https://github.com/pallets/flask/issues/2626) conversation on MVC, factory patterns, and folder/tree structure
 - [Blue Ocean Tutorial](https://www.digitalocean.com/community/tutorials/how-to-structure-large-flask-applications) on flask structures (though, take this with a grain of salt)
 
 #### Blueprints
+[Table of Contents](#priyas-practice)
 - What are [blueprints](https://stackoverflow.com/questions/24420857/what-are-flask-blueprints-exactly) in flask?
   - [Official Flask Documentation](https://flask.palletsprojects.com/en/1.1.x/blueprints/)
   - Simply put, it is a way to structure your code; a method of encapsulating code into separate components; a chance for Single-Responsibility Principle patterns to emerge!
@@ -730,6 +749,7 @@ Or, if you don't want/need a background service you can just run:
 - Now, it looks much cleaner and feels closer to single-responsibility principle patterns
 
 #### Flask RESTful
+[Table of Contents](#priyas-practice)
 - We aren't quite finished though
 - [Official Extension Documentation](https://flask-restful.readthedocs.io/en/latest/)
 - This extension encourages best practices in RESTful design
@@ -842,6 +862,7 @@ Or, if you don't want/need a background service you can just run:
   - _Troubleshooting tip: When updating your code, stop and restart server to see affects in Postman_
 
 #### Part 3 Final Code
+[Table of Contents](#priyas-practice)
   ```py
   # app.py
   from flask import Flask
@@ -910,12 +931,14 @@ Or, if you don't want/need a background service you can just run:
 ------
 
 #### Authentication and Authorization
+[Table of Contents](#priyas-practice)
 - Authentication: You are who you say you are
   - Example: _Signing up and Logging into an application_
 - Authorization: You are allowed to do the things you are trying to do
   - Example: _An admin is authorized to see all users and delete/update/create users, whereas a user is only authorized to update their own records_
 
 #### Implement Authentication into Our Backend Server
+[Table of Contents](#priyas-practice)
 - Why do we need it?
 - Right now, any user with this code can access perform all CRUD functionality. Maybe you want this. Maybe you don't.
 - If you need to restrict who has access to CRUD functionality, we need to add authentication so only a logged in user can access CRUD.
@@ -1168,6 +1191,7 @@ JWT_SECRET_KEY = '<your-encryption-key>'
   ```
 
 #### Implement Authorization into Our Backend Server
+[Table of Contents](#priyas-practice)
 - We will need to update our `movie.py` for safeguards using JWT - only authorized users can Create, Update, and Delete movie records
 - `movie.py`
   ```py
@@ -1336,6 +1360,7 @@ JWT_SECRET_KEY = '<your-encryption-key>'
 - ![Success](https://i0.wp.com/winkgo.com/wp-content/uploads/2019/11/congratulations-memes-08.gif?w=720&ssl=1)
 
 #### Part 4 Final Code
+[Table of Contents](#priyas-practice)
   ```py
   # FILE = app.py
   from flask import Flask
@@ -1483,6 +1508,7 @@ JWT_SECRET_KEY = '<your-encryption-key>'
 ------
 
 #### Custom Error Messages
+[Table of Contents](#priyas-practice)
 - At this point, if we hit an error/issue in Postman, we get a 500 error
 - What if we want these errors to be custom and clear? This way clients/users know why they are getting an error (_if a tries to register with an email in the system, they need to be told why they got an error_)
 - We are going to use `Exception Handling` and the custom error message ability of `flask-restful`
@@ -1703,6 +1729,7 @@ JWT_SECRET_KEY = '<your-encryption-key>'
 - Woo! We've made a lot of progress on exception handling. Let's check what else we need to update
 
 #### Auth and Error Handling
+[Table of Contents](#priyas-practice)
 - At this point, we:
   - `resources/errors.py`: made an errors file
   - `app.py`: updated app to accept errors
@@ -1775,6 +1802,7 @@ JWT_SECRET_KEY = '<your-encryption-key>'
 - ![success error](https://user-images.githubusercontent.com/49959312/103443901-9e187700-4c20-11eb-8c0b-c67dd8e462d7.png)
 
 #### Part 5 Final Code
+[Table of Contents](#priyas-practice)
 ```py
 # FILE = resources/errors.py
 class InternalServerError(Exception):
@@ -1979,3 +2007,17 @@ class LoginApi(Resource):
         except Exception as e:
             raise InternalServerError
 ```
+
+### Part 6
+------
+#### Flask Mail
+[Table of Contents](#priyas-practice)
+-
+
+#### A New Runner
+[Table of Contents](#priyas-practice)
+-
+
+#### Part 6 Final Code
+[Table of Contents](#priyas-practice)
+-
