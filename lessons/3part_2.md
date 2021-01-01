@@ -50,6 +50,10 @@ Goal is to build a a RESTful api with Flask and MongoDB
   1. [Implement Authentication into Our Backend Server](#Implement-Authentication-into-Our-Backend-Server)
   1. [Implement Authorization into Our Backend Server](#Implement-Authorization-into-Our-Backend-Server)
   1. [Part 4 Final Code](#part-4-final-code)
+- [Part 5: Error Handling](#part-5)
+  1. [Custom Error Messages](#custom-error-messages)
+  1. [Auth and Error Handling](#auth-and-error-handling)
+  1. [Part 5 Final Code](#part-5-final-code)
 
 ### Part 1
 ------
@@ -1332,7 +1336,506 @@ JWT_SECRET_KEY = '<your-encryption-key>'
 - ![Success](https://i0.wp.com/winkgo.com/wp-content/uploads/2019/11/congratulations-memes-08.gif?w=720&ssl=1)
 
 #### Part 4 Final Code
+  ```py
+  # FILE = app.py
+  from flask import Flask
+  from flask_bcrypt import Bcrypt
+  from flask_jwt_extended import JWTManager
+
+  from database.db import initialize_db
+  from flask_restful import Api
+  from resources.routes import initialize_routes
+
+  app = Flask(__name__)
+  app.config.from_envvar('ENV_FILE_LOCATION')
+
+  api = Api(app)
+  bcrypt = Bcrypt(app)
+  jwt = JWTManager(app)
+
+  app.config['MONGODB_SETTINGS'] = {
+      'host': 'mongodb://localhost/practice-api-movies'
+  }
+
+  initialize_db(app)
+
+  @app.route('/')
+  def hello():
+      return {'hello': 'world'}
+
+  initialize_routes(api)
+
+  app.run()
+
+  # FILE = .gitignore
+  # JWT
+  .env
+
+  # FILE = .env
+  JWT_SECRET_KEY = '<encrypted-key-of-your-choice>'
+
+  # FILE = database/models.py
+  from .db import db
+  from flask_bcrypt import generate_password_hash, check_password_hash
+
+  class Movie(db.Document):
+      name = db.StringField(required=True, unique=True)
+      casts = db.ListField(db.StringField(), required=True)
+      genres = db.ListField(db.StringField(), required=True)
+      added_by = db.ReferenceField('User')
+
+  class User(db.Document):
+      email = db.EmailField(required=True, unique=True)
+      password = db.StringField(required=True, min_length=6)
+      movies = db.ListField(db.ReferenceField('Movie', reverse_delete_rule=db.PULL))
+
+      def hash_password(self):
+          self.password = generate_password_hash(self.password).decode('utf8')
+
+      def check_password(self, password):
+          return check_password_hash(self.password, password)
+
+  User.register_delete_rule(Movie, 'added_by', db.CASCADE)
+
+  # FILE = resources/auth.py
+  from flask import Response, request
+  from flask_jwt_extended import create_access_token
+  from database.models import User
+  from flask_restful import Resource
+  import datetime
+
+  class SignupApi(Resource):
+      def post(self):
+          body = request.get_json()
+          user = User(**body)
+          user.hash_password()
+          user.save()
+          id = user.id
+          return {'id': str(id)}, 200
+
+  class LoginApi(Resource):
+      def post(self):
+          body = request.get_json()
+          user = User.objects.get(email=body.get('email'))
+          authorized = user.check_password(body.get('password'))
+          if not authorized:
+              return {'error': 'Email or password invalid'}, 401
+
+          expires = datetime.timedelta(days=7)
+          access_token = create_access_token(identity=str(user.id), expires_delta=expires)
+          return {'token': access_token}, 200
+
+  # FILE = resources/movie.py
+  from flask import Response, request
+  from flask_jwt_extended import jwt_required, get_jwt_identity
+  from database.models import Movie, User
+  from flask_restful import Resource
+
+  class MovieApi(Resource):
+      def get(self, id):
+          movie = Movie.objects.get(id=id).to_json()
+          return Response(movie, mimetype="application/json", status=200)
+
+      @jwt_required
+      def put(self, id):
+          user_id = get_jwt_identity()
+          movie = Movie.objects.get(id=id, added_by=user_id)
+          body = request.get_json()
+          Movie.objects.get(id=id).update(**body)
+          return '', 200
+
+      @jwt_required
+      def delete(self, id):
+          user_id = get_jwt_identity()
+          movie = Movie.objects.get(id=id, added_by=user_id)
+          movie.delete()
+          return '', 200
+
+  class MoviesApi(Resource):
+      def get(self):
+          movies = Movie.objects().to_json()
+          return Response(movies, mimetype="application/json", status=200)
+
+      @jwt_required
+      def post(self):
+          user_id = get_jwt_identity()
+          body = request.get_json()
+          user = User.objects.get(id=user_id)
+          movie =  Movie(**body, added_by=user)
+          movie.save()
+          user.update(push__movies=movie)
+          user.save()
+          id = movie.id
+          return {'id': str(id)}, 200
+
+  # FILE = resources/routes.py
+  from .movie import MovieApi, MoviesApi
+  from .auth import SignupApi, LoginApi
+
+  def initialize_routes(api):
+      api.add_resource(MoviesApi, '/api/v1/movies')
+      api.add_resource(MovieApi, '/api/v1/movies/<id>')
+      api.add_resource(SignupApi, '/api/v1/auth/signup')
+      api.add_resource(LoginApi, '/api/v1/auth/login')
+  ```
+
+### Part 5
+------
+
+#### Custom Error Messages
+- At this point, if we hit an error/issue in Postman, we get a 500 error
+- What if we want these errors to be custom and clear? This way clients/users know why they are getting an error (_if a tries to register with an email in the system, they need to be told why they got an error_)
+- We are going to use `Exception Handling` and the custom error message ability of `flask-restful`
+- Make a new file under `resources` called `errors.py` (Recall a path for CLI would be `cd resources` & `touch errors.py`)
+- Add code:
+  ```py
+  # New Exception classes
+  # Exception class for 500 status code with a generic message
+  class InternalServerError(Exception):
+      pass
+
+  # Exception class for failing to meet the requirements for a record/field/etc
+  class SchemaValidationError(Exception):
+      pass
+
+  # Exception class for movie already existing
+  class MovieAlreadyExistsError(Exception):
+      pass
+
+  # Exception class for not having authorization to update a movie record
+  class UpdatingMovieError(Exception):
+      pass
+
+  # Exception class for not having authorization to delete a movie record
+  class DeletingMovieError(Exception):
+      pass
+
+  # Exception class for not having a movie by that id
+  class MovieNotExistsError(Exception):
+      pass
+
+  # Exception class for email already existing in signup process
+  class EmailAlreadyExistsError(Exception):
+      pass
+
+  # Exception class for incorrect email/password (no distinct difference in error to prevent security breaches [best practice - you should not expose whether it was email or password that was incorrect because this could lead to easier security breaches])
+  class UnauthorizedError(Exception):
+      pass
+
+  # Errors dictionary that defines the specific message and status code returned for each class of exception handling
+  errors = {
+      "InternalServerError": {
+          "message": "Something went wrong",
+          "status": 500
+      },
+       "SchemaValidationError": {
+           "message": "Request is missing required fields",
+           "status": 400
+       },
+       "MovieAlreadyExistsError": {
+           "message": "Movie with given name already exists",
+           "status": 400
+       },
+       "UpdatingMovieError": {
+           "message": "Updating movie added by other is forbidden",
+           "status": 403
+       },
+       "DeletingMovieError": {
+           "message": "Deleting movie added by other is forbidden",
+           "status": 403
+       },
+       "MovieNotExistsError": {
+           "message": "Movie with given id doesn't exists",
+           "status": 400
+       },
+       "EmailAlreadyExistsError": {
+           "message": "User with given email address already exists",
+           "status": 400
+       },
+       "UnauthorizedError": {
+           "message": "Invalid username or password",
+           "status": 401
+       }
+  }
+  ```
+- Since we have `flask-restful` which gives us an Api Class, we need to update it to accept errors
+- Update `app.py`
+  ```py
+  from flask import Flask
+  from flask_bcrypt import Bcrypt
+  from flask_jwt_extended import JWTManager
+
+  from database.db import initialize_db
+  from flask_restful import Api
+  from resources.routes import initialize_routes
+  # Bring in errors dictionary (a datatype that is like hashes in ruby) that defines the classes of exception handling
+  from resources.errors import errors
+
+  app = Flask(__name__)
+  app.config.from_envvar('ENV_FILE_LOCATION')
+
+  # Add errors to the api class
+  api = Api(app, errors=errors)
+  bcrypt = Bcrypt(app)
+  jwt = JWTManager(app)
+
+  app.config['MONGODB_SETTINGS'] = {
+      'host': 'mongodb://localhost/practice-api-movies'
+  }
+
+  initialize_db(app)
+
+  @app.route('/')
+  def hello():
+      return {'hello': 'world'}
+
+  initialize_routes(api)
+
+  app.run()
+  ```
+- At this point, we have built out errors and applied them to the api class, but our endpoints don't have information or logic surrounding the error handling, so, let's update `movie.py`
+  ```py
+  from flask import Response, request
+  from flask_jwt_extended import jwt_required, get_jwt_identity
+  from database.models import Movie, User
+  from flask_restful import Resource
+  # Pulls in errors that are native to mongoengine
+  from mongoengine.errors import FieldDoesNotExist, NotUniqueError, DoesNotExist, ValidationError, InvalidQueryError
+  # Pulls in custom erros we created in resources/errors.py
+  from resources.errors import SchemaValidationError, MovieAlreadyExistsError, InternalServerError, UpdatingMovieError, DeletingMovieError, MovieNotExistsError
+
+
+  class MovieApi(Resource):
+      def get(self, id):
+          # Python `try` block lets you test a block of code for errors
+              # The `except` block will let you handle the error
+              # The `else` block will execute if no errors raised
+              # The `finally` block lets you execute code no matter the result of try and except
+          # This tests the code we originally had here, none of the endpoint code was changed
+          try:
+              movie = Movie.objects.get(id=id).to_json()
+              return Response(movie, mimetype="application/json", status=200)
+          # If the record does not exist
+          except DoesNotExist:
+              # Returns custom error that the movie does not exist
+              raise MovieNotExistsError
+          # There are a few different except final statemtents:
+              # except: will catch everything
+              # except Exception: does not catch BaseException
+              # except BaseException: will catch the baseexception, like just except
+              # except Exception as e: will catch what you are "meant" to catch and gives you access to the attributes of the exception object
+          # Source: https://stackoverflow.com/questions/18982610/difference-between-except-and-except-exception-as-e-in-python
+          # Catches exceptions EXCLUDING base (keyboard interrupt, system exit, etc)
+          except Exception:
+              # Returns custom 500 error
+              raise InternalServerError
+
+      @jwt_required
+      def put(self, id):
+          # Checks code for errors
+          try:
+              user_id = get_jwt_identity()
+              movie = Movie.objects.get(id=id, added_by=user_id)
+              body = request.get_json()
+              Movie.objects.get(id=id).update(**body)
+              return '', 200
+          # If you query the incorrect record (wrong id number)
+          except InvalidQueryError:
+              # Then raise the custom schema error from the errors dictionary
+              raise SchemaValidationError
+          # If the record does not exist
+          except DoesNotExist:
+              # Raises updating movie error. Why? Is this because if an unauthorized user attempts to update a movie it will return as if the record doesn't exist?
+              raise UpdatingMovieError
+          # Catches exceptions EXCLUDING base (keyboard interrupt, system exit, etc)
+          except Exception:
+              # Returns custom 500 error
+              raise InternalServerError
+
+      @jwt_required
+      def delete(self, id):
+          # Checks code for errors
+          try:
+              user_id = get_jwt_identity()
+              movie = Movie.objects.get(id=id, added_by=user_id)
+              movie.delete()
+              return '', 200
+          # If the record does not exist
+          except DoesNotExist:
+              # Return custom delete error. This makes sense now that if an unauthorized user attempts to access the record, it will show as if it doesn't exist becasue movie is only collected if it belongs to the user_id
+              raise DeletingMovieError
+          # Catches exceptions EXCLUDING base (keyboard interrupt, system exit, etc)
+          except Exception:
+              # Returns custom 500 error
+              raise InternalServerError
+
+  class MoviesApi(Resource):
+      def get(self):
+          movies = Movie.objects().to_json()
+          return Response(movies, mimetype="application/json", status=200)
+
+      @jwt_required
+      def post(self):
+          # Checks code for errors
+          try:
+              user_id = get_jwt_identity()
+              body = request.get_json()
+              user = User.objects.get(id=user_id)
+              movie =  Movie(**body, added_by=user)
+              movie.save()
+              user.update(push__movies=movie)
+              user.save()
+              id = movie.id
+              return {'id': str(id)}, 200
+          # If a field does not exist that a user is attempting to fill, or if a user fills in a field that doesn't validate (like maybe an email isn't an email or a password doesn't meet it's length requirements)
+          except (FieldDoesNotExist, ValidationError):
+              # Then raise the custom schema error from the errors dictionary
+              raise SchemaValidationError
+          # If you attempt to save a document that has the same value for a unique field as the document that is in the database (basically, if the record already exists in the database)
+          except NotUniqueError:
+              # Give custom error that the movie is already on record
+              raise MovieAlreadyExistsError
+          # Catches excpected exceptions and gives us access to attributes of exception object saved as variable e (why would we use this here? seems excessive, but perhaps more is coming later in the tutorial?)
+          except Exception as e:
+              # Returns custom 500 error
+              raise InternalServerError
+  ```
+- Woo! We've made a lot of progress on exception handling. Let's check what else we need to update
+
+#### Auth and Error Handling
+- At this point, we:
+  - `resources/errors.py`: made an errors file
+  - `app.py`: updated app to accept errors
+  - `resources/movie.py`: updated our endpoints for returning errors using try/except blocks
+- If we check our remaining files, we can check what files will still need to be updated to finalize error handling:
+  - `resources/auth.py`: this creates 2 endpoint classes for users, signing up and logging in. **Since these endpoints will also need to return errors, we will need to update this file!**
+  - hidden files `.gitignore` and `.env` don't need to be updated
+  - `database/db.py`: this initializes the database, I don't believe this needs updates for error handling
+  - `database/models.py`: this defines our models/documents in the database, I don't believe this needs updates for error handling
+  - `resources/routes.py`: this defines our urls for each endpoint class, I don't believe this needs updates for error handling
+- Update `auth.py`:
+  ```py
+  from flask import Response, request
+  from flask_jwt_extended import create_access_token
+  from database.models import User
+  from flask_restful import Resource
+  import datetime
+  # imports errors native to MongoEngine that we will use in this file
+  from mongoengine.errors import FieldDoesNotExist, NotUniqueError, DoesNotExist
+  # imports custom errors we made that we will use in this file
+  from resources.errors import SchemaValidationError, EmailAlreadyExistsError, UnauthorizedError, InternalServerError
+
+  class SignupApi(Resource):
+      def post(self):
+          # Checks code for errors
+          try:
+              body = request.get_json()
+              user =  User(**body)
+              user.hash_password()
+              user.save()
+              id = user.id
+              return {'id': str(id)}, 200
+          # if user does not input data for all fields
+          except FieldDoesNotExist:
+              # return custom schema error
+              raise SchemaValidationError
+          # if user inputs email in system
+          except NotUniqueError:
+              # return custom email error
+              raise EmailAlreadyExistsError
+          # For any other exceptions
+          except Exception as e:
+              # Return custom 500 message
+              raise InternalServerError
+
+  class LoginApi(Resource):
+      def post(self):
+          # Checks code for errors
+          try:
+              body = request.get_json()
+              user = User.objects.get(email=body.get('email'))
+              authorized = user.check_password(body.get('password'))
+              if not authorized:
+                  # email and password don't match
+                  raise UnauthorizedError
+
+              expires = datetime.timedelta(days=7)
+              access_token = create_access_token(identity=str(user.id), expires_delta=expires)
+              return {'token': access_token}, 200
+          # If code above is not authorized or user does not exist in database
+          except (UnauthorizedError, DoesNotExist):
+              # returns message that email or password is incorrect
+              raise UnauthorizedError
+          # For any other exceptions
+          except Exception as e:
+              # Return custom 500 message
+              raise InternalServerError
+```
+- Run the server and test in postman
+- ![success error](https://user-images.githubusercontent.com/49959312/103443901-9e187700-4c20-11eb-8c0b-c67dd8e462d7.png)
+
+#### Part 5 Final Code
 ```py
+# FILE = resources/errors.py
+class InternalServerError(Exception):
+    pass
+
+class SchemaValidationError(Exception):
+    pass
+
+class MovieAlreadyExistsError(Exception):
+    pass
+
+class UpdatingMovieError(Exception):
+    pass
+
+class DeletingMovieError(Exception):
+    pass
+
+class MovieNotExistsError(Exception):
+    pass
+
+class EmailAlreadyExistsError(Exception):
+    pass
+
+class UnauthorizedError(Exception):
+    pass
+
+errors = {
+    "InternalServerError": {
+        "message": "Something went wrong",
+        "status": 500
+    },
+     "SchemaValidationError": {
+         "message": "Request is missing required fields",
+         "status": 400
+     },
+     "MovieAlreadyExistsError": {
+         "message": "Movie with given name already exists",
+         "status": 400
+     },
+     "UpdatingMovieError": {
+         "message": "Updating movie added by other is forbidden",
+         "status": 403
+     },
+     "DeletingMovieError": {
+         "message": "Deleting movie added by other is forbidden",
+         "status": 403
+     },
+     "MovieNotExistsError": {
+         "message": "Movie with given id doesn't exists",
+         "status": 400
+     },
+     "EmailAlreadyExistsError": {
+         "message": "User with given email address already exists",
+         "status": 400
+     },
+     "UnauthorizedError": {
+         "message": "Invalid username or password",
+         "status": 401
+     }
+}
+
 # FILE = app.py
 from flask import Flask
 from flask_bcrypt import Bcrypt
@@ -1341,11 +1844,12 @@ from flask_jwt_extended import JWTManager
 from database.db import initialize_db
 from flask_restful import Api
 from resources.routes import initialize_routes
+from resources.errors import errors
 
 app = Flask(__name__)
 app.config.from_envvar('ENV_FILE_LOCATION')
 
-api = Api(app)
+api = Api(app, errors=errors)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
@@ -1363,89 +1867,51 @@ initialize_routes(api)
 
 app.run()
 
-# FILE = .gitignore
-# JWT
-.env
-
-# FILE = .env
-JWT_SECRET_KEY = '<encrypted-key-of-your-choice>'
-
-# FILE = database/models.py
-from .db import db
-from flask_bcrypt import generate_password_hash, check_password_hash
-
-class Movie(db.Document):
-    name = db.StringField(required=True, unique=True)
-    casts = db.ListField(db.StringField(), required=True)
-    genres = db.ListField(db.StringField(), required=True)
-    added_by = db.ReferenceField('User')
-
-class User(db.Document):
-    email = db.EmailField(required=True, unique=True)
-    password = db.StringField(required=True, min_length=6)
-    movies = db.ListField(db.ReferenceField('Movie', reverse_delete_rule=db.PULL))
-
-    def hash_password(self):
-        self.password = generate_password_hash(self.password).decode('utf8')
-
-    def check_password(self, password):
-        return check_password_hash(self.password, password)
-
-User.register_delete_rule(Movie, 'added_by', db.CASCADE)
-
-# FILE = resources/auth.py
-from flask import Response, request
-from flask_jwt_extended import create_access_token
-from database.models import User
-from flask_restful import Resource
-import datetime
-
-class SignupApi(Resource):
-    def post(self):
-        body = request.get_json()
-        user = User(**body)
-        user.hash_password()
-        user.save()
-        id = user.id
-        return {'id': str(id)}, 200
-
-class LoginApi(Resource):
-    def post(self):
-        body = request.get_json()
-        user = User.objects.get(email=body.get('email'))
-        authorized = user.check_password(body.get('password'))
-        if not authorized:
-            return {'error': 'Email or password invalid'}, 401
-
-        expires = datetime.timedelta(days=7)
-        access_token = create_access_token(identity=str(user.id), expires_delta=expires)
-        return {'token': access_token}, 200
-
 # FILE = resources/movie.py
 from flask import Response, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from database.models import Movie, User
 from flask_restful import Resource
+from mongoengine.errors import FieldDoesNotExist, NotUniqueError, DoesNotExist, ValidationError, InvalidQueryError
+from resources.errors import SchemaValidationError, MovieAlreadyExistsError, InternalServerError, UpdatingMovieError, DeletingMovieError, MovieNotExistsError
+
 
 class MovieApi(Resource):
     def get(self, id):
-        movie = Movie.objects.get(id=id).to_json()
-        return Response(movie, mimetype="application/json", status=200)
+        try:
+            movie = Movie.objects.get(id=id).to_json()
+            return Response(movie, mimetype="application/json", status=200)
+        except DoesNotExist:
+            raise MovieNotExistsError
+        except Exception:
+            raise InternalServerError
 
     @jwt_required
     def put(self, id):
-        user_id = get_jwt_identity()
-        movie = Movie.objects.get(id=id, added_by=user_id)
-        body = request.get_json()
-        Movie.objects.get(id=id).update(**body)
-        return '', 200
+        try:
+            user_id = get_jwt_identity()
+            movie = Movie.objects.get(id=id, added_by=user_id)
+            body = request.get_json()
+            Movie.objects.get(id=id).update(**body)
+            return '', 200
+        except InvalidQueryError:
+            raise SchemaValidationError
+        except DoesNotExist:
+            raise UpdatingMovieError
+        except Exception:
+            raise InternalServerError
 
     @jwt_required
     def delete(self, id):
-        user_id = get_jwt_identity()
-        movie = Movie.objects.get(id=id, added_by=user_id)
-        movie.delete()
-        return '', 200
+        try:
+            user_id = get_jwt_identity()
+            movie = Movie.objects.get(id=id, added_by=user_id)
+            movie.delete()
+            return '', 200
+        except DoesNotExist:
+            raise DeletingMovieError
+        except Exception:
+            raise InternalServerError
 
 class MoviesApi(Resource):
     def get(self):
@@ -1454,29 +1920,62 @@ class MoviesApi(Resource):
 
     @jwt_required
     def post(self):
-        user_id = get_jwt_identity()
-        body = request.get_json()
-        user = User.objects.get(id=user_id)
-        movie =  Movie(**body, added_by=user)
-        movie.save()
-        user.update(push__movies=movie)
-        user.save()
-        id = movie.id
-        return {'id': str(id)}, 200
+        try:
+            user_id = get_jwt_identity()
+            body = request.get_json()
+            user = User.objects.get(id=user_id)
+            movie =  Movie(**body, added_by=user)
+            movie.save()
+            user.update(push__movies=movie)
+            user.save()
+            id = movie.id
+            return {'id': str(id)}, 200
+        except (FieldDoesNotExist, ValidationError):
+            raise SchemaValidationError
+        except NotUniqueError:
+            raise MovieAlreadyExistsError
+        except Exception as e:
+            raise InternalServerError
 
-# FILE = resources/routes.py
-from .movie import MovieApi, MoviesApi
-from .auth import SignupApi, LoginApi
+# FILE = resources/auth.py
+from flask import Response, request
+from flask_jwt_extended import create_access_token
+from database.models import User
+from flask_restful import Resource
+import datetime
+from mongoengine.errors import FieldDoesNotExist, NotUniqueError, DoesNotExist
+from resources.errors import SchemaValidationError, EmailAlreadyExistsError, UnauthorizedError, InternalServerError
 
-def initialize_routes(api):
-    api.add_resource(MoviesApi, '/api/v1/movies')
-    api.add_resource(MovieApi, '/api/v1/movies/<id>')
-    api.add_resource(SignupApi, '/api/v1/auth/signup')
-    api.add_resource(LoginApi, '/api/v1/auth/login')
+class SignupApi(Resource):
+    def post(self):
+        try:
+            body = request.get_json()
+            user =  User(**body)
+            user.hash_password()
+            user.save()
+            id = user.id
+            return {'id': str(id)}, 200
+        except FieldDoesNotExist:
+            raise SchemaValidationError
+        except NotUniqueError:
+            raise EmailAlreadyExistsError
+        except Exception as e:
+            raise InternalServerError
+
+class LoginApi(Resource):
+    def post(self):
+        try:
+            body = request.get_json()
+            user = User.objects.get(email=body.get('email'))
+            authorized = user.check_password(body.get('password'))
+            if not authorized:
+                raise UnauthorizedError
+
+            expires = datetime.timedelta(days=7)
+            access_token = create_access_token(identity=str(user.id), expires_delta=expires)
+            return {'token': access_token}, 200
+        except (UnauthorizedError, DoesNotExist):
+            raise UnauthorizedError
+        except Exception as e:
+            raise InternalServerError
 ```
-
-### Part 5
-------
-- #### Blarg
-- #### Blarg
-- #### Blarg
