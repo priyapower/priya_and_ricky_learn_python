@@ -29,14 +29,10 @@ Goal is to understand introductory coding language/practices while also learning
 ## Priya's Practice
 
 Goal is to build a GUI calculator while practicing python and learning PyQt
-
-[Setup](#the-setup-for-this-project)
-
-[Understanding PyQt](#Understanding-PyQt)
-
-[Beginning to Code Section](#Beginning-to-Code-the-Project)
-
-[Final Code Section](#The-Final-Leg-of-Code)
+1. [Setup](#the-setup-for-this-project)
+1. [Understanding PyQt](#Understanding-PyQt)
+1. [Beginning to Code Section](#Beginning-to-Code-the-Project)
+1. [Final Code Section](#The-Final-Leg-of-Code)
 
 1. We are going to build a GUI calculator (it looks a lot like the calculator preloaded in the system!) [resource](https://realpython.com/python-pyqt-gui-calculator/)
 2. Old Concept: GUI
