@@ -13,7 +13,7 @@ Ricky/Windows/Beginner:
 Priya/Mac/Intermediate:
 - [Priya's Practice](#priyas-practice)
 - Goal is to build a a RESTful api with Flask and MongoDB
-- Product: [Finished Product]()
+- Product: [Finished Product](https://github.com/priyapower/practice-api-movies)
 
 ## Ricky's Practice
 Goal is to create a number guessing game
@@ -2823,12 +2823,218 @@ MAIL_PASSWORD = ""
 
 #### Setting Up Test Environment
 [Table of Contents](#priyas-practice)
-- 
+- Yay - we are at my favorite part. Writing tests. Truly, I enjoy following _Test-Driven Development(TDD)_ & _Behavior-Driven Development(BDD)_ practices. ([Source](https://www.browserstack.com/guide/tdd-vs-bdd-vs-atdd))
+  - TDD:
+    - Tests functionality
+    - The developers friend
+    - **Is the code valid?**
+  - BDD:
+    - Tests behavior of your system
+    - This style generally follows scenarios
+    - This is the product teams friend
+      - _EX: If I'm a logged in user, I can update a record in my database, and get a successful status code from my endpoint_
+    - **Given-When-Then**
+  - _ATDD:_
+    - Acceptance Tests
+    - From the users perspective, testing a user's needs, any requirements they may have, and any user processes that pertain to the logic/business/math
+    - Often interchanged with BDD
+    - **Is the code working the way it's supposed to?**
+- I prefer using these practices for many reasons:
+  - It drives your development. Literally.
+    - It makes writing valid code easier if you can run tests to confirm whether your code makes sense!
+    - Unfortunately, testing doesn't teach us how to write [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself), [best-practice](https://buildmedia.readthedocs.org/media/pdf/python-guide/latest/python-guide.pdf), or even [convention](https://www.python.org/dev/peps/pep-0008/) code, but that is another topic
+  - It catches bugs, typos, errors in your code quickly and sometimes, with feedback
+  - Creates a better workflow
+  - Helps you, the developer, imagine your code in small, bite-size chunks
+  - Helps with productivity as you focus on only one functionality (ties into that SRP!)
+  - With BDD/ATDD, it drives collaboration since multiple people tend to be part of the planning and writing of these types of tests
+    - Also, the human language of writing BDD/ATDD tends to make it more approachable, even by non-developers
+  - And so many more reasons why you should test your code, but hopefully, why you should typically write tests first! (This tutorial saved it for last, but that is okay as well)
+- Back to our project
+- There are 2 popular tools for testing Python:
+  - [unittest](https://docs.python.org/3/library/unittest.html)
+    - Standard library in python
+    - Provides tools for writing and running tests
+    - **What we are using**
+  - [pytest](https://docs.pytest.org/en/latest/)
+    - A framework for making smaller, easier, and faster tests
+    - **NOT using this**
+- To start, we are going to give ourself access to a development database versus a testing database
+- Remove this code from `app.py`
+  ```py
+  app.config['MONGODB_SETTINGS'] = {
+    'host': 'mongodb://localhost/practice-api-movies'
+  }
+  ```
+- And add this code to `.env`
+  ```py
+  MONGODB_SETTINGS = {
+    'host': 'mongodb://localhost/practice-api-movies'
+  }
+  ```
+- Now that our development enviromment is separated, let's make our testing environment
+- `touch .env.test` (notice that this is similar to our `.env`, but the host url for the db has "-test")
+  ```c
+  JWT_SECRET_KEY = 'whuf9347tuhrbfhd89g8yiu4hkj3'
+  MAIL_SERVER: "localhost"
+  MAIL_PORT = "1025"
+  MAIL_USERNAME = "support@practice-api-movies.com"
+  MAIL_PASSWORD = ""
+  MONGODB_SETTINGS = {
+    'host': 'mongodb://localhost/practice-api-movie-test'
+  }
+  ```
+- Good job. Let's setup a our tree structure for testing
+  - `mkdir tests`
+  - `cd tests`
+  - `touch __init__.py`
+  - `touch test_signup.py`
 
 #### Writing Tests
 [Table of Contents](#priyas-practice)
--
+- Add this code for `test_signup.py`
+  ```py
+  # Brings in python native unittest
+  import unittest
+  # Brings in python native json
+  import json
+
+  # Brings in our app from app.py
+  from app import app
+  # Brings in db from db.ppy
+  from database.db import db
+
+  # Make a test class with test case
+  # testcase gives us setup and teardown as well as assertion methods
+  class SignupTest(unittest.TestCase):
+    # setup runs before each function in this class (like rspec/jest/mocha before, before all, and before each)
+    def setUp(self):
+      # defines the app as a test client from flask
+      self.app = app.test_client()
+      # Gets the database instance
+      self.db = db.get_db()
+
+    # OUR ACTUAL TEST
+    # Tests our signup endpoint
+    def test_successful_signup(self):
+      # The Given - the user input
+      # json.dumps() method will convert a python object into a JSON string
+      payload = json.dumps({
+        "email": "paurakh011@gmail.com",
+        "password": "mycoolpassword"
+      })
+
+      # The When - after user input, what should occur (aka, the endpoints response)
+      # It doesnt need the rest of the url because it it in the testing environment information?
+      # We pass our payload from above as the data here
+      # This header is typical for passing json
+      response = self.app.post('/api/v1/auth/signup', headers={"Content-Type": "application/json"}, data=payload)
+
+      # The Then - did it give us back what we expected? Checks for the response from above
+      # Asserts that the datatype for the responses id is a string
+      self.assertEqual(str, type(response.json['id']))
+      # Asserts that the response status code is 200
+      self.assertEqual(200, response.status_code)
+
+    # teardown runs after each function in this class (like rspec/jest/mocha after, after all, and after each)
+    def tearDown(self):
+      # Delete Database collections after the test is complete
+      # Practice for Python for loops: https://www.w3schools.com/python/python_for_loops.asp
+      for collection in self.db.list_collection_names():
+        self.db.drop_collection(collection)
+  ```
+- Now we get to run our first test!
+- Side note about test-isolation. Tests shouldn't interfere with each other. Write knowing this inherent practice.
+  - USE CASE:
+    - I write a test that checks movie with id=4 has certain properties.
+    - I then write another test that updates a field on movie with id=4.
+    - Well... now my first test is going to fail!
+    - To avoid this, you can use `setUp` and `tearDown` concepts as well as a testing database.
+    - This same example while avoiding conflicting tests:
+      - I write a test that first creates a movie record, then checks it has certain properties, and then destroys it.
+      - I then write a test that first creates a movie record, then updates it, confirms updates, and then destroys it.
+      - At this point, my tests will never interact with each other.
+- Prerequisite to running the test:
+  - Make sure you are in virtual enviroment. If not, run `pipenv shell`
+  - Update your environment for testing:
+    - Mac: `export ENV_FILE_LOCATION=./.env.test`
+    - Window: `set ENV_FILE_LOCATION=./.env.test`
+  - Run `python -m unittest tests/test_signup.py`
+    - My error: I had updated my api uri to use ""/api/v1" and I forgot to include that in my test `post` uri. Once I fixed that, I had a completely passing test
+  - See a passing test!
+  - ![passing](https://user-images.githubusercontent.com/49959312/103448626-54984e00-4c59-11eb-8f4d-01175a09073d.png)
+- Cool. We have a chance to refactor. If our `setUp()` and `tearDown()` will be the same in every test, we can pull that into a single file that our test files all use
+- In `tests`, make a new file: `touch BaseCase.py`
+  ```py
+  # Brings in unittest (A native python testing suite)
+  import unittest
+
+  # Brings in our app from app.py
+  from app import app
+  # Brings in db from db.py
+  from database.db import db
+
+  # Defines a basecase class that brings in testcase from unittest (recall, this brings setup, teardown, and assertions)
+  class BaseCase(unittest.TestCase):
+    # The following code is the exact same code from our first test file for setUp() and tearDown()
+    def setUp(self):
+      self.app = app.test_client()
+      self.db = db.get_db()
+
+
+    def tearDown(self):
+      # Delete Database collections after the test is complete
+      for collection in self.db.list_collection_names():
+        self.db.drop_collection(collection)
+  ```
+- Now we can remove excess information from our first test file, `test_signup.py`
+  ```py
+  # removed unittest (since this is now in basecase)
+  # removed app (since this is now in basecase)
+  # removed db (since this is now in basecase)
+  import json
+  # Brings in the basecase class we just wrote
+  from tests.BaseCase import BaseCase
+
+  # Updates the arg for Basecase vs unitttest (since this is now in basecase)
+  class SignupTest(BaseCase):
+    # removes setUp()
+
+    def test_successful_signup(self):
+      payload = json.dumps({
+        "email": "paurakh011@gmail.com",
+        "password": "mycoolpassword"
+      })
+
+      response = self.app.post('/api/v1/auth/signup', headers={"Content-Type": "application/json"}, data=payload)
+
+      self.assertEqual(str, type(response.json['id']))
+      self.assertEqual(200, response.status_code)
+
+    # removes tearDown()
+  ```
+- Don't forget to rerun your test to ensure it is still passing (`python -m unittest tests/test_signup.py`)
+  - To run **ALL** tests: `python -m unittest --buffer` (`--buffer` or `-b` is used to prevent returning the output of _successful_ tests, so we only see the return of errors)
+- At this point, the remaining code will be released in the [Final Code](#Part-7-final-code)
+- So let's talk about happy vs sad paths
+  - [Happy vs Sad](https://en.wikipedia.org/wiki/Happy_path)
+  - To clarify, the test we just wrote (and passed) was the successful, _or HAPPY_, path for POSTing to the `signup` endpoint
+  - Some sad paths will be present in the `test_signup.py` and `test_login.py` files in the [Final Code](#Part-7-final-code)
+- You will need a few more files in your `tests` directory:
+  - `test_login.py`
+  - `test_create_movie.py`
+  - `test_get_movie.py`
+- Looking for ways to take this testing further?
+  - Start with looking at our `errors.py` file. Can you write a sad path test for every error message?
+  - Look through each endpoint function (`auth.py` and `movie.py`) and confirm or write tests for every try and each except
+  - Write a test for your mail service and reset password behavior
+  - Tests are needed for GETting a movie by id, happy and sad
+  - Tests are needed for PUTting (Updating) a movie
+  - Tests are needed for DELETE with movie
+- Looking for ways to take this code further?
+  - Can you take the `@app.route(/)` code further by expanding it with documentation on running the server locally as well as abstracting and refactoring the code so it follows SRP (create file(s) that separate the welcome route)?
+  - Is there repetitive code? If so, find ways to refactor. Consider using any of the pillars of OOP: Abstraction, Encapsulation, Inheritance, Polymorphism
 
 #### Part 7 Final Code
 [Table of Contents](#priyas-practice)
--
+- Please see the [GitHub repo](https://github.com/priyapower/practice-api-movies)

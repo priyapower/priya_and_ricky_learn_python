@@ -7,26 +7,26 @@
 3. [Resource List](#resource-list)
 4. [Setup - Both Windows(basic) and Mac](lessons/1setup.md)
 5. [Part 1 Practice](lessons/2part_1.md)
-  - Ricky: Theory and Hello World
-  - Priya: PyQt and GUI Calculator
+    - Ricky: Theory and Hello World ([finished product]())
+    - Priya: PyQt and GUI Calculator ([finished product](https://github.com/priyapower/python_gui_calculator))
 6. [Part 2 Practice](lessons/3part_2.md)
-  - Ricky: Theory & Number Guessing Game
-  - Priya: RESTful apis with MongoDB and Flask
+    - Ricky: Theory & Number Guessing Game ([finished product]())
+    - Priya: RESTful apis with MongoDB and Flask ([finished product](https://github.com/priyapower/practice-api-movies))
 7. [Part 3 Practice](lessons/4part_3.md)
-  - Ricky: More Theory and Rock, Paper, Scissors
-  - Priya: SQL vs noSQL, PEP3 (Python Convention), More RESTful apis tutorials - this time with testing!
+    - Ricky: More Theory and Rock, Paper, Scissors
+    - Priya: SQL vs noSQL, PEP3 (Python Convention), More RESTful apis tutorials - this time with testing!
 8. [Part 4 Practice]()
-  - Ricky: Theory and Plotting Sine/Cosine
-  - Priya: OOP, 2D Platform Game
+    - Ricky: Theory and Plotting Sine/Cosine
+    - Priya: OOP, 2D Platform Game
 9. [Part 5 Practice]()
-  - Ricky: Django and building a portfolio app
-  - Priya: More theory & Make a gradebook with Panda
+    - Ricky: Django and building a portfolio app
+    - Priya: More theory & Make a gradebook with Panda
 10. [Part 6 Practice]()
-  - Ricky: Bitcoin Notifications & Basic API app
-  - Priya: Instagam Bot
+    - Ricky: Bitcoin Notifications & Basic API app
+    - Priya: Instagam Bot
 11. [Part 7 Practice]()
-  - Ricky: Flask apps - Lyricize and ToDo
-  - Priya: GPU Programming with CUDA library
+    - Ricky: Flask apps - Lyricize and ToDo
+    - Priya: GPU Programming with CUDA library
 
 ### Our Background:
 **Ricky** - French Teacher; specializes in Being Awesome. Learning coding and development for the first time.
