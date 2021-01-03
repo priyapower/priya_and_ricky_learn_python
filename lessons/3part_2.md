@@ -12,7 +12,7 @@ Ricky/Windows/Beginner:
 
 Priya/Mac/Intermediate:
 - [Priya's Practice](#priyas-practice)
-- Goal is to build a a RESTful api with Flask and MongoDB
+- Goal is to build a a RESTful api with Flask, MongoDB, and unittest
 - Product: [Finished Product](https://github.com/priyapower/practice-api-movies)
 
 ## Ricky's Practice
@@ -25,6 +25,14 @@ Goal is to create a number guessing game
 
 ## Priya's Practice
 Goal is to build a a RESTful api with Flask and MongoDB
+- [Part 0: Understanding New Technologies](#part-0)
+  1. [What is a Web API?](#What-is-a-Web-API)
+  1. [What is MongoDB?](#What-is-MongoDB)
+  1. [SQL vs noSQL](#SQL-vs-noSQL)
+  1. [What is Flask?](#What-is-Flask)
+  1. [Flask vs Django](#Flask-vs-Django)
+  1. [What is Postman?](#What-is-Postman)
+  1. [Hosting that API - How?](#Hosting-that-API)
 - [Part 1: Basics and Setup](#part-1)
   1. [Setup](#setup)
   1. [Get your Root Endpoint Exposed](#get-your-root-endpoint-exposed)
@@ -63,10 +71,114 @@ Goal is to build a a RESTful api with Flask and MongoDB
   1. [Writing Tests](#Writing-Tests)
   1. [Part 7 Final Code](#Part-7-Final-Code)
 
+------
+### Part 0
+------
+#### What is a Web API
+[Top](#priyas-practice)
+- API or Application Programming Interface is a way to present/expose data over the web. The typical formats we see out there are JSON (and XML). Personally, I have experience with JSON formatting (see [here](https://jsonapi.org) for the shared convention of presenting JSON).
+- Language you may hear:
+  - "Endpoint" = It is the 'end' of a bit of communication; specific to API, an endpoint is the 'location' that a user/client/application can make a request and get a data response (where does the exposed data resource live? the api endpoint)
+  - "Expose" = We hear expose a lot when programming. When we discuss databases or API's, we mean that we are providing the ability to access and manipulate the data (This word exists in multiple places in software, such as "exposing an object" - now we are providing the ability to access and manipulate the object)
+  - "Request" = This is the act of "making the call". With API's, the request is making a call to the server (and the response is the formatted data). We can also see this word in use in other aspects of software. If I load google.com, I am making an HTTP request (aka, I'm making a call to googles server and the response is the website I see in my browser)
+  - "Response" = This is what is returned back to a user. In API's, our response is the formatted data (the request is what started our process to get the response). Using the website analogy above, the HTTP Response would be the load of the google website in my browser)
+  - "Routes" - Routes determine the structure of our API's and their endpoints. Working with computers, you've probably opened the File Directory/Manager (Mac: Finder, Windows: Windows/File Explorer). You might open up your user folder and then head further into documents and maybe you have another folder called Learn_Coding. Well, that URI (struggling with [URI vs URL](https://danielmiessler.com/study/difference-between-uri-url/)?) would be Priya/Documents/Learn_Coding.
+- Well, let's look at an actual API URL:
+![image](https://miro.medium.com/max/448/1*sauiWFwcEJPxiLlQZj_FYw.png)
+  - The above breakdown is an API endpoint that exposes only Squirtles data
+  - The "entry point" uses other language, such as namespace and
+  - So we have a /pokemon route (if you hit this, you would expose all pokemon data)
+  - Under that, we have another route /squirtle, this exposes just squirtle data
+  - If I showed you this URL, what are the routes you can predict from it? `https://priyapower.com/api/v1/jobs/current_job`
+
+#### What is MongoDB
+[Top](#priyas-practice)
+- [MongoDB](https://www.mongodb.com) is a noSQL database that uses JSON formatting
+  - uses a tree data structure
+  - Uses documents
+
+#### SQL vs noSQL
+[Top](#priyas-practice)
+  - My resources ([Xplenty](https://www.xplenty.com/blog/the-sql-vs-nosql-difference/), [SoftwareTesting](https://www.softwaretestinghelp.com/sql-vs-nosql/))
+  - Language you may hear:
+    - "Database" = the location of information (data) records; gives access and manipulation ability; integrity and security can be built-into/handled-by the database
+    - "Relational" = Regarding databases, this means it is structured with tables with pre-built relationships/dependencies
+    - "Relationship" = In databases, we have three different [types of relationships](https://condor.depaul.edu/gandrus/240IT/accesspages/relationships.htm), one-to-one, one-to-many, and many-to-many. These, in essence, create ways to connect/relate/access the data. For example, a `Hobbes` (an instance of the Pet table) may "belong" to a `Calvin` (an instance of the Pet-Parent table). This means that the Pet-Parent "has" the Pet, and could potentially "have many" Pets, but Pets would only "belong" to 1 Pet-Parent. This is a one-to-many relationship. There is currently only a relationship between `Hobbes` and `Calvin`, however, `Calvin` can still get more pets, but `Hobbes` will always belong to ONLY `Calvin`, aka, `Suzy` isn't going to suddenly take ownership of `Calvin` (Want to understand my [pop-culture reference](https://i.pinimg.com/originals/64/a3/1b/64a31bd94c0dcade459aadebf199bec1.jpg)? See more [details](https://en.wikipedia.org/wiki/Calvin_and_Hobbes).)
+    - "Schema" = the blueprint/organization of the data (how is the database constructed)
+    - "Dynamic" = fluid, changeable
+    - "Static" = fixed
+    - "Field" or "Attribute" = these represent the categories of information you would like to see on a database model. For example, a User model may have a name field/attribute
+  - SQL
+    - SQL databases store information in tables and have relational abilities
+    - Very rigid and structured (It's even in the name! Structure Query Language)
+    - Has rules that define and manipulate the data
+    - Has predefined schemas (aka [static schema](https://www.prisma.io/dataguide/intro/intro-to-schemas#static-vs-dynamic-schemas) structures)
+    - Super widely-used
+    - Database design, preparation, and organization is so important UP-FRONT
+    - CONS: a change in the structure/database-design can be difficult to implement as well as cause errors/bugs/breaks in your system
+    - SCALABILITY: vertically (single server, to increase performance, increase CPU, RAM, or SSD)
+      - This means that SQL databases are preferred with small or consistent data sets
+      - Because of its relational status - it also makes it preferred in multi-row transactions such as financial applications
+  - NoSQL
+    - No tables, instead you have doc, key:value, graph, and column
+    - Dynamic schemas
+    - Works with unstructured databases
+    - Data can be stored in a multitude of ways:
+      - Column-oriented - stores the data by serializing into columns; lets say we have a data record that has 3 bits of information, A, B, and C - our column will store column1=A, column2=B, column3=C
+      - Document-oriented - these are typically JSON or XML; no schemas; each doc contains the data you want and is highly changeable; docs use key:value pairs (hashes)
+      - Graph-based - has nodes and relationships; node = the noun (person, place, thing, object); relationships = the connection between 2 nodes; EXAMPLE: node1 = user, node2 = song, relationship = "favoriting the song"
+      - Key:Value - stores data in pairs (key is the "caller" and the pair is the "return"); fast for writing, reading, and updating when you know the key; slow when you are making lots of changes or you access the entire data set
+    - Super flexible
+    - You can begin working without defining the structure of your database
+    - Different parts of you system can have interaction with unique data structures instead of only relying on 1 defined data structure (use it how you need it!)
+    - Syntax is varied in the different noSQL database world
+    - You can update fields on the go
+    - CONS: Lacks standardization and has less community support/documentation
+    - SCALABILITY: horizontally (multi-servers for increase in performance)
+      - This means that noSQL databases are preferred with large or ever-changing data sets
+
+#### What is Flask
+[Top](#priyas-practice)
+- [Flask](https://flask.palletsprojects.com/en/1.1.x/) a micro web framework for Python
+  - Web frameworks are software that allow web developers to create web applications, services, resources, and API's (what we are using it for!)
+  - Specifically it is a Web Server Gateway Interface (WSGI)
+  - To compare, this is like `Rails`, in that is provides structure/software for web development
+  - HOWEVER, since it is _micro_, it lacks many of the "things" that larger frameworks would come with like data abstraction layers, form validations, etc
+  - Don't fret though: with the flask extensions we have access to many "things" that will allow our code to grow in complexity! I mean, we are able to use mail clients and encrypt passwords and all sorts of fun things in the tutorial below.
+
+#### Flask vs Django
+[Top](#priyas-practice)
+- [Django](https://www.djangoproject.com) markets itself as "The web framework for perfectionists with deadlines"
+- It is a high-level web framework for Python
+- Django reminds me of `Rails` for `Ruby` or my experience with `React` inside `NodeJS`
+|  | Django | Flask |
+| ---- | ---- | ---- |
+| Type of framework | Full Stack Web Development | Web Server Gateway Interface |
+| Flexibility | Packed with features | Flexible with extension use |
+| ORM | Built In | Find your own, like SQLAlchemy; or use noSQL DOM's like MongoEngine |
+| Design | Batteries Included | Minimalistic Design |
+| Working Style | Monolithic | Diversified |
+- Looking for [more](https://www.educba.com/django-vs-flask/) information
+
+#### What is Postman
+[Top](#priyas-practice)
+- [Postman](https://www.postman.com)
+- This is a sleek, GUI, that makes interacting with RESTful API's a breeze
+- I absolutely recommend downloading the full product (I just have the free version for my personal project needs)
+- A great getting started [tutorial](https://www.guru99.com/postman-tutorial.html)
+- Most of the checks and testing we will do in this tutorial uses Postman
+
+#### Hosting that API
+[Top](#priyas-practice)
+- In this tutorial, we will only host our api on our local server
+- However, we can always **deploy** our server (the code we are writing today) to a public space and make your api available to all!
+  - "Deployment": The act of placing your code on web servers, which gives others access to it via the internet or intranet
+- Check out this [tutorial](https://towardsdatascience.com/deploying-a-flask-app-on-heroku-and-connecting-it-to-mongodbs-mlab-e0022c4e6d1e)
+
 ### Part 1
 ------
 #### Setup
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
 - Following [this tutorial](https://dev.to/paurakhsharma/flask-rest-api-part-0-setup-basic-crud-api-4650)
 - Create your project folder/directory: `mkdir practice_api_movies`
 - `cd practice_api_movies`
@@ -122,7 +234,7 @@ Goal is to build a a RESTful api with Flask and MongoDB
     ```
 
 #### Get your Root endpoint Exposed
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
 - Make a file for our rest api: `touch app.py`
 - Code for the app file:
     ```python
@@ -167,7 +279,7 @@ Goal is to build a a RESTful api with Flask and MongoDB
 - ![round_of_applause](https://media0.giphy.com/media/PkXrOxe77MbmavlfWa/giphy.gif)
 
 #### Let's get an index of movies returned
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
 - Time to update our `app.py` "runner" file:
     ```python
     # Imports jsonify from flask package. This converts our data into proper JSON responses
@@ -204,7 +316,7 @@ Goal is to build a a RESTful api with Flask and MongoDB
 - Woo! It works
 
 #### CRUD, It's what you do
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
 - For pop reference, see [example commercial](https://www.youtube.com/watch?v=sxcsKE1SS4Y) and [wiki](https://en.wikipedia.org/wiki/VERB_(program)
 - Time to work on that CRUD (create, read, update, and destroy, see this [article](https://trendintech.com/2018/01/19/why-is-crud-so-important-in-computer-programming/) for more information on CRUD)
 - Updates to code:
@@ -270,7 +382,7 @@ Goal is to build a a RESTful api with Flask and MongoDB
     ```
 
 #### Test CRUD out with Postman
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
 - Create/Post:
   - Post verb
   - Body tab = raw & JSON
@@ -294,7 +406,7 @@ Goal is to build a a RESTful api with Flask and MongoDB
   - ![image](https://user-images.githubusercontent.com/49959312/103389122-2d5f4680-4aca-11eb-99d0-0f3abee0cf08.png)
 
 #### Part 1 Final Code
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
   ```py
   from flask import Flask, jsonify, request
 
@@ -344,7 +456,7 @@ Goal is to build a a RESTful api with Flask and MongoDB
 ### Part 2
 ------
 #### Installing Mongodb and Understanding the library we will use
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
 - The docs for installing on [mac](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/)
 - Prereqs: xcode command-line & homebrew
 - "Tap" the homebrew mongodb by running `brew tap mongodb/brew`
@@ -389,7 +501,7 @@ Or, if you don't want/need a background service you can just run:
   - To confirm the extension installed, I ran `pip freeze | grep flask-mongoengine` , which returned `flask-mongoengine==1.0.0`
 
 #### Getting started with the database
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
 - First we begin my updating our file tree
   - `mkdir database`
   - `cd database`
@@ -425,7 +537,7 @@ Or, if you don't want/need a background service you can just run:
   ```
 
 #### Connect your database with your app
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
 - Update  `app.py` to use the database and not hardcoded data && change the view functions
   ```py
   # remove jsonify from flask imports and add a Response import
@@ -484,7 +596,7 @@ Or, if you don't want/need a background service you can just run:
   ```
 
 #### Make our API endpoints more robust
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
   - We forgot a CRUD endpoint. We have Create (Post), Read/Retrieve (GET), Update (Put), and Destroy (Delete). HOWEVER, Read/Retrieve technically has 2! GET single movie (in rails this is Show) and GET all movies (in rails this is Index). We are missing our GET single (get by id)
   - Add the following _above_ `app.run()`
   ```py
@@ -495,14 +607,14 @@ Or, if you don't want/need a background service you can just run:
   ```
 
 #### Run the server and test in Postman
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
 - If you are outside of the virtual environment, first run `pipenv shell`
 - Otherwise, just run `python app.py`
 - If there are no typos, you should see your server start
 - To continue testing, we may need to ensure database is connected and loaded with data (see next section)
 
 #### Add data to database
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
 - _For data see below with [options 1 & 2](#options)_
 - Exit the server (CTRL + C on Mac)
 - First, we need to see if we have truly started mongodb.
@@ -617,7 +729,7 @@ Or, if you don't want/need a background service you can just run:
 - ![celebrate with birds](https://media.giphy.com/media/B81XkL3dtnWTe/giphy.gif)
 
 #### Part 2 Final Code
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
   ```py
   from flask import Flask, request, Response
   from database.db import initialize_db
@@ -671,13 +783,13 @@ Or, if you don't want/need a background service you can just run:
 ------
 
 #### Best Practices for Organizing Code
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
 - See [here](https://exploreflask.com/en/latest/organizing.html) for official Flask documentation on organizing code
 - [Flask Community](https://github.com/pallets/flask/issues/2626) conversation on MVC, factory patterns, and folder/tree structure
 - [Blue Ocean Tutorial](https://www.digitalocean.com/community/tutorials/how-to-structure-large-flask-applications) on flask structures (though, take this with a grain of salt)
 
 #### Blueprints
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
 - What are [blueprints](https://stackoverflow.com/questions/24420857/what-are-flask-blueprints-exactly) in flask?
   - [Official Flask Documentation](https://flask.palletsprojects.com/en/1.1.x/blueprints/)
   - Simply put, it is a way to structure your code; a method of encapsulating code into separate components; a chance for Single-Responsibility Principle patterns to emerge!
@@ -810,7 +922,7 @@ Or, if you don't want/need a background service you can just run:
 - Now, it looks much cleaner and feels closer to single-responsibility principle patterns
 
 #### Flask RESTful
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
 - We aren't quite finished though
 - [Official Extension Documentation](https://flask-restful.readthedocs.io/en/latest/)
 - This extension encourages best practices in RESTful design
@@ -923,7 +1035,7 @@ Or, if you don't want/need a background service you can just run:
   - _Troubleshooting tip: When updating your code, stop and restart server to see affects in Postman_
 
 #### Part 3 Final Code
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
   ```py
   # app.py
   from flask import Flask
@@ -992,14 +1104,14 @@ Or, if you don't want/need a background service you can just run:
 ------
 
 #### Authentication and Authorization
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
 - Authentication: You are who you say you are
   - Example: _Signing up and Logging into an application_
 - Authorization: You are allowed to do the things you are trying to do
   - Example: _An admin is authorized to see all users and delete/update/create users, whereas a user is only authorized to update their own records_
 
 #### Implement Authentication into Our Backend Server
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
 - Why do we need it?
 - Right now, any user with this code can access perform all CRUD functionality. Maybe you want this. Maybe you don't.
 - If you need to restrict who has access to CRUD functionality, we need to add authentication so only a logged in user can access CRUD.
@@ -1252,7 +1364,7 @@ JWT_SECRET_KEY = '<your-encryption-key>'
   ```
 
 #### Implement Authorization into Our Backend Server
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
 - We will need to update our `movie.py` for safeguards using JWT - only authorized users can Create, Update, and Delete movie records
 - `movie.py`
   ```py
@@ -1421,7 +1533,7 @@ JWT_SECRET_KEY = '<your-encryption-key>'
 - ![Success](https://i0.wp.com/winkgo.com/wp-content/uploads/2019/11/congratulations-memes-08.gif?w=720&ssl=1)
 
 #### Part 4 Final Code
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
   ```py
   # FILE = app.py
   from flask import Flask
@@ -1569,7 +1681,7 @@ JWT_SECRET_KEY = '<your-encryption-key>'
 ------
 
 #### Custom Error Messages
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
 - At this point, if we hit an error/issue in Postman, we get a 500 error
 - What if we want these errors to be custom and clear? This way clients/users know why they are getting an error (_if a tries to register with an email in the system, they need to be told why they got an error_)
 - We are going to use `Exception Handling` and the custom error message ability of `flask-restful`
@@ -1789,7 +1901,7 @@ JWT_SECRET_KEY = '<your-encryption-key>'
 - Woo! We've made a lot of progress on exception handling. Let's check what else we need to update
 
 #### Auth and Error Handling
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
 - At this point, we:
   - `resources/errors.py`: made an errors file
   - `app.py`: updated app to accept errors
@@ -1862,7 +1974,7 @@ JWT_SECRET_KEY = '<your-encryption-key>'
 - ![success error](https://user-images.githubusercontent.com/49959312/103443901-9e187700-4c20-11eb-8c0b-c67dd8e462d7.png)
 
 #### Part 5 Final Code
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
 ```py
 # FILE = resources/errors.py
 class InternalServerError(Exception):
@@ -2071,7 +2183,7 @@ class LoginApi(Resource):
 ### Part 6
 ------
 #### Flask Mail
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
 - What happens if a registered user forgets their password? The easiest and most common method of password resetting is an email flow:
   - (1) The user/client selects the link for a password reset
   - (2) That link sends an email back to the user/client with a `reset_token`
@@ -2440,7 +2552,7 @@ class LoginApi(Resource):
 - Try running your server (`python app.py`) and see below
 
 #### A New Runner
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
 - **EXPECTED ERROR!**: we get an import error from our `reset_password.py` file. This is due to a circular dependency problem in Python. See below
   ```
   In our reset_password.py,
@@ -2560,7 +2672,7 @@ class LoginApi(Resource):
   - ![success yay](https://media.giphy.com/media/CR2rVn1bW7MPu/giphy.gif)
 
 #### Part 6 Final Code
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
 ```py
 # FILE = app.py
 from flask import Flask
@@ -2822,7 +2934,7 @@ MAIL_PASSWORD = ""
 ---
 
 #### Setting Up Test Environment
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
 - Yay - we are at my favorite part. Writing tests. Truly, I enjoy following _Test-Driven Development(TDD)_ & _Behavior-Driven Development(BDD)_ practices. ([Source](https://www.browserstack.com/guide/tdd-vs-bdd-vs-atdd))
   - TDD:
     - Tests functionality
@@ -2891,7 +3003,7 @@ MAIL_PASSWORD = ""
   - `touch test_signup.py`
 
 #### Writing Tests
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
 - Add this code for `test_signup.py`
   ```py
   # Brings in python native unittest
@@ -3036,5 +3148,7 @@ MAIL_PASSWORD = ""
   - Is there repetitive code? If so, find ways to refactor. Consider using any of the pillars of OOP: Abstraction, Encapsulation, Inheritance, Polymorphism
 
 #### Part 7 Final Code
-[Table of Contents](#priyas-practice)
+[Top](#priyas-practice)
 - Please see the [GitHub repo](https://github.com/priyapower/practice-api-movies)
+- Clean [code](https://github.com/priyapower/python_gui_calculator/blob/main/pycalc.py)
+- Code with [notes](https://github.com/priyapower/python_gui_calculator/blob/main/pycalc_notes.py)
