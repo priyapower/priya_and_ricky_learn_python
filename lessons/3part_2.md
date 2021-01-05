@@ -18,7 +18,7 @@ Priya/Mac/Intermediate:
 Goal is to create a number guessing game
 - His theory [notes]()
   - Video understandings
-- His project [code](https://github.com/rckpwr/number_guesser/guesrr.py)
+- His project [code](https://github.com/rckpwr/number_guesser/blob/main/guessr.py)
 - His project code [annotations](https://github.com/rckpwr/number_guesser/blob/main/guessr_notes.py)
 
 ## Priya's Practice

@@ -16,7 +16,7 @@ Priya/Mac/Intermediate:
 Goal is to create a rock, paper, scissors game
 - His theory [notes]()
   - What is OOP
-- His project [code](https://github.com/rckpwr/rock_paper_scissors/rock_paper_scissors.py)
+- His project [code](https://github.com/rckpwr/rock_paper_scissors/blob/main/rock_paper_scissors.py)
 - His project code [annotations]()
 
 ## Priya's Practice
@@ -125,7 +125,7 @@ Goal is to build a Space Shooter game while learn Arcade
 
 ### Part 3
 ------
-#### Fundamentals Concepts for Game
+#### Fundamental Concepts for Game
 [Top](#priyas-practice)
 
 #### Imports and Constants
