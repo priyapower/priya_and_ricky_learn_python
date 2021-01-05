@@ -5,7 +5,7 @@
 Ricky/Windows/Beginner:
 - [Ricky's Practice](#ricky's-practice)
 - Goal is to understand introductory coding language/practices while also learning python
-- Product: [Coming Soon]()
+- Product: [Finished Product](https://github.com/rckpwr/hello_world_python)
 
 Priya/Mac/Intermediate:
 - [Priya's Practice](#priya's-practice)
@@ -14,17 +14,17 @@ Priya/Mac/Intermediate:
 
 
 ## Ricky's Practice
-
-(more coming soon, below are notes to transfer)
-
 Goal is to understand introductory coding language/practices while also learning python
-- What are cases (camelCase, PascalCase, snake_case, and kebab-case)
-- What are datatypes and specific to [Python ones](https://www.w3schools.com/python/python_datatypes.asp)
-- Practicing on PowerShell
-- Practicing on VS Code
-- Practicing on W3Schools Website
-- Lesson on git and getting on github
-- Have him push up his VSCode work
+- His theory [notes]()
+  - What are cases (camelCase, PascalCase, snake_case, and kebab-case)
+  - What are datatypes and specific to [Python ones](https://www.w3schools.com/python/python_datatypes.asp)
+  - Practicing on PowerShell
+  - Practicing on VS Code
+  - Practicing on W3Schools Website
+  - [Git and getting on GitHub](https://github.com/rckpwr/hello_world_python/blob/main/git_notes.md)
+- His project [code](https://github.com/rckpwr/hello_world_python/blob/main/hello.py)
+- His project code [annotations]()
+
 
 ## Priya's Practice
 BLARG
