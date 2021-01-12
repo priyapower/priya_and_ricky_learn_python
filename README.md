@@ -39,7 +39,7 @@
     - Priya: _Coming Soon: GPU Progamming with NVIDIA's CUDA Library (finished product]())_
 11. [Part 7 Practice](lessons/8part_7.md)
     - Ricky: _Coming Soon: Django and the simple API (finished product]())_
-    - Priya: _Coming Soon: Distinguishing Python (finished product]())_
+    - Priya: _Coming Soon: A Wrap-up of my Python Learning (finished product]())_
 
 ### Our Background:
 **Ricky** - French Teacher; specializes in Being Awesome. Learning coding and development for the first time.

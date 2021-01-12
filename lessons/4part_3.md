@@ -75,6 +75,7 @@ Goal is to build a Space Shooter game while learn PyGame
 - [Python](https://www.python.org/)
 - [PyCharm](https://www.jetbrains.com/pycharm/)
 - What is PyCharm
+  - Link to part 4
   - https://www.jetbrains.com/pycharm/
 - BLARG___________________________________
 
@@ -2116,11 +2117,19 @@ Goal is to build a Space Shooter game while learn PyGame
 ------
 #### Final Code
 [Top](#priyas-practice)
-- [Repo]()
-- [Practice Code]()
-- [Game Setup]()
-- [Working Game]()
-- The truly final code: [Game with Images, Speed, and Sound]()
+
+Code
+- [Repo](https://github.com/priyapower/shooter_game)
+- [Practice Code](https://github.com/priyapower/shooter_game/blob/main/learning_code_and_annotations/1practice.py)
+- [Game Setup](https://github.com/priyapower/shooter_game/blob/main/learning_code_and_annotations/2shooter_game_setup.py)
+- [Working Game](https://github.com/priyapower/shooter_game/blob/main/learning_code_and_annotations/3shooter_game_working.py)
+- The final code: [Game with Images, Speed, and Sound](https://github.com/priyapower/shooter_game/blob/main/shooter_game_final.py)
+
+Annotations
+- [Practice Code Annotations](https://github.com/priyapower/shooter_game/blob/main/learning_code_and_annotations/1practice_annotations.py)
+- [Game Setup Annotations](https://github.com/priyapower/shooter_game/blob/main/learning_code_and_annotations/2shooter_game_setup_annotations.py)
+- [Working Game Annotations](https://github.com/priyapower/shooter_game/blob/main/learning_code_and_annotations/3shooter_game_working_annotations.py)
+- The final code annotations: [Game with Images, Speed, and Sound](https://github.com/priyapower/shooter_game/blob/main/learning_code_and_annotations/4shooter_game_final_annotations.py)
 
 
 #### Packaging Code for Easy Execution
