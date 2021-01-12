@@ -1,27 +1,25 @@
 # Part 2 Practice
 Keyword - REST
 ![rest](https://static.onecms.io/wp-content/uploads/sites/35/2017/04/03204310/fb-lazy-cat-rest-day-gif.gif)
-## With Python, MongoDB, and Flask (No testing)
 
 ## What is on this page
 
 Ricky/Windows/Beginner:
 - [Ricky's Practice](#rickys-practice)
 - Goal is to create a number guessing game
-- Product: [Finished Product]()
+- Product: [Finished Product](https://github.com/rckpwr/number_guesser)
 
 Priya/Mac/Intermediate:
 - [Priya's Practice](#priyas-practice)
-- Goal is to build a a RESTful api with Flask, MongoDB, and unittest
+- Goal is to build a RESTful api with Flask, MongoDB, and unittest
 - Product: [Finished Product](https://github.com/priyapower/practice-api-movies)
 
 ## Ricky's Practice
 Goal is to create a number guessing game
-
-(more coming soon...)
-
-- theory part 2 notes
-- notes on how he completed this project
+- His theory [notes]()
+  - Video understandings
+- His project [code](https://github.com/rckpwr/number_guesser/blob/main/guessr.py)
+- His project code [annotations](https://github.com/rckpwr/number_guesser/blob/main/guessr_notes.py)
 
 ## Priya's Practice
 Goal is to build a a RESTful api with Flask and MongoDB
