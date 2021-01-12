@@ -1,4 +1,17 @@
 # Learning Python with Priya and Ricky
+-----
+## Priya's Python Resume Showcase
+- Check out my collaborative project: [DreamHome](https://github.com/Dream-Home-PEABOT)
+  - It uses a Python/MongoDB [BE Server](https://github.com/Dream-Home-PEABOT/BEE_DreamHome) and a Typescript/REACT [FE website](https://github.com/Dream-Home-PEABOT/FEE_DreamHome)
+  - _Coming Soon: Deployed App]()_
+  - ![Screenshot collab]()
+-  Play my adorable 2D side-scroller "avoid obstacles" [game](https://github.com/priyapower/shooter_game)!
+  - ![Screenshot shooter]()
+- See my API [backend server](https://github.com/priyapower/practice-api-movies) for a fake Movie DB
+  - ![Screenshot api]()
+
+-----
+## The Learning Section
 ![image](https://i.pinimg.com/originals/24/97/b4/2497b48e8f9778fb8463c525e14794f9.gif)
 
 ## Table of Contents
@@ -13,23 +26,20 @@
     - Ricky: Theory & Number Guessing Game ([finished product](https://github.com/rckpwr/number_guesser))
     - Priya: RESTful apis with MongoDB, Flask, mail client, and unittest ([finished product](https://github.com/priyapower/practice-api-movies))
 7. [Part 3 Practice](lessons/4part_3.md)
-- Ricky: More Theory and Rock, Paper, Scissors ([finished product](https://github.com/rckpwr/rock_paper_scissors))
-- Priya: Learning python gaming with PyGame and Arcade (Primer lessons at RealPython) ([finished product]())
-
-Coming soon...
-
-    8. [Part 4 Practice]()
-        - Ricky: Theory and Plotting Sine/Cosine
-        - Priya: Diving into Python gaming with Arcade
-    9. [Part 5 Practice]()
-        - Ricky: Django and building a portfolio app
-        - Priya: Diving into Python gaming with PyGame
-    10. [Part 6 Practice]()
-        - Ricky: Bitcoin Notifications & Basic API app
-        - Priya: Diving into Python gaming with Arcade - Part 2
-    11. [Part 7 Practice]()
-        - Ricky: Flask apps - Lyricize and ToDo
-        - Priya: Diving into Python gaming with PyGame - Part 2
+  - Ricky: Rock, Paper, Scissors ([finished product](https://github.com/rckpwr/rock_paper_scissors))
+  - Priya: Build a 2D Shooter Game with Pygame (Primer lessons at RealPython) ([finished product](https://github.com/priyapower/shooter_game))
+8. [Part 4 Practice](lessons/5part_4.md)
+    - Ricky: _Coming Soon: Plotting Sine/Cosine and GUI Calculator (finished product]())_
+    - Priya: _Coming Soon: Collaborative Project: DreamHome (finished product]())_
+9. [Part 5 Practice](lessons/6part_5.md)
+    - Ricky: _Coming Soon: ToDo App with Flask and RethinkDB(finished product]())_
+    - Priya: _Coming Soon: Build a 2D Side Scroller Game with Arcade (finished product]())_
+10. [Part 6 Practice](lessons/7part_6.md)
+    - Ricky: _Coming Soon: Bitcoin Price Notifications App (finished product]())_
+    - Priya: _Coming Soon: GPU Progamming with NVIDIA's CUDA Library (finished product]())_
+11. [Part 7 Practice](lessons/8part_7.md)
+    - Ricky: _Coming Soon: Django and the simple API (finished product]())_
+    - Priya: _Coming Soon: Distinguishing Python (finished product]())_
 
 ### Our Background:
 **Ricky** - French Teacher; specializes in Being Awesome. Learning coding and development for the first time.
