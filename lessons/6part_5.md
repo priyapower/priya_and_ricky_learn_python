@@ -567,26 +567,318 @@ BLARG___________________________________
     ![Updated sprite](https://user-images.githubusercontent.com/49959312/104391100-69e46680-54fc-11eb-8af9-c29377ddf11a.png)
 
   2. Practice placing individually, via a loop, and by coordinates in a list.
+  3. **LOOKING FOR MORE?** See the [Sprite Class](https://arcade.academy/arcade.html#arcade.Sprite) and the [Sprite List Class](https://arcade.academy/arcade.html#arcade.SpriteList)
 - Now that we can now add sprites to our screen, how do we move them?
 
 #### Add User Control
 [Top](#priyas-practice)
 - DEETS
-- In fact, we have a starter file for ourselves called `0.py` that we can play around with
-- When I run it, I see
+- In fact, we have a starter file for ourselves called `03_user_control.py` that we can play around with
+- When I run it, I see the same game file as the last section, HOWEVER, now I can move my player!
 - To fully understand this code, let's annotate it:
-```py
-```
-- Now let's play with our code:
-  1. Adjust the code and try putting sprites in new positions.
-    - ADJUSTMENT NOTES
-```py
-```
-- Now that we can
+  ```py
+  """
+  Platformer Game
+  """
+  import arcade
+
+  SCREEN_WIDTH = 1000
+  SCREEN_HEIGHT = 650
+  SCREEN_TITLE = "Platformer"
+
+  CHARACTER_SCALING = 1
+  TILE_SCALING = 0.5
+  COIN_SCALING = 0.5
+
+  # Movement speed of player, in pixels per frame
+  PLAYER_MOVEMENT_SPEED = 5
+
+  class MyGame(arcade.Window):
+      """
+      Main application class.
+      """
+
+      def __init__(self):
+          super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+
+          self.coin_list = None
+          self.wall_list = None
+          self.player_list = None
+          self.player_sprite = None
+
+          # Our physics engine
+          # Currently it is just a variable, but the engine will be set below
+          self.physics_engine = None
+
+          arcade.set_background_color(arcade.csscolor.MEDIUM_VIOLET_RED)
+
+      def setup(self):
+          """ Set up the game here. Call this function to restart the game. """
+          self.player_list = arcade.SpriteList()
+          self.wall_list = arcade.SpriteList(use_spatial_hash=True)
+          self.coin_list = arcade.SpriteList(use_spatial_hash=True)
+
+          self.player_sprite = arcade.Sprite(":resources:images/animated_characters/female_adventurer/femaleAdventurer_idle.png",
+                                             CHARACTER_SCALING)
+          self.player_sprite.center_x = 64
+          self.player_sprite.center_y = 128
+          self.player_list.append(self.player_sprite)
+
+          for x in range(0, 1250, 64):
+              wall = arcade.Sprite(":resources:images/tiles/grassMid.png", TILE_SCALING)
+              wall.center_x = x
+              wall.center_y = 32
+              self.wall_list.append(wall)
+
+          # Create the 'physics engine'
+          # https://arcade.academy/arcade.html#arcade.PhysicsEngineSimple
+              # Simplistic physics engine for use in games without gravity, such as top-down games.
+              # It is easier to get started with this engine than more sophisticated engines like PyMunk.
+              # Note, it does not currently handle rotation.
+          # This engine is what keeps our player from being able to walk through walls or solid objects or fall through the ground
+          # Noticed that I can walk off the edge of the screen, so that safeguard isn't in place yet
+              # The PhysicsEngineSimple class takes two parameters: The moving sprite, and a list of sprites the moving sprite can’t move through.
+              # So we either need to set another engine with params for the edges, or there is another method coming later
+              # We are allowed to have more than one simple physics engine
+          self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.wall_list)
+
+          # Put some crates on the ground
+          # This shows using a coordinate list to place sprites
+          coordinate_list = [[256, 96],
+                             [512, 96],
+                             [768, 96]]
+
+          for coordinate in coordinate_list:
+              # Add a crate on the ground
+              wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", TILE_SCALING)
+              wall.position = coordinate
+              self.wall_list.append(wall)
+
+      def on_draw(self):
+          """ Render the screen. """
+
+          # Clear the screen to the background color
+          arcade.start_render()
+
+          # Draw our sprites
+          self.wall_list.draw()
+          self.coin_list.draw()
+          self.player_list.draw()
+
+      # on_key_press: https://arcade.academy/arcade.html#arcade.View.on_key_press
+      def on_key_press(self, key, modifiers):
+          """Called whenever a key is pressed. """
+          # If a user presses Up, W, or Space
+          if key == arcade.key.UP or key == arcade.key.W or key == arcade.key.SPACE:
+              # change_y: https://arcade.academy/arcade.html?highlight=change_y#arcade.Sprite.change_y
+              # Increases the velocity in the y-plane by the players set speed
+              self.player_sprite.change_y = PLAYER_MOVEMENT_SPEED
+          # If a user presses Down or S
+          elif key == arcade.key.DOWN or key == arcade.key.S:
+              # Decreases the velocity in the y-plane by the players set speed
+              self.player_sprite.change_y = -PLAYER_MOVEMENT_SPEED
+          # If a user presses Left or A
+          elif key == arcade.key.LEFT or key == arcade.key.A:
+              # change_x: https://arcade.academy/arcade.html?highlight=change_y#arcade.Sprite.change_x
+              # Decreases the velocity in the x-plane by the players set speed
+              self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
+          # If a user presses Right or D
+          elif key == arcade.key.RIGHT or key == arcade.key.D:
+              # Increases the velocity in the x-plane by the players set speed
+              self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+
+      # on_key_release: https://arcade.academy/arcade.html#arcade.View.on_key_release
+      def on_key_release(self, key, modifiers):
+          """Called when the user releases a key. """
+          # This allows a user to press and hold a key because if you release the key, it will reset the velocity to 0
+          if key == arcade.key.UP or key == arcade.key.W:
+              self.player_sprite.change_y = 0
+          elif key == arcade.key.DOWN or key == arcade.key.S:
+              self.player_sprite.change_y = 0
+          elif key == arcade.key.LEFT or key == arcade.key.A:
+              self.player_sprite.change_x = 0
+          elif key == arcade.key.RIGHT or key == arcade.key.D:
+              self.player_sprite.change_x = 0
+
+      # on_update: https://arcade.academy/arcade.html?highlight=on_update#arcade.Sprite.on_update
+      def on_update(self, delta_time):
+          """ Movement and game logic """
+          # Move the player with the physics engine
+          self.physics_engine.update()
+
+  def main():
+      """ Main method """
+      window = MyGame()
+      window.setup()
+      arcade.run()
+
+  if __name__ == "__main__":
+      main()
+  ```
+- Awesome, let's play with this bit of code
+  1. Our player can fly off the screen && some key strokes interfere with each (_If the player hits both left and right keys at the same time, then lets off the left one, we expect the player to move right. This method won’t support that._).
+    - If you want a slightly more complex method that does, see [Better Move By Keyboard](https://arcade.academy/examples/sprite_move_keyboard_better.html#sprite-move-keyboard-better).
+    - The above information also covers preventing the user from falling off the edge of the screen
+    - My updated code (my player no longer flies off the screen and my keystrokes don't interfere!):
+      ```py
+      """
+      Platformer Game
+      """
+      import arcade
+
+      SCREEN_WIDTH = 1000
+      SCREEN_HEIGHT = 650
+      SCREEN_TITLE = "Platformer"
+
+      CHARACTER_SCALING = 1
+      TILE_SCALING = 0.5
+      COIN_SCALING = 0.5
+
+      PLAYER_MOVEMENT_SPEED = 5
+
+      # Our player is now an entire Class
+      class Player(arcade.Sprite):
+
+          def update(self):
+              """ Move the player """
+              # Move player.
+              # Remove these lines if physics engine is moving player.
+              self.center_x += self.change_x
+              self.center_y += self.change_y
+
+              # Check for out-of-bounds
+              if self.left < 0:
+                  self.left = 0
+              elif self.right > SCREEN_WIDTH - 1:
+                  self.right = SCREEN_WIDTH - 1
+
+              if self.bottom < 0:
+                  self.bottom = 0
+              elif self.top > SCREEN_HEIGHT - 1:
+                  self.top = SCREEN_HEIGHT - 1
+
+      class MyGame(arcade.Window):
+          """
+          Main application class.
+          """
+
+          def __init__(self, width, height, title):
+              super().__init__(width, height, title)
+
+              self.coin_list = None
+              self.wall_list = None
+              self.player_list = None
+              self.player_sprite = None
+              self.physics_engine = None
+
+              # Track the current state of what key is pressed
+              self.left_pressed = False
+              self.right_pressed = False
+              self.up_pressed = False
+              self.down_pressed = False
+
+              arcade.set_background_color(arcade.csscolor.MEDIUM_VIOLET_RED)
+
+          def setup(self):
+              """ Set up the game here. Call this function to restart the game. """
+              self.player_list = arcade.SpriteList()
+              self.wall_list = arcade.SpriteList(use_spatial_hash=True)
+              self.coin_list = arcade.SpriteList(use_spatial_hash=True)
+
+              # Changes which class it calls from arcade.Sprite() to Player()
+              self.player_sprite = Player(":resources:images/animated_characters/female_adventurer/femaleAdventurer_idle.png",
+                                                 CHARACTER_SCALING)
+              self.player_sprite.center_x = 64
+              self.player_sprite.center_y = 128
+              self.player_list.append(self.player_sprite)
+
+              for x in range(0, 1250, 64):
+                  wall = arcade.Sprite(":resources:images/tiles/grassMid.png", TILE_SCALING)
+                  wall.center_x = x
+                  wall.center_y = 32
+                  self.wall_list.append(wall)
+
+              self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.wall_list)
+
+              coordinate_list = [[256, 96],
+                                 [512, 96],
+                                 [768, 96]]
+
+              for coordinate in coordinate_list:
+                  wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", TILE_SCALING)
+                  wall.position = coordinate
+                  self.wall_list.append(wall)
+
+          def on_draw(self):
+              """ Render the screen. """
+              arcade.start_render()
+
+              self.wall_list.draw()
+              self.coin_list.draw()
+              self.player_list.draw()
+
+          def on_key_press(self, key, modifiers):
+              """Called whenever a key is pressed. """
+
+              if key == arcade.key.UP or key == arcade.key.W or key == arcade.key.SPACE:
+                  self.up_pressed = True
+              elif key == arcade.key.DOWN or key == arcade.key.S:
+                  self.down_pressed = True
+              elif key == arcade.key.LEFT or key == arcade.key.A:
+                  self.left_pressed = True
+              elif key == arcade.key.RIGHT or key == arcade.key.D:
+                  self.right_pressed = True
+
+          def on_key_release(self, key, modifiers):
+              """Called when the user releases a key. """
+
+              if key == arcade.key.UP or key == arcade.key.W:
+                  self.up_pressed = False
+              elif key == arcade.key.DOWN or key == arcade.key.S:
+                  self.down_pressed = False
+              elif key == arcade.key.LEFT or key == arcade.key.A:
+                  self.left_pressed = False
+              elif key == arcade.key.RIGHT or key == arcade.key.D:
+                  self.right_pressed = False
+
+          def on_update(self, delta_time):
+              """ Movement and game logic """
+
+              # Calculate speed based on the keys pressed
+              self.player_sprite.change_x = 0
+              self.player_sprite.change_y = 0
+
+              if self.up_pressed and not self.down_pressed:
+                  self.player_sprite.change_y = PLAYER_MOVEMENT_SPEED
+              elif self.down_pressed and not self.up_pressed:
+                  self.player_sprite.change_y = -PLAYER_MOVEMENT_SPEED
+              if self.left_pressed and not self.right_pressed:
+                  self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
+              elif self.right_pressed and not self.left_pressed:
+                  self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+
+              # Call update to move the sprite
+              # If using a physics engine, call update player to rely on physics engine
+              # for movement, and call physics engine here.
+              self.player_list.update()
+              self.physics_engine.update()
+
+      def main():
+          """ Main method """
+          window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+          window.setup()
+          arcade.run()
+
+      if __name__ == "__main__":
+          main()
+      ```
+  2. **LOOKING FOR MORE?**
+    - The Arcade Docs go into more detail about [User Control](http://learn.arcade.academy/chapters/16_user_control/user_control.html#)
+- Now that we can control our user, how about some gravity to prevent our user from flying!
 
 #### Add Gravity
 [Top](#priyas-practice)
-- DEETS
+- But what fun is a game you can't move in right?
 - In fact, we have a starter file for ourselves called `0.py` that we can play around with
 - When I run it, I see
 - To fully understand this code, let's annotate it:
