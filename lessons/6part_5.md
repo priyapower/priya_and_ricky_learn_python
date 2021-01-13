@@ -878,33 +878,439 @@ BLARG___________________________________
 
 #### Add Gravity
 [Top](#priyas-practice)
-- But what fun is a game you can't move in right?
-- In fact, we have a starter file for ourselves called `0.py` that we can play around with
-- When I run it, I see
+- ![gravity](https://media2.giphy.com/media/3ov9k4e03yTNRWTgYM/giphy.gif)
+- Using our starter file: `04_add_gravity.py`
+- When I run it, and move my player, especially when I press Up, my character now experiences gravity and must fall back down to the ground!
+- The current file doesn't update for better user_control, so I am going to merge the exploration file from the last section with our current gravity file. See this code in the annotations section below.
 - To fully understand this code, let's annotate it:
-```py
-```
-- Now let's play with our code:
-  1. Adjust the code and try putting sprites in new positions.
-    - ADJUSTMENT NOTES
-```py
-```
-- Now that we can
+  ```py
+  """
+  Platformer Game
+  """
+  import arcade
+
+  SCREEN_WIDTH = 1000
+  SCREEN_HEIGHT = 650
+  SCREEN_TITLE = "Priya's 2D Funhouse"
+
+  CHARACTER_SCALING = 1
+  TILE_SCALING = 0.5
+  COIN_SCALING = 0.5
+
+  PLAYER_MOVEMENT_SPEED = 5
+  # New constant for gravity
+  GRAVITY = 1
+  # New constant for player_jump_speed
+  PLAYER_JUMP_SPEED = 20
+
+  class Player(arcade.Sprite):
+      # Creates boundaries so the player doesn't walk off the edge of the screen
+      def update(self):
+          """ Move the player """
+          if self.left < 0:
+              self.left = 0
+          elif self.right > SCREEN_WIDTH - 1:
+              self.right = SCREEN_WIDTH - 1
+
+          if self.bottom < 0:
+              self.bottom = 0
+          elif self.top > SCREEN_HEIGHT - 1:
+              self.top = SCREEN_HEIGHT - 1
+
+  class MyGame(arcade.Window):
+      """
+      Main application class.
+      """
+
+      def __init__(self, width, height, title):
+          super().__init__(width, height, title)
+
+          self.coin_list = None
+          self.wall_list = None
+          self.player_list = None
+          self.player_sprite = None
+          self.physics_engine = None
+
+          self.left_pressed = False
+          self.right_pressed = False
+          self.up_pressed = False
+          self.down_pressed = False
+
+          arcade.set_background_color(arcade.csscolor.MEDIUM_VIOLET_RED)
+
+      def setup(self):
+          """ Set up the game here. Call this function to restart the game. """
+          self.player_list = arcade.SpriteList()
+          self.wall_list = arcade.SpriteList(use_spatial_hash=True)
+          self.coin_list = arcade.SpriteList(use_spatial_hash=True)
+
+          # This time we've saved the image source to it's own variable for use in the next line
+          image_source = ":resources:images/animated_characters/female_adventurer/femaleAdventurer_idle.png"
+          self.player_sprite = Player(image_source, CHARACTER_SCALING)
+          self.player_sprite.center_x = 64
+          self.player_sprite.center_y = 128
+          self.player_list.append(self.player_sprite)
+
+          for x in range(0, 1250, 64):
+              # Saving the image source in a separate variable for readability
+              image_source2 = ":resources:images/tiles/grassMid.png"
+              wall = arcade.Sprite(image_source2, TILE_SCALING)
+              wall.center_x = x
+              wall.center_y = 32
+              self.wall_list.append(wall)
+
+          coordinate_list = [[256, 96],
+                             [512, 96],
+                             [768, 96]]
+
+          for coordinate in coordinate_list:
+              # Again, saving the image source in a separate variable for readability
+              image_source3 = ":resources:images/tiles/boxCrate_double.png"
+              wall = arcade.Sprite(image_source3, TILE_SCALING)
+              wall.position = coordinate
+              self.wall_list.append(wall)
+
+          # UPDATE TO PHYSICS ENGINE
+          # https://arcade.academy/arcade.html?highlight=physicsengineplatformer#arcade.PhysicsEnginePlatformer
+          # Create a physics engine for a platformer.
+          # Has 4 possible parameters
+              # player_sprite (Sprite) – The moving sprite
+              # platforms (SpriteList) – The sprites it can’t move through
+              # gravity_constant (float) – Downward acceleration per frame
+              # ladders (SpriteList) – Ladders the user can climb on
+          # We are using the player, the wall, and the gravity constant
+          self.physics_engine = arcade.PhysicsEnginePlatformer(self.player_sprite, self.wall_list, GRAVITY)
+
+      def on_draw(self):
+          """ Render the screen. """
+          arcade.start_render()
+
+          self.wall_list.draw()
+          self.coin_list.draw()
+          self.player_list.draw()
+
+      def on_key_press(self, key, modifiers):
+          """Called whenever a key is pressed. """
+
+          # Sets key directional_presses to true depending if user presses certain keys
+          # This accounts for the arrow pad, the AWDS set, and the space bar
+          if key == arcade.key.UP or key == arcade.key.W or key == arcade.key.SPACE:
+              self.up_pressed = True
+          elif key == arcade.key.DOWN or key == arcade.key.S:
+              self.down_pressed = True
+          elif key == arcade.key.LEFT or key == arcade.key.A:
+              self.left_pressed = True
+          elif key == arcade.key.RIGHT or key == arcade.key.D:
+              self.right_pressed = True
+
+      def on_key_release(self, key, modifiers):
+          """Called when the user releases a key. """
+
+          # Sets key directional_presses to False if user releases specific key
+          if key == arcade.key.UP or key == arcade.key.W:
+              self.up_pressed = False
+          elif key == arcade.key.DOWN or key == arcade.key.S:
+              self.down_pressed = False
+          elif key == arcade.key.LEFT or key == arcade.key.A:
+              self.left_pressed = False
+          elif key == arcade.key.RIGHT or key == arcade.key.D:
+              self.right_pressed = False
+
+      def on_update(self, delta_time):
+          """ Movement and game logic """
+
+          # Calculate speed based on the keys pressed
+          # We only need to reset the x value (left and right), since the y value now has a gravity component
+          self.player_sprite.change_x = 0
+
+          # If up is triggered
+          if self.up_pressed and not self.down_pressed:
+              # First check if the physics engine can_jump: https://arcade.academy/arcade.html?highlight=can_jump#arcade.PhysicsEnginePlatformer.can_jump
+              # Method that looks to see if there is a floor under the player_sprite.
+              # If there is a floor, the player can jump and we return a True.
+              if self.physics_engine.can_jump():
+                  # Change the y velocity for the player jump
+                  self.player_sprite.change_y = PLAYER_JUMP_SPEED
+          elif self.down_pressed and not self.up_pressed:
+              self.player_sprite.change_y = -PLAYER_MOVEMENT_SPEED
+          if self.left_pressed and not self.right_pressed:
+              self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
+          elif self.right_pressed and not self.left_pressed:
+              self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+
+          # Call update to move the sprite
+          # If using a physics engine, call update player to rely on physics engine
+          # for movement, and call physics engine here.
+          self.player_list.update()
+          self.physics_engine.update()
+
+  def main():
+      """ Main method """
+      window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+      window.setup()
+      arcade.run()
+
+  if __name__ == "__main__":
+      main()
+  ```
+- **LOOKING FOR MORE?**
+    - Explore the methods inside the [Simple](https://arcade.academy/arcade.html?highlight=physics%20engine#arcade.PhysicsEngineSimple) and [Platformer](https://arcade.academy/arcade.html?highlight=physics%20engine#arcade.PhysicsEnginePlatformer) physics engines
+    - Want your physics to do more, check out [Pymunk](https://arcade.academy/arcade.html?highlight=physics%20engine#arcade.PymunkPhysicsEngine)
+      - There is a full [tutorial](https://arcade.academy/tutorials/pymunk_platformer/index.html)
+- Now that our player has some "real world" constraints, lets start updating the players world!
 
 #### Add Scrolling
 [Top](#priyas-practice)
-- DEETS
-- In fact, we have a starter file for ourselves called `0.py` that we can play around with
-- When I run it, I see
-- To fully understand this code, let's annotate it:
-```py
-```
+- When a player moves across the screen and hits the edge of the screen, what should the game do?
+  - If you have the arcade original files, your player just flies off the edge and can get lost
+  - If you have my updated gravity file with better user control, the player cannot move past the edge
+  - In a real game, the player wouldn't dissapear off the edge, instead, the "world" around the player would **scroll**
+- Look at my starter file for scrolling, `05_scrolling.py`:
+  - I can move my player left and right off the screen edge
+  - When I do, the world around me expands!
+  - I can see more as I scroll
+  - I can even fall off the edge of the ground and my player will now fall forever.
+- To fully understand this code, let's annotate the changes:
+  ```py
+  """
+  Platformer Game
+  """
+  import arcade
+
+  SCREEN_WIDTH = 1000
+  SCREEN_HEIGHT = 650
+  SCREEN_TITLE = "Platformer"
+
+  CHARACTER_SCALING = 1
+  TILE_SCALING = 0.5
+  COIN_SCALING = 0.5
+
+  PLAYER_MOVEMENT_SPEED = 3
+  GRAVITY = 0.8
+  PLAYER_JUMP_SPEED = 15
+
+  # How many pixels to keep as a minimum margin between the character and the edge of the screen.
+  # What is the distance between a screen edge and the player before the world begins to scroll?
+      # This is what we are declaring as margins for each edge: left, right, bottom, and top
+  LEFT_VIEWPORT_MARGIN = 250
+  RIGHT_VIEWPORT_MARGIN = 250
+  BOTTOM_VIEWPORT_MARGIN = 50
+  TOP_VIEWPORT_MARGIN = 100
+
+  class MyGame(arcade.Window):
+      """
+      Main application class.
+      """
+
+      def __init__(self):
+
+          super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+
+          self.coin_list = None
+          self.wall_list = None
+          self.player_list = None
+
+          self.player_sprite = None
+
+          self.physics_engine = None
+
+          # MY USER CONTROL UPDATES
+          self.left_pressed = False
+          self.right_pressed = False
+          self.up_pressed = False
+          self.down_pressed = False
+
+          # Used to keep track of our scrolling
+          # These set the original variables of the game for view_bottom and view_left to the integer value 0
+          self.view_bottom = 0
+          self.view_left = 0
+
+          arcade.set_background_color(arcade.csscolor.MEDIUM_VIOLET_RED)
+
+      def setup(self):
+          """ Set up the game here. Call this function to restart the game. """
+
+          # Used to keep track of our scrolling
+          # Why is this created in __init__ as well as in setup?
+              # Potentially for the "restart" option?
+          self.view_bottom = 0
+          self.view_left = 0
+
+          self.player_list = arcade.SpriteList()
+          self.wall_list = arcade.SpriteList()
+          self.coin_list = arcade.SpriteList()
+
+          image_source = ":resources:images/animated_characters/female_adventurer/femaleAdventurer_idle.png"
+          self.player_sprite = arcade.Sprite(image_source, CHARACTER_SCALING)
+          self.player_sprite.center_x = 64
+          self.player_sprite.center_y = 96
+          self.player_list.append(self.player_sprite)
+
+          for x in range(0, 1250, 64):
+              image_source2 = ":resources:images/tiles/grassMid.png"
+              wall = arcade.Sprite(image_source2, TILE_SCALING)
+              wall.center_x = x
+              wall.center_y = 32
+              self.wall_list.append(wall)
+
+          coordinate_list = [[256, 96],
+                             [512, 96],
+                             [768, 96]]
+
+          for coordinate in coordinate_list:
+              image_source3 = ":resources:images/tiles/boxCrate_double.png"
+              wall = arcade.Sprite(image_source3, TILE_SCALING)
+              wall.position = coordinate
+              self.wall_list.append(wall)
+
+          self.physics_engine = arcade.PhysicsEnginePlatformer(self.player_sprite,
+                                                               self.wall_list,
+                                                               GRAVITY)
+
+      def on_draw(self):
+          """ Render the screen. """
+
+          arcade.start_render()
+
+          self.wall_list.draw()
+          self.coin_list.draw()
+          self.player_list.draw()
+
+      def on_key_press(self, key, modifiers):
+          """Called whenever a key is pressed. """
+          # MY USER CONTROL UPDATES
+          if key == arcade.key.UP or key == arcade.key.W or key == arcade.key.SPACE:
+              self.up_pressed = True
+          elif key == arcade.key.DOWN or key == arcade.key.S:
+              self.down_pressed = True
+          elif key == arcade.key.LEFT or key == arcade.key.A:
+              self.left_pressed = True
+          elif key == arcade.key.RIGHT or key == arcade.key.D:
+              self.right_pressed = True
+
+      def on_key_release(self, key, modifiers):
+          """Called when the user releases a key. """
+          # MY USER CONTROL UPDATES
+          if key == arcade.key.UP or key == arcade.key.W:
+              self.up_pressed = False
+          elif key == arcade.key.DOWN or key == arcade.key.S:
+              self.down_pressed = False
+          elif key == arcade.key.LEFT or key == arcade.key.A:
+              self.left_pressed = False
+          elif key == arcade.key.RIGHT or key == arcade.key.D:
+              self.right_pressed = False
+
+      def on_update(self, delta_time):
+          """ Movement and game logic """
+          # MY USER CONTROL UPDATES
+          self.player_sprite.change_x = 0
+
+          if self.up_pressed and not self.down_pressed:
+              if self.physics_engine.can_jump():
+                  self.player_sprite.change_y = PLAYER_JUMP_SPEED
+          elif self.down_pressed and not self.up_pressed:
+              self.player_sprite.change_y = -PLAYER_MOVEMENT_SPEED
+          if self.left_pressed and not self.right_pressed:
+              self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
+          elif self.right_pressed and not self.left_pressed:
+              self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+
+          self.player_list.update()
+          # Move the player with the physics engine
+          self.physics_engine.update()
+
+          # --- Manage Scrolling ---
+
+          # Track if we need to change the viewport
+          # Begins with a boolean variable, "changed", that is set to false (used further down in "if changed" block)
+          changed = False
+
+          # Scroll left
+          # This sets up the view_left (which is set to 0) summed with the custom margin we set for the left edge
+          left_boundary = self.view_left + LEFT_VIEWPORT_MARGIN
+          # If the player's left coord is less than the left boundary from above
+              # .left: https://arcade.academy/arcade.html?highlight=.left#arcade.Sprite.left
+              # Return the x coordinate of the left-side of the sprite’s hit box
+          if self.player_sprite.left < left_boundary:
+              # "-=" is called subtraction assignment: https://python-reference.readthedocs.io/en/latest/docs/operators/subtraction_assignment.html
+                  # Subtracts a value from the variable and assigns the result to that variable.
+              # In this case, first take the left_boundary from above and subtract the player's left coord
+              # THEN, subtract that from view_left and reassign view_left with this new number
+              # It makes sense that this value is negative, because we would be heading left, aka, in the negative direction on the x-axis
+              self.view_left -= left_boundary - self.player_sprite.left
+              # Finally, update "changed" to True
+              changed = True
+
+          # Scroll right
+          # The right_boundary must include the screen width as a component
+          right_boundary = self.view_left + SCREEN_WIDTH - RIGHT_VIEWPORT_MARGIN
+          # If a players right coord attempts to exceed the right boundary
+          if self.player_sprite.right > right_boundary:
+              # Because this is on the right side of the screen, we want to use addition assignment
+              # view_left is now a positive value because we are heading right, or in the positive direction on the x-axis
+              self.view_left += self.player_sprite.right - right_boundary
+              changed = True
+
+          # Scroll up
+          # Very similar to above if-block, bit takes in Height and the Top/Bottom viewport margins
+          top_boundary = self.view_bottom + SCREEN_HEIGHT - TOP_VIEWPORT_MARGIN
+          if self.player_sprite.top > top_boundary:
+              self.view_bottom += self.player_sprite.top - top_boundary
+              changed = True
+
+          # Scroll down
+          # This does not need height
+          bottom_boundary = self.view_bottom + BOTTOM_VIEWPORT_MARGIN
+          if self.player_sprite.bottom < bottom_boundary:
+              self.view_bottom -= bottom_boundary - self.player_sprite.bottom
+              changed = True
+
+          # Here is where all the above if-blocks come into play
+          # If changed is true, then this means our player is attempting to go past the margins near the edge
+          if changed:
+              # Only scroll to integers. Otherwise we end up with pixels that don't line up on the screen
+              self.view_bottom = int(self.view_bottom)
+              self.view_left = int(self.view_left)
+
+              # Do the scrolling
+              # .set_viewport: https://arcade.academy/arcade.html?highlight=.set_viewport#arcade.set_viewport
+              # This sets what coordinates the window will cover.
+              # By default, the lower left coordinate will be (0, 0) and the top y coordinate will be the height of the window in pixels, and the right x coordinate will be the width of the window in pixels.
+              arcade.set_viewport(self.view_left,
+                                  SCREEN_WIDTH + self.view_left,
+                                  self.view_bottom,
+                                  SCREEN_HEIGHT + self.view_bottom)
+
+  def main():
+      """ Main method """
+      window = MyGame()
+      window.setup()
+      arcade.run()
+
+  if __name__ == "__main__":
+      main()
+  ```
 - Now let's play with our code:
-  1. Adjust the code and try putting sprites in new positions.
-    - ADJUSTMENT NOTES
-```py
-```
-- Now that we can
+  1. What happens when I change the viewport margins to something else?
+    - If I change the viewport constants at the beginning to very _small_ values, my player doesn't make the world scroll until it gets to the very edge of the map
+      - This doesn't seem like great gameplay because I can't see what is coming on the map.
+      ```py
+      LEFT_VIEWPORT_MARGIN = 5
+      RIGHT_VIEWPORT_MARGIN = 5
+      BOTTOM_VIEWPORT_MARGIN = 5
+      TOP_VIEWPORT_MARGIN = 5
+      ```
+    - If I change the viewport constants at the beginning to very _large_ values, my player makes the world scroll "too much". If I jump, the entire world shift. My ground is off center now because my player is "approaching the bottom" edge. If I move right or left, the entire world moves.
+      - This is bad gameplay because the world is moving too much and too quick. The user can't fully see what is happening on the map.
+      ```py
+      LEFT_VIEWPORT_MARGIN = 500
+      RIGHT_VIEWPORT_MARGIN = 500
+      BOTTOM_VIEWPORT_MARGIN = 300
+      TOP_VIEWPORT_MARGIN = 300
+      ```
+  2. **LOOKING FOR MORE?**
+    - Explore [viewport](https://arcade.academy/arcade.html?highlight=.set_viewport#arcade.set_viewport) thought the Arcade Class
+- Awesome! We are beginning to have an interactive space for our player. But if a player can just move around a space, that doesn't make for a compelling game. Let's give our player some incentive in the next section.
 
 #### Add Coins and Sounds
 [Top](#priyas-practice)
