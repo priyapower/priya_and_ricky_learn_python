@@ -1,3 +1,6 @@
+# THIS PAGE IS STILL UNDER CONSTRUCTION
+---
+
 # Part 5 Practice
 ----
 ## What is on this page
@@ -23,6 +26,7 @@ Goal is to build a 2D side scroller with interactive levels using Arcade
 - [Part 0: New Information](#part-0)
   1. [Arcade](#Arcade)
   1. [PyCharm](#PyCharm)
+  1. [The Tutorial](#The-Tutorial)
 - [Part 1: Settup for Arade](#part-1)
   1. [Installing Arcade](#Installing-Arcade)
   1. [Getting to Know PyCharm](#Getting-to-Know-PyCharm)
@@ -41,19 +45,28 @@ Goal is to build a 2D side scroller with interactive levels using Arcade
   1. [Add Character Animations and Better Keyboard Control](#Add-Character Animations-and-Better-Keyboard-Control)
 - [Part 3: Adding Physics using Pymunk](#part-3)
   1. [What is Pymunk](#What-is-Pymunk)
-- [Part 4: ](#part-4)
+- [Part 4: The Final Code](#part-4)
   1. [Final Code](#Final-Code)
+  1. [An Executable Program](#An-Executable-Program)
 
 ------
 ### Part 0
 ------
 #### Arcade
 [Top](#priyas-practice)
+- https://arcade.academy/
+- A more recent python library dedicated to 2D game development. This particular library is aimed at programmers who want to dive into game mechanics and design instead of learning complex frameworks.
 - BLARG___________________________________
 
 #### Pycharm
 [Top](#priyas-practice)
+- https://www.jetbrains.com/pycharm/
+- PyCharm is a python IDE (integrated development environment)
 - BLARG___________________________________
+
+#### The Tutorial
+[Top](#priyas-practice)
+- [Arcade Simple Tutorial](https://arcade.academy/examples/platform_tutorial/index.html)
 
 ### Part 1
 ------
@@ -1230,7 +1243,9 @@ BLARG___________________________________
           left_boundary = self.view_left + LEFT_VIEWPORT_MARGIN
           # If the player's left coord is less than the left boundary from above
               # .left: https://arcade.academy/arcade.html?highlight=.left#arcade.Sprite.left
-              # Return the x coordinate of the left-side of the sprite’s hit box
+              # Return the x coordinate of the left-side of the sprite’s hitbox
+                # Any transparent “white-space” around an image counts as the "hitbox"
+                # You can trim the space in a graphics editor OR specify a hitbox
           if self.player_sprite.left < left_boundary:
               # "-=" is called subtraction assignment: https://python-reference.readthedocs.io/en/latest/docs/operators/subtraction_assignment.html
                   # Subtracts a value from the variable and assigns the result to that variable.
@@ -1314,24 +1329,243 @@ BLARG___________________________________
 
 #### Add Coins and Sounds
 [Top](#priyas-practice)
-- DEETS
-- In fact, we have a starter file for ourselves called `0.py` that we can play around with
-- When I run it, I see
-- To fully understand this code, let's annotate it:
-```py
-```
-- Now let's play with our code:
-  1. Adjust the code and try putting sprites in new positions.
-    - ADJUSTMENT NOTES
-```py
-```
-- Now that we can
+- With this code players can collect coins AND we will add sounds that trigger when a coin is collected or the player jumps
+- Playing with `06_coins_and_sounds`, I see that my player can now collect coins and trigger sounds
+- But... I'm not happy with the user control, so first I update it to match better user keystrokes
+- Like usual, to grasp the new code, let's annotate it:
+  ```py
+  """
+  Platformer Game
+  """
+  import arcade
+
+  SCREEN_WIDTH = 1000
+  SCREEN_HEIGHT = 650
+  SCREEN_TITLE = "Priya's 2D Funhouse"
+
+  CHARACTER_SCALING = 1
+  TILE_SCALING = 0.5
+  # NEW CONSTANT FOR COIN SCALING
+  COIN_SCALING = 0.5
+
+  PLAYER_MOVEMENT_SPEED = 3
+  GRAVITY = 0.8
+  PLAYER_JUMP_SPEED = 15
+
+  LEFT_VIEWPORT_MARGIN = 250
+  RIGHT_VIEWPORT_MARGIN = 250
+  BOTTOM_VIEWPORT_MARGIN = 50
+  TOP_VIEWPORT_MARGIN = 100
+
+  class MyGame(arcade.Window):
+      """
+      Main application class.
+      """
+
+      def __init__(self):
+
+          super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+          # New Coin List Variable Setup
+          self.coin_list = None
+          self.wall_list = None
+          self.player_list = None
+
+          self.player_sprite = None
+
+          self.physics_engine = None
+
+          # MY USER CONTROL UPDATES
+          self.left_pressed = False
+          self.right_pressed = False
+          self.up_pressed = False
+          self.down_pressed = False
+
+          self.view_bottom = 0
+          self.view_left = 0
+
+          # Creates a variable that holds our sound for coin collection
+          # .load_sound: https://arcade.academy/arcade.html?highlight=.load_sound#arcade.load_sound
+              # Loads a sound for use with .play_sound later
+          self.collect_coin_sound = arcade.load_sound(":resources:sounds/coin1.wav")
+          # Creates a variable that holds our sound for player jumping
+          self.jump_sound = arcade.load_sound(":resources:sounds/jump1.wav")
+
+          arcade.set_background_color(arcade.csscolor.MEDIUM_VIOLET_RED)
+
+      def setup(self):
+          """ Set up the game here. Call this function to restart the game. """
+
+          self.view_bottom = 0
+          self.view_left = 0
+
+          self.player_list = arcade.SpriteList()
+          self.wall_list = arcade.SpriteList()
+          # New Coin Sprite List
+          self.coin_list = arcade.SpriteList()
+
+          image_source = ":resources:images/animated_characters/female_adventurer/femaleAdventurer_idle.png"
+          self.player_sprite = arcade.Sprite(image_source, CHARACTER_SCALING)
+          self.player_sprite.center_x = 64
+          self.player_sprite.center_y = 128
+          self.player_list.append(self.player_sprite)
+
+          for x in range(0, 1250, 64):
+              image_source2 = ":resources:images/tiles/grassMid.png"
+              wall = arcade.Sprite(image_source2, TILE_SCALING)
+              wall.center_x = x
+              wall.center_y = 32
+              self.wall_list.append(wall)
+
+          coordinate_list = [[256, 96],
+                             [512, 96],
+                             [768, 96]]
+
+          for coordinate in coordinate_list:
+              image_source3 = ":resources:images/tiles/boxCrate_double.png"
+              wall = arcade.Sprite(image_source3, TILE_SCALING)
+              wall.position = coordinate
+              self.wall_list.append(wall)
+
+          # Adds a new sprite: the coin
+          for x in range(128, 1250, 256):
+              image_source4 = ":resources:images/items/coinGold.png"
+              coin = arcade.Sprite(image_source4, COIN_SCALING)
+              coin.center_x = x
+              # Makes the coin float a little off the ground
+              coin.center_y = 96
+              # Adds coin to coin list
+              self.coin_list.append(coin)
+
+          self.physics_engine = arcade.PhysicsEnginePlatformer(self.player_sprite,
+                                                               self.wall_list,
+                                                               GRAVITY)
+
+      def on_draw(self):
+          """ Render the screen. """
+          arcade.start_render()
+
+          self.wall_list.draw()
+          self.coin_list.draw()
+          self.player_list.draw()
+
+      def on_key_press(self, key, modifiers):
+          """Called whenever a key is pressed. """
+          # MY USER CONTROL UPDATES
+          if key == arcade.key.UP or key == arcade.key.W or key == arcade.key.SPACE:
+              self.up_pressed = True
+          elif key == arcade.key.DOWN or key == arcade.key.S:
+              self.down_pressed = True
+          elif key == arcade.key.LEFT or key == arcade.key.A:
+              self.left_pressed = True
+          elif key == arcade.key.RIGHT or key == arcade.key.D:
+              self.right_pressed = True
+
+      def on_key_release(self, key, modifiers):
+          """Called when the user releases a key. """
+          # MY USER CONTROL UPDATES
+          if key == arcade.key.UP or key == arcade.key.W:
+              self.up_pressed = False
+          elif key == arcade.key.DOWN or key == arcade.key.S:
+              self.down_pressed = False
+          elif key == arcade.key.LEFT or key == arcade.key.A:
+              self.left_pressed = False
+          elif key == arcade.key.RIGHT or key == arcade.key.D:
+              self.right_pressed = False
+
+      def update(self, delta_time):
+          """ Movement and game logic """
+          # MY USER CONTROL UPDATES
+          self.player_sprite.change_x = 0
+
+          if self.up_pressed and not self.down_pressed:
+              if self.physics_engine.can_jump():
+                  self.player_sprite.change_y = PLAYER_JUMP_SPEED
+                  # NEW INFO FROM SOUNDS
+                  # This plays the sound from jump_sound which was set in __init__
+                  arcade.play_sound(self.jump_sound)
+          elif self.down_pressed and not self.up_pressed:
+              self.player_sprite.change_y = -PLAYER_MOVEMENT_SPEED
+          if self.left_pressed and not self.right_pressed:
+              self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
+          elif self.right_pressed and not self.left_pressed:
+              self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+
+          self.player_list.update()
+          self.physics_engine.update()
+
+          # The code for what happens when a player collides with a coin
+          # Checks the coin sprite list for collisions AND saves to a new variable "coin_hit_list"
+          # .check_for_collision_with_list: https://arcade.academy/arcade.html?highlight=check_for_collision_with_list#arcade.check_for_collision_with_list
+              # Check for a collision between a sprite, and a list of sprites
+              # 2 Parameters: (sprite_to_check, sprite_to_check_AGAINST)
+          coin_hit_list = arcade.check_for_collision_with_list(self.player_sprite,
+                                                               self.coin_list)
+
+          # For every coin sprite in the coin HIT list
+          for coin in coin_hit_list:
+              # Remove the coin from any sprite list it belongs to
+              coin.remove_from_sprite_lists()
+              # Play the sound set in __init__
+              arcade.play_sound(self.collect_coin_sound)
+
+          # --- Manage Scrolling ---
+          changed = False
+
+          left_boundary = self.view_left + LEFT_VIEWPORT_MARGIN
+          if self.player_sprite.left < left_boundary:
+              self.view_left -= left_boundary - self.player_sprite.left
+              changed = True
+
+          right_boundary = self.view_left + SCREEN_WIDTH - RIGHT_VIEWPORT_MARGIN
+          if self.player_sprite.right > right_boundary:
+              self.view_left += self.player_sprite.right - right_boundary
+              changed = True
+
+          top_boundary = self.view_bottom + SCREEN_HEIGHT - TOP_VIEWPORT_MARGIN
+          if self.player_sprite.top > top_boundary:
+              self.view_bottom += self.player_sprite.top - top_boundary
+              changed = True
+
+          bottom_boundary = self.view_bottom + BOTTOM_VIEWPORT_MARGIN
+          if self.player_sprite.bottom < bottom_boundary:
+              self.view_bottom -= bottom_boundary - self.player_sprite.bottom
+              changed = True
+
+          if changed:
+              self.view_bottom = int(self.view_bottom)
+              self.view_left = int(self.view_left)
+
+              arcade.set_viewport(self.view_left,
+                                  SCREEN_WIDTH + self.view_left,
+                                  self.view_bottom,
+                                  SCREEN_HEIGHT + self.view_bottom)
+
+  def main():
+      """ Main method """
+      window = MyGame()
+      window.setup()
+      arcade.run()
+
+  if __name__ == "__main__":
+      main()
+  ```
+- Updates you could make in this section:
+  1. Update where you place the coins (How would you make them higher? How would you place them on top of crates? How would you place them for jumpable off crates?)
+  2. Add other collectibles (Gems and keys are in the arcade resources. You can also internet research "sprite resources open source" )
+  3. Make a subclass for the coin sprite and add an attribute for a score value. Make a subclass for your gem sprite. Then you could have coins worth one point, and gems worth 5, 10, and 15 points.
+  4. **LOOKING FOR MORE?**
+    - [Coins by mouse](https://arcade.academy/examples/sprite_collect_coins.html)
+    - [Coins collected downward](https://arcade.academy/examples/sprite_collect_coins_move_down.html)
+    - [Change Coins](https://arcade.academy/examples/sprite_change_coins.html)
+    - [Random Placement with Safeguards](https://arcade.academy/examples/sprite_no_coins_on_walls.html)
+    - [Level Coin Clearage](https://arcade.academy/examples/sprite_collect_coins_diff_levels.html_)
+- So we can collect coins... but how does a player know their score? Let's see the next section.
 
 #### Display the Score
 [Top](#priyas-practice)
-- DEETS
-- In fact, we have a starter file for ourselves called `0.py` that we can play around with
-- When I run it, I see
+- As easy as it would be to draw a static box with a score inside, it isn't quite correct for our game dynamics:
+  - Since our game scrolls at the edges, we must account for this when we setup our score box!
+- I ran my `07_score.py` and saw
 - To fully understand this code, let's annotate it:
 ```py
 ```
@@ -1414,3 +1648,7 @@ BLARG___________________________________
 [Top](#priyas-practice)
 - Github repo]()
 - Play game here]()
+
+#### An Executable Program
+[Top](#priyas-practice)
+- BLARG___________________________________
