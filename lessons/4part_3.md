@@ -64,10 +64,18 @@ Goal is to build a Space Shooter game while learn PyGame
 
 - What is Pygame?
   - https://www.pygame.org/news
-  - BLARG___________________________________
+  - Pygame is a cross-platform group of `Python` modules whose purpose is to assist in 2D game development
+    - Cross-platform: can be used on Windows or Linux or Mac
+    - Python: an interpreted, high-level, and general-purpose programming language
+      - interpreted: a programming language whose implementations execute instructions directly and freely, without previously compiling a program into machine-language instructions (https://www.geeksforgeeks.org/difference-between-compiled-and-interpreted-language/)
+      - high-level: designed to simplify programming since it is removed (abstracted) away from the code used to run your computers processor; these languages have easy syntax or are human readable/writeable (https://techterms.com/definition/high-level_language)
+      - general-purpose: programming languages that are used for a variety of software needs; in this case Python is used for desktop applications, web applications, developing complex scientific/numeric applications, and so much more. The opposite would be "special purpose programming languages" or "domain specific language", such as SQL, which is a database query/manipulation language
+    - Modules: modules are simply packaged up code in certain languages that can perform a certain function. Using modules allows us to keep our code "DRY" and following Single Responsibility Principle. In the case of Pygame, these modules are written in `C` or `Python` whose behaviors are directly related to game development such as handling user input with keystrokes or mouse or setting window sizes, etc.
 - What is Arcade?
   - https://arcade.academy/
-  - BLARG___________________________________
+  - A more recent python library dedicated to 2D game development. This particular library is aimed at programmers who want to dive into game mechanics and design instead of learning complex frameworks.
+  - We will not be using this until [Part 5](lessons/6part_5.md)
+- Interested in Other libraries or 3D development, see [here](https://codeboje.de/2d-and-3d-game-and-rendering-engines-python/)
 
 #### Additional Prereqs
 [Top](#priyas-practice)
@@ -75,9 +83,10 @@ Goal is to build a Space Shooter game while learn PyGame
 - [Python](https://www.python.org/)
 - [PyCharm](https://www.jetbrains.com/pycharm/)
 - What is PyCharm
-  - Link to part 4
+  - PyCharm is a python IDE (integrated development environment)
+  - We will not be using this until [Part 5](lessons/6part_5.md)
   - https://www.jetbrains.com/pycharm/
-- BLARG___________________________________
+- For this project, I will be using [Atom](https://atom.io), a Mac based IDE. For alternate IDE's and comparisons, check out this [resource](https://stackify.com/top-integrated-developer-environments-ides/)
 
 #### A Brief Intro to Game Design
 [Top](#priyas-practice)
@@ -102,9 +111,7 @@ Goal is to build a Space Shooter game while learn PyGame
   - player attack capabilities
   - advancing levels
   - boss characters
-- More Info on Game Design:
-  - BLARG___________________________________
-- Resources:
+- More Resources on Game Design:
   - https://www.gamasutra.com/view/feature/132341/the_13_basic_principles_of_.php
   - https://www.cgspectrum.com/blog/what-is-game-design
   - https://www.cgspectrum.com/blog/game-development-process
@@ -211,18 +218,19 @@ Goal is to build a Space Shooter game while learn PyGame
     - You can always call specific init's
     - Allows us to work with pygame in windows, linux, or mac
     - https://www.pygame.org/docs/tut/ImportInit.html
-    - BLARG___________________________________
   - Modules
     - List: https://www.pygame.org/docs/py-modindex.html
     - Provides access to specific hardware on system
       - `display` gives access to video display
     - Provides access to methods that work with hardware
       - `joystick` gives access to your joystick controller
-    - BLARG___________________________________
 - **Displays and Surfaces**
-  - BLARG___________________________________
+  - Pygame also includes many `Classes` available for use, typically for the non-hardware concepts
+  - Surfaces: Defines an area in which you can "draw", it is the canvas on which you design your game or create components for use in your game. It basically represents an image. For more [information](https://www.pygame.org/docs/ref/surface.html)
+  - Displays: This is what your user sees and interacts with - the window (or full screen) that the game takes place in. For more [information](https://www.pygame.org/docs/ref/display.html)
 - **Images and Rects**
-  - BLARG___________________________________
+  - Images: yes, we can use our surfaces to draw on, however, what if I have an image I want to use, like a background image or an image for my game character? The images module lets us load, save, and work with images in a variety of ways. For our tutorial, we will use images for the player character, the missile objects, and the floating clouds. For more [information](https://www.pygame.org/docs/ref/image.html)
+  - Rects: Since rectangles are a heavily used shape inside game design, pygame created an entire module dedicated to the rectangle class. These `rects` can be used for object creation, character creation, collision physics and logic, and more. For more [information](https://www.pygame.org/docs/ref/rect.html)
 
 ### Part 3
 ------
@@ -2134,3 +2142,10 @@ Annotations
 
 #### Packaging Code for Easy Execution
 [Top](#priyas-practice)
+
+Sources for use when ready for this section:
+- https://pythonprogramming.net/converting-pygame-executable-cx_freeze/
+- https://www.pygame.org/project-pyg.exe-2830-.html
+- https://stackoverflow.com/questions/54210392/how-can-i-convert-pygame-to-exe
+- https://www.youtube.com/watch?v=BIWqt6NICrw
+- https://www.pyinstaller.org
