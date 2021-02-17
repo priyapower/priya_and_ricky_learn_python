@@ -38,6 +38,7 @@ Goal is to build a 2D side scroller with interactive levels using Arcade
   1. [Add Gravity](#Add-Gravity)
   1. [Add Scrolling](#Add-Scrolling)
   1. [Add Coins and Sounds](#Add-Coins-and-Sounds)
+  1. [Halfway Demo](#Halfway-Demo)
   1. [Display the Score](#Display-the-Score)
   1. [Use a Map Editor](#Use-a-Map-Editor)
   1. [Multiple Levels and Other Layers](#Multiple-Levels-and-Other-Layers)
@@ -1560,6 +1561,10 @@ BLARG___________________________________
     - [Random Placement with Safeguards](https://arcade.academy/examples/sprite_no_coins_on_walls.html)
     - [Level Coin Clearage](https://arcade.academy/examples/sprite_collect_coins_diff_levels.html_)
 - So we can collect coins... but how does a player know their score? Let's see the next section.
+
+#### Halfway Demo
+[Top](#priyas-practice)
+![Halfway Demo](https://user-images.githubusercontent.com/49959312/108256301-97838780-711a-11eb-95db-6c529ab3ac28.mov)
 
 #### Display the Score
 [Top](#priyas-practice)
