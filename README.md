@@ -2,13 +2,14 @@
 -----
 ## Priya's Python Resume Showcase
 - Check out my collaborative project: [DreamHome](https://github.com/Dream-Home-PEABOT)
-  - It uses a Python/MongoDB [BE Server](https://github.com/Dream-Home-PEABOT/BEE_DreamHome) and a Typescript/REACT [FE website](https://github.com/Dream-Home-PEABOT/FEE_DreamHome)
-  - _Coming Soon: Deployed App]()_
-  - ![Screenshot collab]()
+  - It uses a Python/MongoDB Back End Server, [BE Repo](https://github.com/Dream-Home-PEABOT/BEE_DreamHome), and a Typescript/REACT Front End Web Site, [FE repo](https://github.com/Dream-Home-PEABOT/FEE_DreamHome)
+  - [DreamHome](https://dream-home-cap.herokuapp.com/home)
+  - [DreamHome Server](http://dreamhome-mvp.herokuapp.com)
+  - ![Screenshot](https://user-images.githubusercontent.com/49959312/108244065-fee60b00-710b-11eb-994a-99d858820dbd.png)
 -  Play my adorable 2D side-scroller "avoid obstacles" [game](https://github.com/priyapower/shooter_game)!
-  - ![Screenshot shooter]()
+  - ![Pygame Demo](https://user-images.githubusercontent.com/49959312/108242968-c98ced80-710a-11eb-988c-acc09932cc49.mov)
 - See my API [backend server](https://github.com/priyapower/practice-api-movies) for a fake Movie DB
-  - ![Screenshot api]()
+  - ![Screenshot api](https://user-images.githubusercontent.com/49959312/108244619-9d726c00-710c-11eb-8ec5-5c6720a6ad4e.png)
 
 -----
 ## The Learning Section
