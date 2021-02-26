@@ -1573,7 +1573,7 @@ BLARG___________________________________
 #### Halfway Demo
 [Top](#priyas-practice)
 
-![Halfway Demo](https://user-images.githubusercontent.com/49959312/108256301-97838780-711a-11eb-95db-6c529ab3ac28.mov)
+![halfway demo](https://user-images.githubusercontent.com/49959312/109329417-c3d48d80-7817-11eb-95b4-941c3de613f1.gif)
 
 #### Display the Score
 [Top](#priyas-practice)
@@ -1869,9 +1869,9 @@ BLARG___________________________________
   - when I hit `OK`, I now see a blank tileset in the bottom right of my screen
   - ![blank tileset](https://user-images.githubusercontent.com/49959312/109324879-7efa2800-7812-11eb-8b80-1bee7025c96a.png)
   - Now we need to add in our tilesets. In the Tilesets box, there are icons on the bottom. Find the one for "Edit" (has a wrench) which will open a new file (map.tmx#my_tiles => file_name#tile_name). At the top of this file, there will be a "Plus" icon. Clicking on this will get us to the point where we can "paint" our level.
-  - ![tileset vid](https://user-images.githubusercontent.com/49959312/109326014-dfd63000-7813-11eb-8d7f-83ab80a38864.mov)
+  - ![tileset vid](https://user-images.githubusercontent.com/49959312/109329690-20d04380-7818-11eb-9a9e-01a962f85ff2.gif)
   - Create a level by adding whatever tiles you may want. Return to the main map.tsx file and use your mouse to add tiles wherever you would like on your map
-  - ![level vid](https://user-images.githubusercontent.com/49959312/109326426-6ab72a80-7814-11eb-8797-952c23487cbc.mov)
+  - ![level vid](https://user-images.githubusercontent.com/49959312/109330055-845a7100-7818-11eb-8ffe-499d00915c24.gif)
   - Finish a TEST LEVEL - this means don't spend forever on this level, make something quick (and maybe ugly), because we just want to confirm this works with our code before we spend time creating in-depth levels
   - ![test level](https://user-images.githubusercontent.com/49959312/109327279-65a6ab00-7815-11eb-8943-cf2811c4ac20.png)
 
