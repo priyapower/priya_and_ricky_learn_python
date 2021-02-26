@@ -1604,7 +1604,6 @@ BLARG___________________________________
   BOTTOM_VIEWPORT_MARGIN = 50
   TOP_VIEWPORT_MARGIN = 100
 
-
   class MyGame(arcade.Window):
       """
       Main application class.
@@ -1796,13 +1795,11 @@ BLARG___________________________________
                                   self.view_bottom,
                                   SCREEN_HEIGHT + self.view_bottom)
 
-
   def main():
       """ Main method """
       window = MyGame()
       window.setup()
       arcade.run()
-
 
   if __name__ == "__main__":
       main()
@@ -1825,70 +1822,312 @@ BLARG___________________________________
   - Don't forget to install from the Part 1 section: [What is a Tiled Map Editor](#What-is-a-Tiled-Map-Editor)
   - A map editor helps create the playable levels that a users character might access
   - Consider the Mario Series, every level had a distinct map with enemies, obstacles, power-ups, coins, etc
+
     - ![super mario bros level poster](https://i.pinimg.com/originals/04/8a/60/048a60099be2b7819b24100d15c2d638.jpg)
   - Want to learn [more](https://gamedevelopment.tutsplus.com/tutorials/introduction-to-tiled-map-editor-a-platform-agnostic-tool-for-level-maps--gamedev-2838)?
-- So let's use TILED
-  - I open the Application `Tiled`
-  - Create a new file/map
-  - ![new map](https://user-images.githubusercontent.com/49959312/109323346-9a643380-7810-11eb-9575-ac9a9967b5d5.png)
-  - Fill out the options
-  - ![options](https://user-images.githubusercontent.com/49959312/109323972-4c9bfb00-7811-11eb-8e72-731413c68042.png)
-    ```
-    Orientation: Orthogonal
-    Tile layer format: Base65 (zlib compressed)
-    Tile render order: Right Down
-    Map size: Width: 25; Height: 20
-    Tile Size: Width: 128; Height: 128
-    ```
-  - Details about options:
-    - Orthogonal - This is a normal square-grid layout. It is the only version that Arcade supports very well at this time.
-    - Tile layer format - This selects how the data is stored inside the file. Any option works, but Base64 zlib compressed is the smallest.
-    - Tile render order - Any of these should work. It simply specifies what order the tiles are added. Right-down has tiles added left->right and top->down.
-    - Map size - You can change this later, but this is your total grid size.
-    - Tile size - the size, in pixels, of your tiles. Your tiles all need to be the same size. Also, rendering works better if the tile size is a power of 2, such as 16, 32, 64, 128, and 256.
-  - Click `Save As...` and name your file. I chose `map.tmx` from the tutorial and I made sure it was in my project folder
-  - This opened a blank file
-  - ![blank map](https://user-images.githubusercontent.com/49959312/109324229-9edd1c00-7811-11eb-9a39-5acacffae887.png)
-  - We need to change the layer name to "Platforms"
-  - ![update layer name](https://user-images.githubusercontent.com/49959312/109324329-c207cb80-7811-11eb-85be-cd907e876413.png)
-  - We may eventually have layers for:
-    - Platforms that you run into (or you can think of them as walls)
-    - Coins or objects to pick up
-    - Background objects that you don’t interact with, but appear behind the player
-    - Foreground objects that you don’t interact with, but appear in front of the player
-    - Insta-death blocks (like lava)
-    - Ladders
-  - Create a tileset (click bottom right button `New Tileset...`)
-  - ![new tileset](https://user-images.githubusercontent.com/49959312/109324508-ff6c5900-7811-11eb-861f-16ff36733ccf.png)
-    ```
-    name: my_tiles
-    type: Collection of images
-    embed in map: CHECKED
-    ```
-  - ![tileset info](https://user-images.githubusercontent.com/49959312/109324703-42c6c780-7812-11eb-8c41-ab857fe16b17.png)
-  - when I hit `OK`, I now see a blank tileset in the bottom right of my screen
-  - ![blank tileset](https://user-images.githubusercontent.com/49959312/109324879-7efa2800-7812-11eb-8b80-1bee7025c96a.png)
-  - Now we need to add in our tilesets. In the Tilesets box, there are icons on the bottom. Find the one for "Edit" (has a wrench) which will open a new file (map.tmx#my_tiles => file_name#tile_name). At the top of this file, there will be a "Plus" icon. Clicking on this will get us to the point where we can "paint" our level.
-  - ![tileset vid](https://user-images.githubusercontent.com/49959312/109329690-20d04380-7818-11eb-9a9e-01a962f85ff2.gif)
-  - Create a level by adding whatever tiles you may want. Return to the main map.tsx file and use your mouse to add tiles wherever you would like on your map
-  - ![level vid](https://user-images.githubusercontent.com/49959312/109330055-845a7100-7818-11eb-8ffe-499d00915c24.gif)
-  - Finish a TEST LEVEL - this means don't spend forever on this level, make something quick (and maybe ugly), because we just want to confirm this works with our code before we spend time creating in-depth levels
-  - ![test level](https://user-images.githubusercontent.com/49959312/109327279-65a6ab00-7815-11eb-8943-cf2811c4ac20.png)
+- So let's use **_TILED_**
+  1. I open the Application `Tiled`
+  2. Create a new file/map
 
+    - ![new map](https://user-images.githubusercontent.com/49959312/109323346-9a643380-7810-11eb-9575-ac9a9967b5d5.png)
+  3. Fill out the options
+    - What to fill out:
+      ```
+      Orientation: Orthogonal
+      Tile layer format: Base65 (zlib compressed)
+      Tile render order: Right Down
+      Map size: Width: 25; Height: 20
+      Tile Size: Width: 128; Height: 128
+      ```
+    - Details about options:
+      - Orthogonal - This is a normal square-grid layout. It is the only version that Arcade supports very well at this time.
+      - Tile layer format - This selects how the data is stored inside the file. Any option works, but Base64 zlib compressed is the smallest.
+      - Tile render order - Any of these should work. It simply specifies what order the tiles are added. Right-down has tiles added left->right and top->down.
+      - Map size - You can change this later, but this is your total grid size.
+      - Tile size - the size, in pixels, of your tiles. Your tiles all need to be the same size. Also, rendering works better if the tile size is a power of 2, such as 16, 32, 64, 128, and 256.
 
+      - ![options](https://user-images.githubusercontent.com/49959312/109323972-4c9bfb00-7811-11eb-8e72-731413c68042.png)
+  4. Click `Save As...` and name your file. I chose `map.tmx` from the tutorial and I made sure it was in my project folder
+    - This opened a blank file
 
+    - ![blank map](https://user-images.githubusercontent.com/49959312/109324229-9edd1c00-7811-11eb-9a39-5acacffae887.png)
+  5. We need to change the layer name to "Platforms"
 
-- In fact, we have a starter file for ourselves called `0.py` that we can play around with
-- When I run it, I see
-- To fully understand this code, let's annotate it:
-```py
-```
-- Now let's play with our code:
-  1. Adjust the code and try putting sprites in new positions.
-    - ADJUSTMENT NOTES
-```py
-```
-- Now that we can
+    - ![update layer name](https://user-images.githubusercontent.com/49959312/109324329-c207cb80-7811-11eb-85be-cd907e876413.png)
+    - We may eventually have layers for:
+      - Platforms that you run into (or you can think of them as walls)
+      - Coins or objects to pick up
+      - Background objects that you don’t interact with, but appear behind the player
+      - Foreground objects that you don’t interact with, but appear in front of the player
+      - Insta-death blocks (like lava)
+      - Ladders
+  6. Create a tileset (click bottom right button `New Tileset...`)
+
+    - ![new tileset](https://user-images.githubusercontent.com/49959312/109324508-ff6c5900-7811-11eb-861f-16ff36733ccf.png)
+    - What to fill out:
+      ```
+      name: my_tiles
+      type: Collection of images
+      embed in map: CHECKED
+      ```
+      - ![tileset info](https://user-images.githubusercontent.com/49959312/109324703-42c6c780-7812-11eb-8c41-ab857fe16b17.png)
+    - When I hit `OK`, I now see a blank tileset in the bottom right of my screen
+
+      - ![blank tileset](https://user-images.githubusercontent.com/49959312/109324879-7efa2800-7812-11eb-8b80-1bee7025c96a.png)
+  7. Now we need to add in our tilesets. In the Tilesets box, there are icons on the bottom. Find the one for "Edit" (has a wrench) which will open a new file (map.tmx#my_tiles => file_name#tile_name). At the top of this file, there will be a "Plus" icon. Clicking on this will get us to the point where we can "paint" our level.
+
+    - ![tileset vid](https://user-images.githubusercontent.com/49959312/109329690-20d04380-7818-11eb-9a9e-01a962f85ff2.gif)
+
+    - Create a level by adding whatever tiles you may want. Return to the main map.tsx file and use your mouse to add tiles wherever you would like on your map
+
+      - ![level vid](https://user-images.githubusercontent.com/49959312/109330055-845a7100-7818-11eb-8ffe-499d00915c24.gif)
+
+    - Finish a TEST LEVEL - this means don't spend forever on this level, make something quick (and maybe ugly), because we just want to confirm this works with our code before we spend time creating in-depth levels
+
+      - ![test level](https://user-images.githubusercontent.com/49959312/109327279-65a6ab00-7815-11eb-8943-cf2811c4ac20.png)
+
+  8. Test the level (switch from `Tiled` to your code in `PyCharm`/or whatever IDE you chose)
+    - Open the file `08_load_map.py`
+    - First, I like to make updates for better user control. I also like to create a separate annotations file. Like usual, the changes are documented using comments:
+      ```py
+      """
+      Platformer Game
+      """
+      import arcade
+
+      SCREEN_WIDTH = 1000
+      SCREEN_HEIGHT = 650
+      SCREEN_TITLE = "Priya's 2D Funhouse"
+
+      CHARACTER_SCALING = 1
+      TILE_SCALING = 0.5
+      COIN_SCALING = 0.5
+      # THIS MATCHES THE TILED MAP FILE PIXEL SIZE
+      SPRITE_PIXEL_SIZE = 128
+      GRID_PIXEL_SIZE = (SPRITE_PIXEL_SIZE * TILE_SCALING)
+
+      PLAYER_MOVEMENT_SPEED = 3
+      GRAVITY = 0.8
+      PLAYER_JUMP_SPEED = 13
+
+      LEFT_VIEWPORT_MARGIN = 250
+      RIGHT_VIEWPORT_MARGIN = 250
+      BOTTOM_VIEWPORT_MARGIN = 100
+      TOP_VIEWPORT_MARGIN = 100
+
+      class MyGame(arcade.Window):
+          """
+          Main application class.
+          """
+
+          def __init__(self):
+
+              super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+
+              self.coin_list = None
+              self.wall_list = None
+              self.player_list = None
+
+              self.player_sprite = None
+
+              self.physics_engine = None
+
+              # MY USER CONTROL UPDATES
+              self.left_pressed = False
+              self.right_pressed = False
+              self.up_pressed = False
+              self.down_pressed = False
+
+              self.view_bottom = 0
+              self.view_left = 0
+
+              self.score = 0
+
+              self.collect_coin_sound = arcade.load_sound(":resources:sounds/coin1.wav")
+              self.jump_sound = arcade.load_sound(":resources:sounds/jump1.wav")
+
+              # I LIKE TO CHANGE MY BACKGROUND COLOR FOR MY PERSONAL PREFERENCE OF THIS PRETTY PINK COLOR
+              arcade.set_background_color(arcade.csscolor.MEDIUM_VIOLET_RED)
+
+          def setup(self):
+              """ Set up the game here. Call this function to restart the game. """
+
+              self.view_bottom = 0
+              self.view_left = 0
+
+              self.score = 0
+
+              self.player_list = arcade.SpriteList()
+              self.wall_list = arcade.SpriteList()
+              self.coin_list = arcade.SpriteList()
+
+              image_source = ":resources:images/animated_characters/female_adventurer/femaleAdventurer_idle.png"
+              self.player_sprite = arcade.Sprite(image_source, CHARACTER_SCALING)
+              # MATCHES THE PIXEL SIZE SET IN THE TILED MAP FILE
+              self.player_sprite.center_x = 128
+              self.player_sprite.center_y = 128
+              self.player_list.append(self.player_sprite)
+
+              # HERE IS THE LOAD OF THE MAP!!! THIS ALSO REPLACES THE CODE THAT STATICALLY PLACED A FLOOR, CRATES, AND COINS IN PREVIOUS CODE. STARTS WITH " for x in range(0, 1250, 64):"
+
+              # --- Load in a map from the tiled editor ---
+
+              # NAME OF THE MAP FILE TO LOAD
+                  # THIS PATHWAY IMPLIES THAT THERE IS A DIRECTORY CALLED "tmx_maps" NESTED UNDER OUR PROJECT DIRECTORY
+                  # TESTING THIS THEORY
+              map_name = ":resources:tmx_map/map.tmx"
+              # NAME OF THE LAYER IN THE FILE THAT HAS OUR PLATFORM/WALLS
+              platforms_layer_name = 'Platforms'
+              # NAME OF THE LAYER THAT HAS ITEMS FOR PICK-UP
+              coins_layer_name = 'Coins'
+
+              # READ THE TILED MAP
+              my_map = arcade.tilemap.read_tmx(map_name)
+
+              # -- Platforms
+              # PULLS THE PLATFORM FROM THE "PLATFORMS" LAYER OF THE TILED MAP
+              self.wall_list = arcade.tilemap.process_layer(map_object=my_map,
+                                                            layer_name=platforms_layer_name,
+                                                            scaling=TILE_SCALING,
+                                                            use_spatial_hash=True)
+
+              # -- Coins
+              self.coin_list = arcade.tilemap.process_layer(my_map, coins_layer_name, TILE_SCALING)
+
+              # --- Other stuff
+              # SET THE BACKGROUND COLOR (THIS IS DONE IN "TILED" BY SELECTING MAP PROPERTIES FROM THE MAP DROPDOWN (NEAR FILE, EDIT, ...)
+              if my_map.background_color:
+                  arcade.set_background_color(my_map.background_color)
+
+              # THIS IS A RETURN TO THE PREVIOUS CODE
+              self.physics_engine = arcade.PhysicsEnginePlatformer(self.player_sprite,
+                                                                   self.wall_list,
+                                                                   GRAVITY)
+
+          def on_draw(self):
+              """ Render the screen. """
+
+              arcade.start_render()
+
+              self.wall_list.draw()
+              self.coin_list.draw()
+              self.player_list.draw()
+
+              score_text = f"Score: {self.score}"
+              arcade.draw_text(score_text, 10 + self.view_left, 10 + self.view_bottom,
+                               arcade.csscolor.WHITE, 18)
+
+          def on_key_press(self, key, modifiers):
+              """Called whenever a key is pressed. """
+
+              # MY USER CONTROL UPDATES
+              if key == arcade.key.UP or key == arcade.key.W or key == arcade.key.SPACE:
+                  self.up_pressed = True
+              elif key == arcade.key.DOWN or key == arcade.key.S:
+                  self.down_pressed = True
+              elif key == arcade.key.LEFT or key == arcade.key.A:
+                  self.left_pressed = True
+              elif key == arcade.key.RIGHT or key == arcade.key.D:
+                  self.right_pressed = True
+
+          def on_key_release(self, key, modifiers):
+              """Called when the user releases a key. """
+
+              # MY USER CONTROL UPDATES
+              if key == arcade.key.UP or key == arcade.key.W:
+                  self.up_pressed = False
+              elif key == arcade.key.DOWN or key == arcade.key.S:
+                  self.down_pressed = False
+              elif key == arcade.key.LEFT or key == arcade.key.A:
+                  self.left_pressed = False
+              elif key == arcade.key.RIGHT or key == arcade.key.D:
+                  self.right_pressed = False
+
+          def on_update(self, delta_time):
+              """ Movement and game logic """
+
+              # MY USER CONTROL UPDATES
+              self.player_sprite.change_x = 0
+
+              if self.up_pressed and not self.down_pressed:
+                  if self.physics_engine.can_jump():
+                      self.player_sprite.change_y = PLAYER_JUMP_SPEED
+                      arcade.play_sound(self.jump_sound)
+              elif self.down_pressed and not self.up_pressed:
+                  self.player_sprite.change_y = -PLAYER_MOVEMENT_SPEED
+              if self.left_pressed and not self.right_pressed:
+                  self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
+              elif self.right_pressed and not self.left_pressed:
+                  self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+
+              self.player_list.update()
+
+              self.physics_engine.update()
+
+              coin_hit_list = arcade.check_for_collision_with_list(self.player_sprite,
+                                                                   self.coin_list)
+
+              for coin in coin_hit_list:
+                  coin.remove_from_sprite_lists()
+                  arcade.play_sound(self.collect_coin_sound)
+                  self.score += 1
+
+              # --- Manage Scrolling ---
+              changed = False
+
+              left_boundary = self.view_left + LEFT_VIEWPORT_MARGIN
+              if self.player_sprite.left < left_boundary:
+                  self.view_left -= left_boundary - self.player_sprite.left
+                  changed = True
+
+              right_boundary = self.view_left + SCREEN_WIDTH - RIGHT_VIEWPORT_MARGIN
+              if self.player_sprite.right > right_boundary:
+                  self.view_left += self.player_sprite.right - right_boundary
+                  changed = True
+
+              top_boundary = self.view_bottom + SCREEN_HEIGHT - TOP_VIEWPORT_MARGIN
+              if self.player_sprite.top > top_boundary:
+                  self.view_bottom += self.player_sprite.top - top_boundary
+                  changed = True
+
+              bottom_boundary = self.view_bottom + BOTTOM_VIEWPORT_MARGIN
+              if self.player_sprite.bottom < bottom_boundary:
+                  self.view_bottom -= bottom_boundary - self.player_sprite.bottom
+                  changed = True
+
+              if changed:
+                  self.view_bottom = int(self.view_bottom)
+                  self.view_left = int(self.view_left)
+
+                  arcade.set_viewport(self.view_left,
+                                      SCREEN_WIDTH + self.view_left,
+                                      self.view_bottom,
+                                      SCREEN_HEIGHT + self.view_bottom)
+
+      def main():
+          """ Main method """
+          window = MyGame()
+          window.setup()
+          arcade.run()
+
+      if __name__ == "__main__":
+          main()
+      ```
+    - When I run my `08_load_map_better_control.py` file, I realized something was wrong. I wasn't seeing the map I expected to see
+      - In fact, I opened every map that was available in the project directory and none of my project maps matched the map I was seeing when I run the game
+      - After researching: My current code is set to grab resources directly from Arcades online resource library (which gets downloaded into my site-packages for Arcade locally)
+      - I updated my source code lines:
+        ```py
+        image_source = "images/player_1/female_stand.png"
+        map_name = "tmx_map/map.tsx.tmx"
+        ```
+    - Voila!!! It works
+  9. Success with a level!
+- Updates for this section:
+  - You can edit the hitbox of a tile to make ramps or platforms that only cover a portion of the rectangle in the grid.
+    - To edit the hitbox, use the polygon tool (only) and draw a polygon around the item. You can hold down “CTRL” when positioning a point to get the exact corner of an item.
+  - Make all loaded objects (images, sounds, etc) from project directory instead of arcade library resources (this is setting up for packaging the game later on)
+- But I'm sure you are wondering, well... I only made a test map. Shouldn't I make a better map? In fact, shouldn't I have multiple maps for various levels?? See next section
 
 #### Multiple Levels and Other Layers
 [Top](#priyas-practice)
