@@ -161,8 +161,16 @@ BLARG___________________________________
 
 #### What is a Tiled Map Editor
 [Top](#priyas-practice)
-- BLARG___________________________________
-- https://www.mapeditor.org
+- "Tiled is a 2D level editor that helps you develop the content of your game. Its primary feature is to edit tile maps of various forms, but it also supports free image placement as well as powerful ways to annotate your level with extra information used by the game. Tiled focuses on general flexibility while trying to stay intuitive." ([resource](https://doc.mapeditor.org/en/stable/manual/introduction/))
+- To install:
+  - https://www.mapeditor.org
+  - Click on [download now](https://thorbjorn.itch.io/tiled) at itch.io
+  - This pulls up an option to donate, or you can click on the link "No thanks, just take me to the downloads"
+  - I downloaded the `Mac OS (Snapshot)` version
+    - My downloads wouldn't auto-start, even with pop-up blocker disabled on the page, so I had to click on "Downloads not starting?" and enable alternate downloads
+  - Once I had the application downloaded, I moved it into my Applications folder (for Mac users) and went through the process of opening an application that isn't from the App Store or a verified developer ([source](https://support.apple.com/guide/mac-help/open-a-mac-app-from-an-unidentified-developer-mh40616/mac))
+  - Now I can officially open `Tiled`!
+- Enjoyed this map editor, considering [supporting](https://www.mapeditor.org/donate) the program
 
 ### Part 2
 ------
@@ -1813,7 +1821,63 @@ BLARG___________________________________
 
 #### Use a Map Editor
 [Top](#priyas-practice)
-- DEETS
+- What is a Map Editor?
+  - Don't forget to install from the Part 1 section: [What is a Tiled Map Editor](#What-is-a-Tiled-Map-Editor)
+  - A map editor helps create the playable levels that a users character might access
+  - Consider the Mario Series, every level had a distinct map with enemies, obstacles, power-ups, coins, etc
+    - ![super mario bros level poster](https://i.pinimg.com/originals/04/8a/60/048a60099be2b7819b24100d15c2d638.jpg)
+  - Want to learn [more](https://gamedevelopment.tutsplus.com/tutorials/introduction-to-tiled-map-editor-a-platform-agnostic-tool-for-level-maps--gamedev-2838)?
+- So let's use TILED
+  - I open the Application `Tiled`
+  - Create a new file/map
+  - ![new map](https://user-images.githubusercontent.com/49959312/109323346-9a643380-7810-11eb-9575-ac9a9967b5d5.png)
+  - Fill out the options
+  - ![options](https://user-images.githubusercontent.com/49959312/109323972-4c9bfb00-7811-11eb-8e72-731413c68042.png)
+    ```
+    Orientation: Orthogonal
+    Tile layer format: Base65 (zlib compressed)
+    Tile render order: Right Down
+    Map size: Width: 25; Height: 20
+    Tile Size: Width: 128; Height: 128
+  ```
+  - Details about options:
+    - Orthogonal - This is a normal square-grid layout. It is the only version that Arcade supports very well at this time.
+    - Tile layer format - This selects how the data is stored inside the file. Any option works, but Base64 zlib compressed is the smallest.
+    - Tile render order - Any of these should work. It simply specifies what order the tiles are added. Right-down has tiles added left->right and top->down.
+    - Map size - You can change this later, but this is your total grid size.
+    - Tile size - the size, in pixels, of your tiles. Your tiles all need to be the same size. Also, rendering works better if the tile size is a power of 2, such as 16, 32, 64, 128, and 256.
+  - Click `Save As...` and name your file. I chose `map.tmx` from the tutorial and I made sure it was in my project folder
+  - This opened a blank file
+  - ![blank map](https://user-images.githubusercontent.com/49959312/109324229-9edd1c00-7811-11eb-9a39-5acacffae887.png)
+  - We need to change the layer name to "Platforms"
+  - ![update layer name](https://user-images.githubusercontent.com/49959312/109324329-c207cb80-7811-11eb-85be-cd907e876413.png)
+  - We may eventually have layers for:
+    - Platforms that you run into (or you can think of them as walls)
+    - Coins or objects to pick up
+    - Background objects that you don’t interact with, but appear behind the player
+    - Foreground objects that you don’t interact with, but appear in front of the player
+    - Insta-death blocks (like lava)
+    - Ladders
+  - Create a tileset (click bottom right button `New Tileset...`)
+  - ![new tileset](https://user-images.githubusercontent.com/49959312/109324508-ff6c5900-7811-11eb-861f-16ff36733ccf.png)
+    ```
+    name: my_tiles
+    type: Collection of images
+    embed in map: CHECKED
+    ```
+  - ![tileset info](https://user-images.githubusercontent.com/49959312/109324703-42c6c780-7812-11eb-8c41-ab857fe16b17.png)
+  - when I hit `OK`, I now see a blank tileset in the bottom right of my screen
+  - ![blank tileset](https://user-images.githubusercontent.com/49959312/109324879-7efa2800-7812-11eb-8b80-1bee7025c96a.png)
+  - Now we need to add in our tilesets. In the Tilesets box, there are icons on the bottom. Find the one for "Edit" (has a wrench) which will open a new file (map.tmx#my_tiles => file_name#tile_name). At the top of this file, there will be a "Plus" icon. Clicking on this will get us to the point where we can "paint" our level.
+  - ![tileset vid](https://user-images.githubusercontent.com/49959312/109326014-dfd63000-7813-11eb-8d7f-83ab80a38864.mov)
+  - Create a level by adding whatever tiles you may want. Return to the main map.tsx file and use your mouse to add tiles wherever you would like on your map
+  - ![level vid](https://user-images.githubusercontent.com/49959312/109326426-6ab72a80-7814-11eb-8797-952c23487cbc.mov)
+  - Finish a TEST LEVEL - this means don't spend forever on this level, make something quick (and maybe ugly), because we just want to confirm this works with our code before we spend time creating in-depth levels
+  - ![test level](https://user-images.githubusercontent.com/49959312/109327279-65a6ab00-7815-11eb-8943-cf2811c4ac20.png)
+
+
+
+
 - In fact, we have a starter file for ourselves called `0.py` that we can play around with
 - When I run it, I see
 - To fully understand this code, let's annotate it:
