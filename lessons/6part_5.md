@@ -243,7 +243,7 @@ BLARG___________________________________
 
   if __name__ == "__main__":
       main()
-```
+  ```
 - Things to practice:
   1. Change the screen size
     - I updated my constants and see the screen size change when I open the window (run `python 01_open_window.py`)
@@ -1839,7 +1839,7 @@ BLARG___________________________________
     Tile render order: Right Down
     Map size: Width: 25; Height: 20
     Tile Size: Width: 128; Height: 128
-  ```
+    ```
   - Details about options:
     - Orthogonal - This is a normal square-grid layout. It is the only version that Arcade supports very well at this time.
     - Tile layer format - This selects how the data is stored inside the file. Any option works, but Base64 zlib compressed is the smallest.
