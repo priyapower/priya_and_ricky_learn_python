@@ -243,7 +243,7 @@ BLARG___________________________________
 
   if __name__ == "__main__":
       main()
-```
+  ```
 - Things to practice:
   1. Change the screen size
     - I updated my constants and see the screen size change when I open the window (run `python 01_open_window.py`)
